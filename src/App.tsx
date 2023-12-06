@@ -1,17 +1,18 @@
-import React from "react";
+import React , {lazy} from "react";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./pages/login/Login.page";
-import Home from "./pages/home/Home.page";
-import Hotel from "./pages/hotel/Hotel.page";
-import AdminCities from "./pages/admin/adminCities/AdminCities.page";
-import AdminHotels from "./pages/admin/adminHotels/AdminHotels.page";
-import AdminRooms from "./pages/admin/adminRooms/AdminRooms.page";
-import PageNotFound from "./pages/pageNotFound/PageNotFound.page";
-import Search from "./pages/search/Search.page";
-import Checkout from "./pages/checkout/Checkout.page";
-import Confirmation from "./pages/confirmation/Confirmation.page";
-import Admin from "./pages/admin/Admin.component";
+
+const Login = lazy(() => import("./pages/login/Login.page"));
+const Home = lazy(() => import("./pages/home/Home.page"));
+const Search = lazy(() => import("./pages/search/Search.page"));
+const Hotel = lazy(() => import("./pages/hotel/Hotel.page"));
+const Checkout = lazy(() => import("./pages/checkout/Checkout.page"));
+const Confirmation = lazy(() => import("./pages/confirmation/Confirmation.page"));
+const Admin = lazy(() => import("./pages/admin/Admin.component"));
+const AdminCities = lazy(() => import("./pages/admin/adminCities/AdminCities.page"));
+const AdminHotels = lazy(() => import("./pages/admin/adminHotels/AdminHotels.page"));
+const AdminRooms = lazy(() => import("./pages/admin/adminRooms/AdminRooms.page"));
+const PageNotFound = lazy(() => import("./pages/pageNotFound/PageNotFound.page"));
 
 function App() {
   return (
