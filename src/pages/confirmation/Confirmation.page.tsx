@@ -1,5 +1,6 @@
 import React from "react";
+import localization from "../../localizationConfig";
 
 export default function Confirmation() {
-  return <div>Confirmation</div>;
+  return <div>{localization.confirmation}</div>;
 }

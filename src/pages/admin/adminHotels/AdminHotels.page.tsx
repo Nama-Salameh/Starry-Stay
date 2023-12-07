@@ -1,5 +1,6 @@
 import React from "react";
+import localization from "../../../localizationConfig";
 
 export default function AdminHotels() {
-  return <div>Admin hotels</div>;
+  return <div>{localization.adminHotels}</div>;
 }

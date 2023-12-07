@@ -1,5 +1,6 @@
 import React from "react";
+import localization from "../../localizationConfig";
 
 export default function Home() {
-  return <div>Home</div>;
+  return <div>{localization.home}</div>;
 }
