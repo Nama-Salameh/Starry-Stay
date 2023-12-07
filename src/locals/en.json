@@ -45,5 +45,15 @@
     "number" : "Number",
     "availability" : "Availability",
     "adultsCapacity" : "Adults capacity",
-    "childrenCapacity" : "Children capacity"
+    "childrenCapacity" : "Children capacity",
+    "adminHotels" : "Admin hotels",
+    "adminCities" : "Admin cities",
+    "adminRooms" : "Admin rooms",
+    "checkout" : "Checkout",
+    "confirmation" : "Confirmation",
+    "home" : "Home",
+    "pageNotFound" : "Page Not Found",
+    "hotel" : "hotels",
+    "cities" : "cities",
+    "rooms" : "rooms"
 }

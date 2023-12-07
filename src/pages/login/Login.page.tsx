@@ -1,5 +1,6 @@
 import React from "react";
+import localization from "../../localizationConfig";
 
 export default function Login() {
-  return <div>Login</div>;
+  return <div>{localization.login}</div>;
 }
