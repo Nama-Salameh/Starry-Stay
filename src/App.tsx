@@ -1,6 +1,6 @@
 import React , {lazy} from "react";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 const Login = lazy(() => import("./pages/login/Login.page"));
 const Home = lazy(() => import("./pages/home/Home.page"));
@@ -17,7 +17,6 @@ const PageNotFound = lazy(() => import("./pages/pageNotFound/PageNotFound.page")
 function App() {
   return (
     <div>
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />}></Route>
           <Route path="/login" element={<Login />}></Route>
@@ -34,7 +33,6 @@ function App() {
           </Route>
           <Route path="*" element={<PageNotFound />}></Route>
         </Routes>
-      </BrowserRouter>
     </div>
   );
 }
