@@ -5,7 +5,7 @@ export const theme = extendTheme({
         light: {
             palette: {
                 primary: {
-                    contrastText: '#ffff',
+                    contrastText: '#f0f0f0',
                     light: '#003F7F',
                     main: '#001f3f',
                     dark: '#002142',
@@ -29,7 +29,10 @@ export const theme = extendTheme({
                     light: '#E9B449',
                     main: '#E4A11C',
                     dark: '#B68116',
-                }
+                },
+                background: {
+                    default: "#f0f0f0"
+                },
             },
         },
     },

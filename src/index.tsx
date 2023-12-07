@@ -4,8 +4,9 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
-import { theme } from "./theme/Theme";
+import { CssBaseline } from "@mui/material";
 
+import { theme } from "./theme/Theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,8 +14,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <CssVarsProvider theme={theme}>
+      <CssVarsProvider theme={theme}>
+        <CssBaseline>
           <App />
+        </CssBaseline>
       </CssVarsProvider>
     </BrowserRouter>
   </React.StrictMode>
