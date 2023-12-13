@@ -36,13 +36,13 @@ export default function Login() {
             label={localization.email}
             name="email"
             type="email"
-            placeholder={localization.enterEmail}
+            placeholder={localization.email}
           />
           <TextInput
             label={localization.password}
             name="password"
             type="password"
-            placeholder={localization.enterPassword}
+            placeholder={localization.password}
           />
           <BigSubmitButton text={localization.login} onClick={handleLogin} />
         </Form>
