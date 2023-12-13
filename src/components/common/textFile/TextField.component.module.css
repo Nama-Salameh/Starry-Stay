@@ -1,0 +1,15 @@
+.formField {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 500px;
+  margin-bottom: 30px;
+}
+.textInput {
+  padding: 8px;
+}
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 3px;
+}
