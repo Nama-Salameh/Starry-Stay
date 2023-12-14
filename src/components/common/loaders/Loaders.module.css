@@ -1,0 +1,10 @@
+.bigButton {
+    height: 50px;
+    width: 500px;
+    background-color: var(--mui-palette-primary-light) !important;
+    font-weight: "Bold";
+    text-transform: "none";
+    font-size: 18;
+    margin-top: 10px !important;
+    color: var(--mui-palette-secondary-main) !important;
+}
