@@ -1,50 +1,79 @@
-import React from "react";
 import localization from "../../localizationConfig";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import logoImage from "../../assets/images/logo.jpeg";
 import style from "./Login.module.css";
-import TextInput from "../../components/common/textFile/TextField.component";
+import TextInput from "../../components/common/textField/TextField.component";
 import BigSubmitButton from "../../components/common/Buttons/BigSubmitButton.component";
-
-const handleLogin = () => {};
+import { login } from "../../services/users/UserRegistration.service";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { FormHelperText } from "@mui/material";
+import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [validationMessage, setValidationMessage] = useState("");
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+  const handleLogin = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      setIsLoginLoading(true);
+      await login(values.username, values.password);
+      navigate("/home");
+    } catch {
+      setValidationMessage(localization.incorrectUsernameOrPassword);
+    } finally {
+      setIsLoginLoading(false);
+    }
+  };
+  const handleInputChange = () => {
+    setValidationMessage("");
+  };
+
   return (
     <div className={style.loginContainer}>
       <img src={logoImage} className={style.logo} alt="logo" />
       <h1 className={style.title}>Login</h1>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ username: "", password: "" }}
         validationSchema={Yup.object({
-          email: Yup.string()
-            .email(localization.InvalidEmail)
-            .required(localization.required),
-          password: Yup.string()
-            .min(8, localization.InvalidPassword)
-            .required(localization.required),
+          username: Yup.string().required(localization.required),
+          password: Yup.string().required(localization.required),
         })}
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+          handleLogin(values);
+          setSubmitting(false);
         }}
       >
         <Form className={style.from}>
           <TextInput
-            label={localization.email}
-            name="email"
-            type="email"
-            placeholder={localization.email}
+            label={localization.userName}
+            name="username"
+            type="text"
+            placeholder={localization.userName}
+            onChange={handleInputChange}
           />
           <TextInput
             label={localization.password}
             name="password"
             type="password"
             placeholder={localization.password}
+            onChange={handleInputChange}
           />
-          <BigSubmitButton text={localization.login} onClick={handleLogin} />
+          {validationMessage !== "" && (
+            <FormHelperText className={`${style.error} mt-2`}>
+              {validationMessage}
+            </FormHelperText>
+          )}
+          {!isLoginLoading ? (
+            <BigSubmitButton text={localization.login} />
+          ) : (
+            <BigButtonLoader />
+          )}
         </Form>
       </Formik>
     </div>
