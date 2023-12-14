@@ -7,10 +7,9 @@ import TextInput from "../../components/common/textField/TextField.component";
 import BigSubmitButton from "../../components/common/Buttons/BigSubmitButton.component";
 import { login } from "../../services/users/UserRegistration.service";
 import { useNavigate } from "react-router-dom";
-import { useState} from "react";
+import { useState } from "react";
 import { FormHelperText } from "@mui/material";
 import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
-
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,8 +26,7 @@ export default function Login() {
       navigate("/home");
     } catch {
       setValidationMessage(localization.incorrectUsernameOrPassword);
-    }
-    finally{
+    } finally {
       setIsLoginLoading(false);
     }
   };
@@ -57,22 +55,25 @@ export default function Login() {
             name="username"
             type="text"
             placeholder={localization.userName}
-            onChange = {handleInputChange}
+            onChange={handleInputChange}
           />
           <TextInput
             label={localization.password}
             name="password"
             type="password"
             placeholder={localization.password}
-            onChange = {handleInputChange}
+            onChange={handleInputChange}
           />
           {validationMessage !== "" && (
             <FormHelperText className={`${style.error} mt-2`}>
-            {validationMessage}
+              {validationMessage}
             </FormHelperText>
           )}
-          {!isLoginLoading ? <BigSubmitButton text={localization.login}/> : <BigButtonLoader />}
-
+          {!isLoginLoading ? (
+            <BigSubmitButton text={localization.login} />
+          ) : (
+            <BigButtonLoader />
+          )}
         </Form>
       </Formik>
     </div>
