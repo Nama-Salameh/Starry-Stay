@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import PageNotFound from "../pages/pageNotFound/PageNotFound.page";
 import { getDecodedToken, isLoggedIn } from "../utils/TokenUtils";
-import { IToken } from "../interfaces/Token.interface";
+import IToken from "../interfaces/IToken.interface";
 
 export default function ProtectedRoutes({
   onlyAdmins = false,
@@ -22,7 +22,7 @@ export default function ProtectedRoutes({
 
   if (!isLoggedIn()) {
     return null;
-  } else if (onlyAdmins && decodedToken?.userType !== "admin") {
+  } else if (onlyAdmins && decodedToken?.userType !== "Admin") {
     return <PageNotFound />;
   } else {
     return <Outlet />;
