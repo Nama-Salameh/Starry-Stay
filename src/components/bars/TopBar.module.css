@@ -1,0 +1,8 @@
+.topBarLogo {
+  height: 65px;
+  width: fit-content;
+}
+.topBarLogoDrawer {
+  width: 100%;
+  height: 50px;
+}
