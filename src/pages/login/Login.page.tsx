@@ -10,11 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FormHelperText } from "@mui/material";
 import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
+import { getDecodedToken } from "../../utils/TokenUtils";
+import IToken from '../../interfaces/IToken.interface';
 
 export default function Login() {
   const navigate = useNavigate();
   const [validationMessage, setValidationMessage] = useState("");
   const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const decodedToken: IToken | null = getDecodedToken() as IToken | null;
 
   const handleLogin = async (values: {
     username: string;
@@ -23,7 +26,8 @@ export default function Login() {
     try {
       setIsLoginLoading(true);
       await login(values.username, values.password);
-      navigate("/home");
+      if (decodedToken?.userType === "Admin") navigate("/Admin");
+      else navigate("/home");
     } catch {
       setValidationMessage(localization.incorrectUsernameOrPassword);
     } finally {

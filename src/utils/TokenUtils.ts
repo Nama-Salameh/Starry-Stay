@@ -6,7 +6,7 @@ export const getDecodedToken = () => {
   if (!token) {
     return null;
   }
-  return JSON.parse(token);
+  return decodeToken(token);
 };
 
 export const isSessionExpired = () => {
