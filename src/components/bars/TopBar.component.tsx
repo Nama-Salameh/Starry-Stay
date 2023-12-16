@@ -19,10 +19,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@mui/system";
 import { isLoggedIn } from "../../utils/TokenUtils";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 200;
 
 export default function TopBar({ items }: { items: string[] }) {
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const theme = useTheme();
 
@@ -31,21 +33,13 @@ export default function TopBar({ items }: { items: string[] }) {
   };
 
   const drawer = (
-    <Box
-      onClick={handleDrawerToggle}
-      sx={{
-        textAlign: "center",
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.secondary.main,
-        height: "100%",
-      }}
-    >
+    <Box onClick={handleDrawerToggle} className={style.drawerContainer}>
       <img
         src={topBarLogo}
         className={style.topBarLogoDrawer}
         alt="top bar logo"
       />
-      <Divider sx={{ backgroundColor: theme.palette.secondary.main }} />
+      <Divider className={style.deviderDrawer} />
       <List>
         {items.map((item) => (
           <ListItem key={item} disablePadding>
@@ -62,7 +56,7 @@ export default function TopBar({ items }: { items: string[] }) {
     typeof window !== "undefined" ? () => window.document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }} className={style.topBar}>
+    <Box className={style.topBar}>
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar
@@ -77,7 +71,8 @@ export default function TopBar({ items }: { items: string[] }) {
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            className={style.menuIcon}
+            sx={{ display: { xs: "block", sm: "none" } }}
           >
             <MenuIcon />
           </IconButton>
@@ -117,15 +112,18 @@ export default function TopBar({ items }: { items: string[] }) {
               </Button>
             ))}
           </Box>
-          <Button>
-            {isLoggedIn() ?
-            <FontAwesomeIcon
-              icon={faShoppingCart}
-              style={{
-                color: theme.palette.secondary.main,
-              }}
-            /> : "Login"}
-          </Button>
+          {isLoggedIn() ? (
+            <Button onClick={()=> navigate('/checkout')}>
+              <FontAwesomeIcon
+                icon={faShoppingCart}
+                style={{
+                  color: theme.palette.secondary.main,
+                }}
+              />
+            </Button>
+          ) : (
+            <Button onClick={()=> navigate('/login')}>Login</Button>
+          )}
         </Toolbar>
       </AppBar>
       <nav>
