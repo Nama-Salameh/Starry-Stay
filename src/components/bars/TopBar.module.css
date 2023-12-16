@@ -1,0 +1,25 @@
+.topBar {
+  display: flex;
+  flex-direction: column;
+}
+.topBarLogo {
+  height: 65px;
+  width: fit-content;
+}
+.topBarLogoDrawer {
+  width: 100%;
+  height: 50px;
+}
+.menuIcon {
+  margin-right: 2;
+  display: none;
+}
+.drawerContainer{
+    text-align: "center";
+    background-color: var(--mui-palette-primary-main);
+    color: var(--mui-palette-secondary-main);
+    height: 100%;
+}
+.deviderDrawer{
+  background-color: var(--mui-palette-secondary-main); 
+}
