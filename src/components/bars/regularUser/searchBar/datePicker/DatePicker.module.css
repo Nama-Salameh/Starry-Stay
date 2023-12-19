@@ -38,6 +38,7 @@
   width: 94%;
   color: var(--mui-palette-primary-main);
   border: none;
+  cursor: pointer;
 }
 
 .dateRangePicker:hover,
