@@ -1,0 +1,76 @@
+.cityFormControl {
+  width: 270px;
+  height: 55px;
+  border: 1px solid var(--mui-palette-primary-main) !important;
+  border-radius: 5px;
+  margin-right: 5px;
+  padding: 0px;
+}
+.selectContainer {
+  height: 55px;
+}
+.locationIcon {
+  margin-right: 8px;
+}
+.menuPaper {
+  max-height: calc(48 * 4.5 + 8);
+  width: 40%;
+}
+.locationSelectorPlaceholder {
+  font-size: 18px;
+}
+
+@media (max-width: 1100px) {
+  .cityFormControl {
+    width: 230px;
+  }
+}
+@media (max-width: 1000px) {
+  .cityFormControl {
+    width: 190px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cityFormControl {
+    width: 160px;
+  }
+  .locationSelectorPlaceholder {
+    font-size: 17px;
+  }
+}
+@media (max-width: 800px) {
+  .cityFormControl {
+    width: 150px;
+  }
+}
+
+@media (max-width: 650px) {
+  .cityFormControl {
+    width: 130px;
+  }
+  .locationSelectorPlaceholder {
+    font-size: 15px;
+  }
+}
+@media (max-width: 600px) {
+  .cityFormControl {
+    width: 70px;
+  }
+  .locationSelectorPlaceholder {
+    font-size: 0;
+  }
+  .locationIcon {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 450px) {
+  .cityFormControl {
+    width: 55px;
+    margin-right: 1px;
+  }
+  .locationIcon {
+    font-size: 21px;
+  }
+}

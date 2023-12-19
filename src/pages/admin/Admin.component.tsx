@@ -1,13 +1,11 @@
-import React, { startTransition } from "react";
+import React  from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
-    startTransition(() => {
       navigate(`/admin/${path}`);
-    });
   };
 
   return (
