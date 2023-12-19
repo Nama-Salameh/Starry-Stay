@@ -1,0 +1,94 @@
+.datePickerContainer {
+  border: 1px solid var(--mui-palette-primary-main);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 55px;
+  width: calc(31.5% - 10px);
+  margin-right: 5px;
+  padding: 0px;
+  font-size: 18px;
+  position: relative;
+}
+.calenderIcon {
+  margin-right: 3%;
+  margin-left: 2%;
+  font-size: 20px;
+}
+
+.datePicker {
+  width: 93%;
+}
+
+.datePickerDateLabels {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  height: 20px;
+  width: 95%;
+}
+.customDatePickerDropdown {
+  position: absolute;
+  min-width: 300px;
+}
+
+.dateRangePicker {
+  background-color: inherit !important;
+  width: 94%;
+  color: var(--mui-palette-primary-main);
+  border: none;
+}
+
+.dateRangePicker:hover,
+.dateRangePicker:focus,
+.dateRangePicker:active {
+  border-color: var(--mui-palette-primary-main);
+}
+
+@media (max-width: 1100px) {
+  .datePickerDateLabels > span {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .datePickerContainer {
+    padding-right: 7px;
+  }
+  .calenderIcon {
+    margin-left: 2%;
+  }
+  .datePickerDateLabels > span {
+    font-size: 14px;
+    margin-right: 3px;
+  }
+}
+
+@media (max-width: 850px) {
+  .datePickerDateLabels > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  /*
+  .customDatePickerDropdown{
+    width: 50%; 
+    max-width: 300px;
+  }*/
+}
+
+@media (max-width: 600px) {
+  .datePickerContainer {
+    width: calc(43% - 10px);
+    margin-right: 1px;
+  }
+}
+@media (max-width: 500px) {
+  /* .customDatePickerDropdown{
+    max-width: 270px;
+    min-width:270px;
+
+  }*/
+}
