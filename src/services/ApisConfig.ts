@@ -1,6 +1,6 @@
 import { getToken } from '../utils/storageUtils/TokenStorage';
 import axios, { HttpStatusCode } from 'axios';
-import { ErrorTypes } from '../ErrprTypes.enum';
+import { ErrorTypes } from '../enums/ErrprTypes.enum';
 
 const BASE_URL = "https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/api/";
 

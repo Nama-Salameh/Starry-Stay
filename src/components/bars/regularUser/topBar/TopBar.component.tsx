@@ -13,17 +13,17 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import topBarLogo from "../../assets/images/topbarLogo.jpeg";
+import topBarLogo from "../../../../assets/images/topbarLogo.jpeg";
 import style from "./TopBar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@mui/system";
-import { isLoggedIn } from "../../utils/TokenUtils";
+import { isLoggedIn } from "../../../../utils/TokenUtils";
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 200;
 
-export default function TopBar({ items }: { items: string[] }) {
+export default function TopBar({ items = [] }: { items?: string[] }) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const theme = useTheme();
@@ -40,15 +40,18 @@ export default function TopBar({ items }: { items: string[] }) {
         alt="top bar logo"
       />
       <Divider className={style.deviderDrawer} />
-      <List>
-        {items.map((item) => (
-          <ListItem key={item} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={item} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+
+      {items.length > 0 && (
+        <List>
+          {items.map((item) => (
+            <ListItem key={item} disablePadding>
+              <ListItemButton>
+                <ListItemText primary={item} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Box>
   );
 
@@ -64,6 +67,7 @@ export default function TopBar({ items }: { items: string[] }) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            minHeight: "70px",
           }}
         >
           <IconButton
@@ -112,8 +116,9 @@ export default function TopBar({ items }: { items: string[] }) {
               </Button>
             ))}
           </Box>
+
           {isLoggedIn() ? (
-            <Button onClick={()=> navigate('/checkout')}>
+            <Button onClick={() => navigate("/checkout")}>
               <FontAwesomeIcon
                 icon={faShoppingCart}
                 style={{
@@ -122,7 +127,7 @@ export default function TopBar({ items }: { items: string[] }) {
               />
             </Button>
           ) : (
-            <Button onClick={()=> navigate('/login')}>Login</Button>
+            <Button onClick={() => navigate("/login")}>Login</Button>
           )}
         </Toolbar>
       </AppBar>

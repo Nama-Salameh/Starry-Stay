@@ -1,7 +1,7 @@
 {
   "login": "Login",
   "password": "Password",
-  "userName" : "Username",
+  "userName": "Username",
   "enterPassword": "Enter your password",
   "recentlyVisitedHotels": "Recently visited hotels",
   "featuredDeals": "Featured deals",
@@ -57,7 +57,7 @@
   "rooms": "rooms",
   "required": "Required",
   "InvalidPassword": "Password must be maore than 8 characters",
-  "invalidUsername" : "Invalid username",
-  "incorrectUsernameOrPassword" : "Incorrect Username or Password",
-  "loginPageTitle" : "Starry Stay | login"
+  "invalidUsername": "Invalid username",
+  "incorrectUsernameOrPassword": "Incorrect Username or Password",
+  "loginPageTitle": "Starry Stay | login"
 }

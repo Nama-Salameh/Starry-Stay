@@ -9,7 +9,6 @@ import localization from "../../../../localizationConfig";
 import { useNavigate } from "react-router-dom";
 
 export default function SearchBar() {
-
   const navigate = useNavigate();
   const [cities, setCities] = React.useState<
     { id: string; name: string; description: string }[]

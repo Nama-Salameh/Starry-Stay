@@ -8,7 +8,7 @@ const getCities = async () => {
     return response.data;
   } catch (error) {
     let { message, type } = handleError(error);
-    throw ({ message, type });
+    throw { message, type };
   }
 };
 
