@@ -1,0 +1,64 @@
+.roomsSelectorContainer {
+  border: 1px solid var(--mui-palette-primary-main);
+  border-radius: 4px;
+  padding: 0;
+  width: calc(31.5% - 10px);
+  height: 55px;
+  margin-right: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.childrenContainer,
+.adultsContainer,
+.roomsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.decrementButton,
+.incrementButton {
+  margin: 0 5px !important;
+  border: 1px solid var(--mui-palette-primary-main) !important;
+  min-width: 25px !important;
+  height: 25px !important;
+  padding: 0 !important;
+}
+
+.roomsSelectorButton {
+  text-transform: none !important;
+  display: flex !important;
+  flex-direction: row;
+  justify-content: space-between !important;
+  align-items: center;
+  width: 100%;
+}
+.labelContainer {
+  width: 80px;
+}
+.responsiveText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  min-width: 0;
+  margin-right: 8px;
+}
+@media (max-width: 600px) {
+  .responsiveText {
+    display: none;
+  }
+  .roomsSelectorContainer {
+    width: calc(19% - 10px);
+    margin-right: 0;
+    padding-left: 1px;
+  }
+  .roomsSelectorButton {
+    padding: 0;
+  }
+  .downArrow {
+    margin-right: 3px;
+    margin-left: 0;
+  }
+}
