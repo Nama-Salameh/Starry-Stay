@@ -1,0 +1,50 @@
+.hotelContainer {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-bottom: 3%;
+  width: 100%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+}
+.hotelImage {
+  width: 30%;
+  height: 280px;
+  margin-right: 4%;
+  border-radius: 5px;
+}
+.hotelInfoContainer {
+  padding: 5px;
+  flex-grow: 1;
+}
+.hotelName {
+  margin-bottom: 5px;
+}
+.hotelRating{
+    margin-left: 0;
+}
+.hotelPrice {
+  margin-top: 5px;
+}
+.smallButtonContainer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+@media (max-width: 900px) {
+  .hotelImage {
+    height: 200px;
+  }
+}
+@media (max-width: 600px) {
+  .hotelImage {
+    height: 160px;
+  }
+}
+
+@media (max-width: 500px) {
+  .hotelImage {
+    height: 120px;
+  }
+}

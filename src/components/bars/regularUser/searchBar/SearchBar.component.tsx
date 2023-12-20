@@ -33,7 +33,7 @@ export default function SearchBar() {
       <DateRangePickerComponent />
       <RoomsSelector />
       <SmallButton
-        text={localization.search}
+        value={localization.search}
         onClick={() => {
           navigate("/search");
         }}
