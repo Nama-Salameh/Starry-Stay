@@ -3,6 +3,7 @@ import React, { lazy } from "react";
 import ProtectedRoute from "./ProtectedRoute.route";
 import TopBar from "../components/bars/regularUser/topBar/TopBar.component";
 import navItemsForHome from "../constants/navItemsForHome.constant";
+import { SearchProvider } from "../contexts/SearchContext.context";
 
 const Login = lazy(() => import("../pages/login/Login.page"));
 const Home = lazy(() => import("../pages/home/Home.page"));
@@ -29,49 +30,51 @@ const PageNotFound = lazy(
 export default function AppRoutes() {
   return (
     <div>
-      <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-        <Route
-          path="/home"
-          element={
-            <>
-              <TopBar items={navItemsForHome} />
-              <Home />
-            </>
-          }
-        />
-        <Route
-          path="/*"
-          element={
-            <>
-              <TopBar />
-              <Routes>
-                <Route path="*" element={<PageNotFound />}></Route>
-                <Route path="/search" element={<Search />}></Route>
-                <Route path="/hotel" element={<Hotel />}></Route>
-                <Route element={<ProtectedRoute />}>
-                  <Route path="/checkout" element={<Checkout />}></Route>
-                </Route>
-                <Route element={<ProtectedRoute />}>
-                  <Route
-                    path="/confirmation"
-                    element={<Confirmation />}
-                  ></Route>
-                </Route>
-                <Route element={<ProtectedRoute onlyAdmins={true} />}>
-                  <Route path="/admin/*" element={<Admin />}>
-                    <Route index element={<AdminCities />} />
-                    <Route path="cities" element={<AdminCities />} />
-                    <Route path="hotels" element={<AdminHotels />} />
-                    <Route path="rooms" element={<AdminRooms />} />
+      <SearchProvider>
+        <Routes>
+          <Route path="/" element={<Login />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route
+            path="/home"
+            element={
+              <>
+                <TopBar items={navItemsForHome} />
+                <Home />
+              </>
+            }
+          />
+          <Route
+            path="/*"
+            element={
+              <>
+                <TopBar />
+                <Routes>
+                  <Route path="*" element={<PageNotFound />}></Route>
+                  <Route path="/search" element={<Search />}></Route>
+                  <Route path="/hotel" element={<Hotel />}></Route>
+                  <Route element={<ProtectedRoute />}>
+                    <Route path="/checkout" element={<Checkout />}></Route>
                   </Route>
-                </Route>
-              </Routes>
-            </>
-          }
-        ></Route>
-      </Routes>
+                  <Route element={<ProtectedRoute />}>
+                    <Route
+                      path="/confirmation"
+                      element={<Confirmation />}
+                    ></Route>
+                  </Route>
+                  <Route element={<ProtectedRoute onlyAdmins={true} />}>
+                    <Route path="/admin/*" element={<Admin />}>
+                      <Route index element={<AdminCities />} />
+                      <Route path="cities" element={<AdminCities />} />
+                      <Route path="hotels" element={<AdminHotels />} />
+                      <Route path="rooms" element={<AdminRooms />} />
+                    </Route>
+                  </Route>
+                </Routes>
+              </>
+            }
+          ></Route>
+        </Routes>
+      </SearchProvider>
     </div>
   );
 }
