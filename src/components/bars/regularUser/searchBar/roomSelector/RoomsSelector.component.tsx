@@ -4,24 +4,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import style from "./RoomSelector.module.css";
 import RoomCounterControl from "./RoomCounterControl.component";
+import { useSearchContext } from "../../../../../contexts/SearchContext.context";
+import localization from "../../../../../localizationConfig";
 
-const RoomSelector: React.FC = () => {
+const RoomSelector = () => {
   const [roomMenuAnchor, setroomMenuAnchor] = useState<null | HTMLElement>(
     null
   );
-  const [rooms, setRooms] = useState(1);
-  const [adults, setAdults] = useState(2);
-  const [children, setChildren] = useState(0);
+  const { searchParams, setSearchParamsValue } = useSearchContext();
 
-  const handleIncrement =
-    (stateSetter: React.Dispatch<React.SetStateAction<number>>) => () => {
-      stateSetter((prevValue) => prevValue + 1);
-    };
+  const handleIncrement = (param: keyof typeof searchParams) => () => {
+    setSearchParamsValue(param, searchParams[param] + 1);
+  };
 
-  const handleDecrement =
-    (stateSetter: React.Dispatch<React.SetStateAction<number>>) => () => {
-      stateSetter((prevValue) => Math.max(prevValue - 1, 0));
-    };
+  const handleDecrement = (param: keyof typeof searchParams) => () => {
+    setSearchParamsValue(param, Math.max(searchParams[param] - 1, 0));
+  };
 
   const handleOpenRoomMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setroomMenuAnchor(event.currentTarget);
@@ -42,7 +40,8 @@ const RoomSelector: React.FC = () => {
         disableRipple
       >
         <span className={style.responsiveText}>
-          {adults} Adults, {children} Children, {rooms} Rooms
+          {searchParams.adults} Adults, {searchParams.children} Children,{" "}
+          {searchParams.rooms} Rooms
         </span>
         <FontAwesomeIcon icon={faChevronDown} className={style.downArrow} />
       </Button>
@@ -55,21 +54,21 @@ const RoomSelector: React.FC = () => {
       >
         <RoomCounterControl
           label="Rooms"
-          value={rooms}
-          onIncrement={handleIncrement(setRooms)}
-          onDecrement={handleDecrement(setRooms)}
+          value={searchParams.rooms}
+          onIncrement={handleIncrement(localization.rooms)}
+          onDecrement={handleDecrement(localization.rooms)}
         />
         <RoomCounterControl
           label="Adults"
-          value={adults}
-          onIncrement={handleIncrement(setAdults)}
-          onDecrement={handleDecrement(setAdults)}
+          value={searchParams.adults}
+          onIncrement={handleIncrement(localization.adults)}
+          onDecrement={handleDecrement(localization.adults)}
         />
         <RoomCounterControl
           label="Children"
-          value={children}
-          onIncrement={handleIncrement(setChildren)}
-          onDecrement={handleDecrement(setChildren)}
+          value={searchParams.children}
+          onIncrement={handleIncrement(localization.children)}
+          onDecrement={handleDecrement(localization.children)}
         />
       </Menu>
     </div>

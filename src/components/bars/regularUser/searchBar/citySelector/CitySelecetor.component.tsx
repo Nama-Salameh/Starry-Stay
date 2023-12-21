@@ -6,14 +6,16 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "./CitySelector.module.css";
+import { useSearchContext } from "../../../../../contexts/SearchContext.context";
 
 const CitySelector: React.FC<{
   cities: { id: string; name: string; description: string }[];
 }> = ({ cities }) => {
-  const [cityName, setCityName] = React.useState<string>("");
+  const { searchParams, setSearchParamsValue } = useSearchContext();
 
-  const handleChange = (event: SelectChangeEvent<typeof cityName>) => {
-    setCityName(event.target.value);
+  const handleChange = (event: SelectChangeEvent<typeof searchParams.city>) => {
+    const selectedCity = event.target.value as string;
+    setSearchParamsValue("city", selectedCity);
   };
 
   return (
@@ -21,12 +23,12 @@ const CitySelector: React.FC<{
       <FormControl className={style.cityFormControl}>
         <Select
           displayEmpty
-          value={cityName}
+          value={searchParams.city || ""}
           onChange={handleChange}
           input={<OutlinedInput />}
           className={style.selectContainer}
           renderValue={() => {
-            if (!cityName) {
+            if (!searchParams.city) {
               return (
                 <div className={style.locationSelectorPlaceholder}>
                   <FontAwesomeIcon
@@ -43,7 +45,7 @@ const CitySelector: React.FC<{
                   icon={faLocationDot}
                   className={style.locationIcon}
                 />
-                {cityName}
+                {searchParams.city}
               </div>
             );
           }}
