@@ -1,6 +1,6 @@
 import { axiosInstance, handleError } from "../ApisConfig";
 
-const GET_CITIES_URL = "/cities";
+const GET_CITIES_URL = "api/cities";
 
 const getCities = async () => {
   try {
