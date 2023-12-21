@@ -9,11 +9,24 @@
   flex-direction: row;
   gap: 10px;
 }
-.hotelsContainer{
+.hotelsContainerWithoutSideBar {
+  margin-top: 60px;
   flex-grow: 1;
+  max-height: 710px;
+  overflow-y: auto;
+  grid: 10px;
 }
-.hotelsContainerWithoutSideBar{
-  margin-top : 7px;
+.hotelsContainer {
+  flex-grow: 1;
+  max-height: 770px;
+  overflow-y: auto;
+}
+.smallButtonContainer {
+  position: fixed;
+  top: 155px;
+  z-index: 1000;
+  width: 100%;
+  margin-bottom: 5px;
 }
 @media (max-width: 1100px) {
   .filterSideBarContainer {

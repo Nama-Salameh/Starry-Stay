@@ -1,18 +1,21 @@
 import { Rating, useMediaQuery } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import SmallButton from "../../common/Buttons/SmallButton.component";
 import localization from "../../../localizationConfig";
 import { useNavigate } from "react-router";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import IHotel from "../../../interfaces/IHotel.interface";
 import { useTheme } from "@mui/system";
-import style from "./Hotel.module.css";
+import style from "./HotelsContainer.module.css";
 
-export default function Hotel() {
+export default function HotelsContainer({
+  hotelsSearchResult,
+}: {
+  hotelsSearchResult: IHotel[];
+}) {
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery("(max-width:550px)");
-  const [hotelsSearchResult, sethotelsSearchResult] = useState<IHotel[]>([]);
 
   return (
     <div>

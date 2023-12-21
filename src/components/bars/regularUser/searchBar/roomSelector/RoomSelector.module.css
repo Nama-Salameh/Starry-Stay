@@ -32,7 +32,7 @@
   justify-content: space-around !important;
   align-items: center;
   width: 100%;
-  padding : 3px;
+  padding: 3px;
 }
 .labelContainer {
   width: 80px;
@@ -53,6 +53,4 @@
     width: calc(19% - 10px);
     margin-right: 0;
   }
-
-  
 }
