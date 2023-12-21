@@ -1,6 +1,6 @@
 import { axiosInstance, handleError } from "../ApisConfig";
 
-const GET_AMINITIES_URL = "/search-results/amenities";
+const GET_AMINITIES_URL = "api/search-results/amenities";
 
 const getAminities = async () => {
   try {

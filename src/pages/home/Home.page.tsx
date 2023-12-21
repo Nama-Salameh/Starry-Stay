@@ -3,10 +3,15 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import SearchBar from "../../components/bars/regularUser/searchBar/SearchBar.component";
 import localization from "../../localizationConfig";
-import { getFeaturedDealsHotels } from "../../services/home/home.service";
+import {
+  getFeaturedDealsHotels,
+  getTrendingDestinationHotels,
+} from "../../services/home/home.service";
 
 export default function Home() {
   const featuredDealsHotels = getFeaturedDealsHotels();
+  const trendingDestinations = getTrendingDestinationHotels();
+
   return (
     <Box>
       <SearchBar />

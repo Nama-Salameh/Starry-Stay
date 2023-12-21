@@ -1,7 +1,7 @@
 import { storeToken } from "../../utils/storageUtils/TokenStorage";
 import { axiosInstance, handleError } from "../ApisConfig";
 
-const LOGIN_URL = "auth/authenticate";
+const LOGIN_URL = "api/auth/authenticate";
 
 export const login = async (username: string, password: string) => {
   const props = {

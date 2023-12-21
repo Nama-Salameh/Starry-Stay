@@ -1,6 +1,6 @@
 import { axiosInstance, handleError } from "../ApisConfig";
 
-const GET_SEARCH_REGULAR_USER_URL = "/home/search";
+const GET_SEARCH_REGULAR_USER_URL = "api/home/search";
 
 const getSearchResultRegularUser = async (
   checkInDate: string,
