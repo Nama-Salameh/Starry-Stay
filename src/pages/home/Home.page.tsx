@@ -5,12 +5,19 @@ import SearchBar from "../../components/bars/regularUser/searchBar/SearchBar.com
 import localization from "../../localizationConfig";
 import {
   getFeaturedDealsHotels,
+  getRecentlyVisitedHotels,
   getTrendingDestinationHotels,
 } from "../../services/home/home.service";
+import { getDecodedToken } from "../../utils/TokenUtils";
+import IToken from "../../interfaces/IToken.interface";
 
 export default function Home() {
+  const userToken: IToken | null = getDecodedToken() as IToken | null;
   const featuredDealsHotels = getFeaturedDealsHotels();
   const trendingDestinations = getTrendingDestinationHotels();
+  const recentlyVisitedHotels = userToken
+    ? getRecentlyVisitedHotels(parseInt(userToken.sub, 10))
+    : null;
 
   return (
     <Box>
