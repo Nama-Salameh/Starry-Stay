@@ -1,11 +1,13 @@
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 
 const SmallButton: React.FC<{
-  text: string;
+  value: string;
+  icon?: React.ReactNode
   buttonWidth?: number;
   disabled?: boolean;
+  isSecondaryBackgroundColor? : boolean;
   onClick: () => void;
-}> = ({ text, buttonWidth, disabled = false, onClick }) => {
+}> = ({ value, icon, buttonWidth, disabled = false, isSecondaryBackgroundColor, onClick }) => {
   return (
     <Button
       type="submit"
@@ -18,9 +20,18 @@ const SmallButton: React.FC<{
         fontSize: 18,
         borderRadius: 2,
         width: buttonWidth || "auto",
+        ...(isSecondaryBackgroundColor && {
+          backgroundColor: "var(--mui-palette-secondary-main)",
+          color: "var(--mui-palette-primary-main)",
+        }),
       }}
     >
-      {text}
+       {icon && (
+        <IconButton sx={{margin : 0, padding :0, }}>
+          {icon}
+        </IconButton>
+      )}
+      {value}
     </Button>
   );
 };

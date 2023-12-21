@@ -1,0 +1,9 @@
+
+.filteringModal{
+    width: 70%;
+    height: 80%;
+    padding: 2% 5%;
+    position: fixed;
+    left:2%;
+    top:85px;
+}

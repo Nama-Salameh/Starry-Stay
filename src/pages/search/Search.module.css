@@ -1,0 +1,40 @@
+.filterSideBarContainer {
+  width: 20%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  padding: 8px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+}
+.searchContainerWithSideBar {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.hotelsContainerWithoutSideBar {
+  margin-top: 60px;
+  flex-grow: 1;
+  max-height: 710px;
+  overflow-y: auto;
+  grid: 10px;
+}
+.hotelsContainer {
+  flex-grow: 1;
+  max-height: 770px;
+  overflow-y: auto;
+}
+.smallButtonContainer {
+  position: fixed;
+  top: 155px;
+  z-index: 1000;
+  width: 100%;
+  margin-bottom: 5px;
+}
+@media (max-width: 1100px) {
+  .filterSideBarContainer {
+    width: 23%;
+  }
+}
+@media (max-width: 950px) {
+  .filterSideBarContainer {
+    width: 26%;
+  }
+}

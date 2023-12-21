@@ -10,7 +10,7 @@ export default function Home() {
       <SearchBar />
       <Box component="main" sx={{ p: 1.5, pt: 12 }}>
         <Toolbar />
-        {localization.home}{" "}
+        {localization.home}
       </Box>
     </Box>
   );

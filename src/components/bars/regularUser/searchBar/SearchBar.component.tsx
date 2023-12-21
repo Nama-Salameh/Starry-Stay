@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, startTransition } from "react";
 import CitySelector from "./citySelector/CitySelecetor.component";
 import getCities from "../../../../services/cities/Cities.service";
 import DateRangePickerComponent from "./datePicker/DatePicker.component";
@@ -7,6 +7,7 @@ import RoomsSelector from "./roomSelector/RoomsSelector.component";
 import SmallButton from "../../../common/Buttons/SmallButton.component";
 import localization from "../../../../localizationConfig";
 import { useNavigate } from "react-router-dom";
+import { handleError } from "../../../../services/ApisConfig";
 
 export default function SearchBar() {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ export default function SearchBar() {
       const citiesInfo = await getCities();
       setCities(citiesInfo);
     } catch (error) {
-      console.error("Error fetching cities:", error);
+      let { message, type } = handleError(error);
+      throw { message, type };
     }
   };
 
@@ -27,16 +29,19 @@ export default function SearchBar() {
     fetchData();
   }, []);
 
+  const handleSearchButtonClick = () => {
+    startTransition(() => {
+      navigate("/search");
+    });
+  };
   return (
     <div className={style.searchBarContainer}>
       <CitySelector cities={cities} />
       <DateRangePickerComponent />
       <RoomsSelector />
       <SmallButton
-        text={localization.search}
-        onClick={() => {
-          navigate("/search");
-        }}
+        value={localization.search}
+        onClick={handleSearchButtonClick}
         buttonWidth={80}
       />
     </div>

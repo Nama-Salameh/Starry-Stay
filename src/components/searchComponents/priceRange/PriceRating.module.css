@@ -1,0 +1,42 @@
+.priceRatingContainer {
+  margin-bottom: 7px;
+}
+.minMaxValues {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 14px;
+}
+.priceHeader {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.priceHeader > h3 {
+  margin-right: 10px;
+}
+.priceRating {
+  margin: 0;
+  margin-left: 2px;
+}
+
+.priceInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+.minPriceContainer,
+.maxPriceContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.minPrice,
+.maxPrice {
+  padding: 3px;
+  border: 1px solid;
+}
