@@ -11,6 +11,7 @@ import { useSearchContext } from "../../contexts/SearchContext.context";
 import { getSearchResultRegularUser } from "../../services/search/Search.service";
 import HotelsContainer from "../../components/searchComponents/hotel/HotelsConatainer.component";
 import { handleError } from "../../services/ApisConfig";
+import Sort from "../../components/searchComponents/sort/Sort.component";
 
 export default function Search() {
   const isSmallScreen = useMediaQuery("(max-width:900px)");
@@ -29,7 +30,7 @@ export default function Search() {
           searchParams.children,
           searchParams.adults,
           searchParams.starRate,
-          searchParams.sort,
+          searchParams.sort
         );
         setHotelsSearchResults(results);
       } catch (error) {
@@ -50,14 +51,10 @@ export default function Search() {
       <div className={style.searchBarContainer}>
         <SearchBar />
       </div>
-      <Box
-        component="main"
-        sx={{ p: 1.5, pt: 20 }}
-        className={style.mainContent}
-      >
+      <Box component="main" sx={{ p: 1, pt: 20 }} className={style.mainContent}>
         {isSmallScreen ? (
-          <div>
-            <div className={style.smallButtonContainer}>
+          <div className={style.smallPageContainer}>
+            <div className={style.filtersContainer}>
               <SmallButton
                 onClick={toggleFilteringModal}
                 value={localization.filterBy}
@@ -65,6 +62,7 @@ export default function Search() {
                 buttonWidth={150}
                 icon={<TuneIcon />}
               />
+              <Sort />
             </div>
             <FilteringDialog
               modalOpen={modalOpen}
@@ -80,8 +78,13 @@ export default function Search() {
             <div className={style.filterSideBarContainer}>
               <FilteringContent />
             </div>
-            <div className={style.hotelsContainer}>
-              <HotelsContainer hotelsSearchResult={hotelsSearchResults} />
+            <div className={style.bigPageContainer}>
+              <div className={style.sortContainer}>
+                <Sort />
+              </div>
+              <div className={style.hotelsContainer}>
+                <HotelsContainer hotelsSearchResult={hotelsSearchResults} />
+              </div>
             </div>
           </div>
         )}

@@ -42,7 +42,7 @@ const DateRangePickerComponent = () => {
           onChange={onChange}
           suffixIcon={null}
           className={style.dateRangePicker}
-          dropdownClassName={style.customDatePickerDropdown}
+          popupClassName={style.customDatePickerDropdown}
           placeholder={["_ _/_ _/_ _ ", "_ _/_ _/_ _"]}
           disabledDate={disabledDate}
         />
