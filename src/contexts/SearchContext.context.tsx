@@ -6,9 +6,11 @@ export const SearchProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [searchParams, setSearchParams] = useState({
-    city: "",
     checkInDate: "",
     checkOutDate: "",
+    city: "",
+    starRate: 1,
+    sort : "ascending",
     rooms: 1,
     adults: 2,
     children: 0,

@@ -22,12 +22,14 @@ export default function Search() {
     const fetchSearchResults = async () => {
       try {
         const results = await getSearchResultRegularUser(
-          searchParams.city,
           searchParams.checkInDate,
           searchParams.checkOutDate,
+          searchParams.city,
           searchParams.rooms,
           searchParams.children,
-          searchParams.adults
+          searchParams.adults,
+          searchParams.starRate,
+          searchParams.sort,
         );
         setHotelsSearchResults(results);
       } catch (error) {
