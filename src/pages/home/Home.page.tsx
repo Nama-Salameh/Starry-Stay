@@ -7,6 +7,7 @@ import {
   getFeaturedDealsHotels,
   getTrendingDestinationHotels,
 } from "../../services/home/home.service";
+import HotelsContainer from "../../components/homeComponents/hotelsConatiner/HotelsContainer.component";
 
 export default function Home() {
   const featuredDealsHotels = getFeaturedDealsHotels();
@@ -17,7 +18,7 @@ export default function Home() {
       <SearchBar />
       <Box component="main" sx={{ p: 1.5, pt: 12 }}>
         <Toolbar />
-        {localization.home}
+        <HotelsContainer/>
       </Box>
     </Box>
   );
