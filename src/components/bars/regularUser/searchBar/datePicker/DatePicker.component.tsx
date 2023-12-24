@@ -16,7 +16,8 @@ const DateRangePickerComponent = () => {
       if (Array.isArray(dates) && dates.length === 2 && dates[0] && dates[1]) {
         setSearchParamsValue("checkInDate", dates[0].format("YYYY-MM-DD"));
         setSearchParamsValue("checkOutDate", dates[1].format("YYYY-MM-DD"));
-        setDateRange(dates); }
+        setDateRange(dates);
+      }
     } catch (error) {
       let { message, type } = handleError(error);
       throw { message, type };

@@ -1,16 +1,16 @@
 .selectSortTypeContainer {
-    width: 140px;
-    border-radius: 8px;
-    align-items: center;
-    min-width: 64px;
-    padding: 6px 16px;
-    height: 52px;
-    font-size: 18px;
-    border: 1px solid var(--mui-palette-secondary-dark);
-    box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+  width: 140px;
+  border-radius: 8px;
+  align-items: center;
+  min-width: 64px;
+  padding: 6px 16px;
+  height: 52px;
+  font-size: 18px;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+}
+@media (max-width: 500px) {
+  .selectSortTypeContainer {
+    width: 130px;
   }
-  @media (max-width: 500px) {
-    .selectSortTypeContainer {
-      width: 130px;
-    }
-  }
+}
