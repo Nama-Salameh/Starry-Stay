@@ -1,4 +1,5 @@
 export default interface IHotel {
+  hotelId : number,
   hotelName: string;
   starRating: number;
   latitude: number;

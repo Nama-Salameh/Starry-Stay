@@ -1,5 +1,5 @@
 import { Rating, useMediaQuery } from "@mui/material";
-import React from "react";
+import React, { startTransition } from "react";
 import SmallButton from "../../common/Buttons/SmallButton.component";
 import localization from "../../../localizationConfig";
 import { useNavigate } from "react-router";
@@ -17,10 +17,20 @@ export default function HotelsContainer({
   const theme = useTheme();
   const isSmallScreen = useMediaQuery("(max-width:550px)");
 
+  const handleHotelClick = (hotelId: number) => {
+    startTransition(() => {
+      navigate(`/hotel/${hotelId}`);
+    });
+  };
+
   return (
     <div>
-      {hotelsSearchResult.map((hotel, index) => (
-        <div className={style.hotelContainer} key={index}>
+      {hotelsSearchResult.map((hotel) => (
+        <div
+          className={style.hotelContainer}
+          key={hotel.hotelId}
+          onClick={() => handleHotelClick(hotel.hotelId)}
+        >
           <img
             src={hotel.roomPhotoUrl}
             alt={`Hotel ${hotel.hotelName}`}
