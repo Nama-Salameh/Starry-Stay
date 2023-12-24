@@ -48,9 +48,7 @@ export default function Search() {
   };
   return (
     <div className={style.pageContainer}>
-      <div className={style.searchBarContainer}>
-        <SearchBar />
-      </div>
+      <SearchBar />
       <Box component="main" sx={{ p: 1, pt: 20 }} className={style.mainContent}>
         {isSmallScreen ? (
           <div className={style.smallPageContainer}>

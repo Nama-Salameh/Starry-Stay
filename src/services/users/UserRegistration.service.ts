@@ -10,7 +10,7 @@ export const login = async (username: string, password: string) => {
   };
   try {
     const response = await axiosInstance.post(LOGIN_URL, props);
-    storeToken(response.data);
+    storeToken(response.data.authentication);
   } catch (error: any) {
     let { message, type } = handleError(error);
     throw { message, type };

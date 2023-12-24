@@ -24,6 +24,7 @@ const getSearchResultRegularUser = async (
   };
   const apiUrl = axiosInstance.getUri({ url: GET_SEARCH_REGULAR_USER_URL, params });
   console.log("API URL:", apiUrl);
+  
   try {
     const response = await axiosInstance.get(GET_SEARCH_REGULAR_USER_URL, {
       params: params,

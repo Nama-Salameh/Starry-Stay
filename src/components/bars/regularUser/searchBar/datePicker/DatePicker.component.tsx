@@ -11,7 +11,6 @@ import { handleError } from "../../../../../services/ApisConfig";
 const DateRangePickerComponent = () => {
   const { searchParams, setSearchParamsValue } = useSearchContext();
   const [dateRange, setDateRange] = useState<RangeValue<Dayjs>>([null, null]);
-
   const onChange = (dates: RangeValue<Dayjs>) => {
     try {
       if (Array.isArray(dates) && dates.length === 2 && dates[0] && dates[1]) {

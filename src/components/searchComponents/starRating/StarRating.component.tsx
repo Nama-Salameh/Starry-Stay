@@ -5,9 +5,7 @@ import style from './StarRating.module.css';
 import { useSearchContext } from "../../../contexts/SearchContext.context";
 
 export default function StarRating() {
-  const [value, setValue] = React.useState<number | null>(2);
   const { searchParams , setSearchParamsValue} = useSearchContext();
-
 
   return (
     <div className={style.starRatingContainer}>
