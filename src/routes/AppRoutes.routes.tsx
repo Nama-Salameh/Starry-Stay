@@ -5,6 +5,7 @@ import TopBar from "../components/bars/regularUser/topBar/TopBar.component";
 import {navItemsForHomeLoggedUsers, navItemsForHomeUnLoggedUsers} from "../constants/navItemsForHome.constant";
 import { SearchProvider } from "../contexts/SearchContext.context";
 import { isLoggedIn, isSessionExpired } from "../utils/TokenUtils";
+import RoomDetails from "../pages/room/RoomDetails.page";
 
 const Login = lazy(() => import("../pages/login/Login.page"));
 const Home = lazy(() => import("../pages/home/Home.page"));
@@ -57,6 +58,7 @@ export default function AppRoutes() {
                   <Route path="*" element={<PageNotFound />}></Route>
                   <Route path="/search" element={<Search />}></Route>
                   <Route path="/hotel/:hotelId" element={<Hotel />}></Route>
+                  <Route path="/room" element={<RoomDetails />}></Route>
                   <Route element={<ProtectedRoute />}>
                     <Route path="/checkout" element={<Checkout />}></Route>
                   </Route>
