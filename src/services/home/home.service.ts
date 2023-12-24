@@ -2,7 +2,6 @@ import { axiosInstance, handleError } from "../ApisConfig";
 import { getToken } from "../../utils/storageUtils/TokenStorage";
 const GET_FEATURED_DEALS_HOTELS = "api/home/featured-deals";
 const GET_TRENDING_DESTINATION_HOTELS = "/destinations/trending";
-const GET_RECENTLY_VISITED_HOTELS = "/users/{userId}/recent-hotels";
 
 export const getFeaturedDealsHotels = async () => {
   try {
