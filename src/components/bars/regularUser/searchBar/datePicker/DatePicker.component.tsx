@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { DatePicker } from "antd";
 import { RangeValue } from "rc-picker/lib/interface";
 import dayjs, { Dayjs } from "dayjs";
@@ -10,15 +10,13 @@ import { handleError } from "../../../../../services/ApisConfig";
 
 const DateRangePickerComponent = () => {
   const { searchParams, setSearchParamsValue } = useSearchContext();
-
+  const [dateRange, setDateRange] = useState<RangeValue<Dayjs>>([null, null]);
   const onChange = (dates: RangeValue<Dayjs>) => {
     try {
       if (Array.isArray(dates) && dates.length === 2 && dates[0] && dates[1]) {
-        const startDate = dates[0].format("YYYY-MM-DD");
-        const endDate = dates[1].format("YYYY-MM-DD");
-        setSearchParamsValue("checkInDate", startDate);
-        setSearchParamsValue("checkOutDate", endDate);
-      }
+        setSearchParamsValue("checkInDate", dates[0].format("YYYY-MM-DD"));
+        setSearchParamsValue("checkOutDate", dates[1].format("YYYY-MM-DD"));
+        setDateRange(dates); }
     } catch (error) {
       let { message, type } = handleError(error);
       throw { message, type };
@@ -38,11 +36,11 @@ const DateRangePickerComponent = () => {
           <span>Check-out-date</span>
         </div>
         <DatePicker.RangePicker
-          value={[searchParams.startDate, searchParams.endDate]}
+          value={dateRange}
           onChange={onChange}
           suffixIcon={null}
           className={style.dateRangePicker}
-          dropdownClassName={style.customDatePickerDropdown}
+          popupClassName={style.customDatePickerDropdown}
           placeholder={["_ _/_ _/_ _ ", "_ _/_ _/_ _"]}
           disabledDate={disabledDate}
         />
