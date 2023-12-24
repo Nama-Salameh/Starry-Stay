@@ -1,7 +1,11 @@
 import localization from "../localizationConfig";
-const navItemsForHome = [
+const navItemsForHomeLoggedUsers = [
+  localization.featuredDeals,
   localization.recentlyVisitedHotels,
+  localization.trendingDestinations,
+];
+const navItemsForHomeUnLoggedUsers = [
   localization.featuredDeals,
   localization.trendingDestinations,
 ];
-export default navItemsForHome;
+export { navItemsForHomeLoggedUsers , navItemsForHomeUnLoggedUsers};

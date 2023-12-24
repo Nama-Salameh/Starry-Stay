@@ -1,7 +1,7 @@
 export default interface IToken {
   exp: number;
   iss: string;
-  sub: string;
+  user_id: string;
   nbf: number;
   userType: string;
   given_name: string;

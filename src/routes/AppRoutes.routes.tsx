@@ -2,8 +2,9 @@ import { Routes, Route } from "react-router";
 import React, { lazy } from "react";
 import ProtectedRoute from "./ProtectedRoute.route";
 import TopBar from "../components/bars/regularUser/topBar/TopBar.component";
-import navItemsForHome from "../constants/navItemsForHome.constant";
+import {navItemsForHomeLoggedUsers, navItemsForHomeUnLoggedUsers} from "../constants/navItemsForHome.constant";
 import { SearchProvider } from "../contexts/SearchContext.context";
+import { isLoggedIn, isSessionExpired } from "../utils/TokenUtils";
 
 const Login = lazy(() => import("../pages/login/Login.page"));
 const Home = lazy(() => import("../pages/home/Home.page"));
@@ -38,7 +39,11 @@ export default function AppRoutes() {
             path="/home"
             element={
               <>
-                <TopBar items={navItemsForHome} />
+                {isLoggedIn() && !isSessionExpired() ? (
+                  <TopBar items={navItemsForHomeLoggedUsers} />
+                ) : (
+                  <TopBar items={navItemsForHomeUnLoggedUsers} />
+                )}
                 <Home />
               </>
             }

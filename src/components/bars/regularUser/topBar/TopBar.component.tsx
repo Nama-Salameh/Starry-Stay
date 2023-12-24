@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { startTransition } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,8 +18,11 @@ import style from "./TopBar.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useTheme } from "@mui/system";
-import { isLoggedIn } from "../../../../utils/TokenUtils";
+import { isLoggedIn, isSessionExpired } from "../../../../utils/TokenUtils";
 import { useNavigate } from "react-router-dom";
+import SmallButton from "../../../common/Buttons/SmallButton.component";
+import localization from "../../../../localizationConfig";
+import slugify from "slugify";
 
 const drawerWidth = 200;
 
@@ -30,6 +33,17 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
+  };
+  const toSlug = (str: string) => slugify(str, { lower: true });
+
+  const navigateToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const topOffset = -150;
+      const targetScrollPosition = element.offsetTop + topOffset;
+      window.scrollTo({ top: targetScrollPosition, behavior: "smooth" });
+      setMobileOpen(false);
+    }
   };
 
   const drawer = (
@@ -45,7 +59,7 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
         <List>
           {items.map((item) => (
             <ListItem key={item} disablePadding>
-              <ListItemButton>
+              <ListItemButton onClick={() => navigateToSection(toSlug(item))}>
                 <ListItemText primary={item} />
               </ListItemButton>
             </ListItem>
@@ -111,14 +125,17 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
                   color: "var(--mui-pallete-secondary-main)",
                   textTransform: "none",
                 }}
+                onClick={() => navigateToSection(toSlug(item))}
               >
                 {item}
               </Button>
             ))}
           </Box>
 
-          {isLoggedIn() ? (
-            <Button onClick={() => navigate("/checkout")}>
+          {isLoggedIn() && !isSessionExpired() ? (
+            <Button
+              onClick={() => startTransition(() => navigate("/checkout"))}
+            >
               <FontAwesomeIcon
                 icon={faShoppingCart}
                 style={{
@@ -127,7 +144,10 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
               />
             </Button>
           ) : (
-            <Button onClick={() => navigate("/login")}>Login</Button>
+            <SmallButton
+              onClick={() => startTransition(() => navigate("/login"))}
+              value={localization.login}
+            />
           )}
         </Toolbar>
       </AppBar>

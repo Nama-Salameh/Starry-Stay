@@ -3,29 +3,22 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import SearchBar from "../../components/bars/regularUser/searchBar/SearchBar.component";
 import localization from "../../localizationConfig";
-import {
-  getFeaturedDealsHotels,
-  getRecentlyVisitedHotels,
-  getTrendingDestinationHotels,
-} from "../../services/home/home.service";
-import { getDecodedToken } from "../../utils/TokenUtils";
-import IToken from "../../interfaces/IToken.interface";
+import RecenlyVisitedHotels from "../../components/homeComponents/recenlyVisitedHotels/RecenlyVisitedHotels.component";
+import TrendingDestinationsContainer from "../../components/homeComponents/trendingDestinationsContainer/TrendingDestinationsContainer.component";
+import { isLoggedIn, isSessionExpired } from "../../utils/TokenUtils";
+import FeaturedDealsHotelsContainer from "../../components/homeComponents/featuredDealsHotelsContainer/FeaturedDealsContainer.component";
+import style from "./Home.module.css";
 
 export default function Home() {
-  const userToken: IToken | null = getDecodedToken() as IToken | null;
-  const featuredDealsHotels = getFeaturedDealsHotels();
-  const trendingDestinations = getTrendingDestinationHotels();
-  const recentlyVisitedHotels = userToken
-    ? getRecentlyVisitedHotels(parseInt(userToken.sub, 10))
-    : null;
-
   return (
-    <Box>
+    <div>
       <SearchBar />
       <Box component="main" sx={{ p: 1.5, pt: 12 }}>
         <Toolbar />
-        {localization.home}
+        <FeaturedDealsHotelsContainer />
+        {isLoggedIn() && !isSessionExpired() && <RecenlyVisitedHotels />}
+        <TrendingDestinationsContainer />
       </Box>
-    </Box>
+    </div>
   );
 }
