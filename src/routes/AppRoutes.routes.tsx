@@ -56,7 +56,7 @@ export default function AppRoutes() {
                 <Routes>
                   <Route path="*" element={<PageNotFound />}></Route>
                   <Route path="/search" element={<Search />}></Route>
-                  <Route path="/hotel" element={<Hotel />}></Route>
+                  <Route path="/hotel/:hotelId" element={<Hotel />}></Route>
                   <Route element={<ProtectedRoute />}>
                     <Route path="/checkout" element={<Checkout />}></Route>
                   </Route>
