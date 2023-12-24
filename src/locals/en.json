@@ -59,5 +59,9 @@
   "InvalidPassword": "Password must be maore than 8 characters",
   "invalidUsername": "Invalid username",
   "incorrectUsernameOrPassword": "Incorrect Username or Password",
-  "loginPageTitle": "Starry Stay | login"
+  "loginPageTitle": "Starry Stay | login",
+  "ascendingSortType": "ascending",
+  "descendingSortType": "descending",
+  "ascending": "Ascending",
+  "descending": "Descending"
 }

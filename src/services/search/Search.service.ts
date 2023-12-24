@@ -13,15 +13,17 @@ const getSearchResultRegularUser = async (
   sort?: string
 ) => {
   const params = {
-    city: city,
     checkInDate: checkInDate,
     checkOutDate: checkOutDate,
+    city: city,
+    starRate: starRate,
+    sort: sort,
     numberOfRooms: numberOfRooms,
     adults: adults,
     children: children,
-    starRate: starRate,
-    sort: sort,
   };
+  const apiUrl = axiosInstance.getUri({ url: GET_SEARCH_REGULAR_USER_URL, params });
+  console.log("API URL:", apiUrl); 
   try {
     const response = await axiosInstance.get(GET_SEARCH_REGULAR_USER_URL, {
       params: params,

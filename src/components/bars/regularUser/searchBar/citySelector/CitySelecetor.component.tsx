@@ -13,7 +13,7 @@ const CitySelector: React.FC<{
 }> = ({ cities }) => {
   const { searchParams, setSearchParamsValue } = useSearchContext();
 
-  const handleChange = (event: SelectChangeEvent<typeof searchParams.city>) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     const selectedCity = event.target.value as string;
     setSearchParamsValue("city", selectedCity);
   };
