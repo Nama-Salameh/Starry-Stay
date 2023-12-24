@@ -4,6 +4,8 @@ import {
   getHotelInfoByItsId,
   getHotelGalleryByItsId,
   getHotelAmenitiesByItsId,
+  getHotelRoomsByItsId,
+  getHotelAvailableRoomsByItsId,
 } from "../../services/hotels/Hotels.service";
 import { useParams } from "react-router-dom";
 import IHotel from "../../interfaces/IHotel.interface";
@@ -19,6 +21,9 @@ export default function Hotel() {
   const [hotelInfo, setHotelInfo] = useState<IHotel>();
   const [hotelAmenities, setHotelAmenities] =
     useState<{ id: number; name: string; description: string }[]>();
+  const [hotelRooms, setHotelRooms] = useState();
+  const [hotelAvailableRooms, setHotelAvaiableRooms] = useState();
+
   useEffect(() => {
     const fetchHotelsData = async () => {
       try {
@@ -30,6 +35,20 @@ export default function Hotel() {
 
         const hotelAmenities = await getHotelAmenitiesByItsId(hotelId);
         setHotelAmenities(hotelAmenities || []);
+
+        const hotelAvailableRooms = await getHotelAvailableRoomsByItsId(
+          hotelId,
+          "2024-1-1",
+          "2024-1-30"
+        );
+        setHotelAvaiableRooms(hotelAvailableRooms || []);
+
+        const hotelRooms = await getHotelRoomsByItsId(
+          hotelId,
+          "2024-1-1",
+          "2024-1-30"
+        );
+        setHotelRooms(hotelRooms || []);
       } catch (error) {
         console.error(error);
       }
@@ -41,7 +60,8 @@ export default function Hotel() {
   console.log("hotel Info is :", hotelInfo);
   console.log("hotel Gallery is :", hotelGallery);
   console.log("hotel amenities is : ", hotelAmenities);
-
+  console.log("hotel Rooms is :", hotelRooms);
+  console.log("hotel Available rooms is :", hotelAvailableRooms);
   return (
     <div>
       {localization.hotel}
