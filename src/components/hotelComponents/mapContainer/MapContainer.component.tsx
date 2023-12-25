@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
+import style from '../../../pages/hotel/Hotel.module.css'
 interface MapProps {
   latitude: number;
   longitude: number;
@@ -62,6 +62,6 @@ const Map: React.FC<MapProps> = ({ latitude, longitude }) => {
     }
   }, [latitude, longitude]);
 
-  return <div id="map" style={{ height: "300px", width: "50%" }} />;
+  return <div id="map" className={style.mapContainer}/>;
 };
 export default Map;

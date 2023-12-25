@@ -1,0 +1,11 @@
+.mapContainer {
+  width: 90%;
+  aspect-ratio: 16 / 15;
+  z-index: -1;
+}
+
+@media (max-width: 600px) {
+  .mapContainer {
+    width: 100%;
+  }
+}

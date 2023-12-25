@@ -1,0 +1,50 @@
+.roomContainer {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-bottom: 3%;
+  width: 100%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+  cursor: pointer;
+}
+.roomImage {
+  width: 35%;
+  aspect-ratio: 16 / 15;
+  margin-right: 4%;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.roomInfoContainer {
+  padding: 5px;
+  flex-grow: 1;
+  width: 100%;
+}
+.roomName {
+  margin: 10px 0;
+}
+.roomType {
+  margin: 3px 0;
+}
+.roomPrice {
+  margin: 5px 0;
+}
+.smallButtonContainer {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+
+@media (max-width: 700px) {
+  .roomName {
+    margin: 5px 0;
+  }
+  .roomType {
+    margin: 5px 0;
+  }
+  .roomPrice {
+    margin: 5px 0;
+  }
+}
