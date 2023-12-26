@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import AliceCarousel from 'react-alice-carousel';
-import 'react-alice-carousel/lib/alice-carousel.css';
+import AliceCarousel from "react-alice-carousel";
+import "react-alice-carousel/lib/alice-carousel.css";
 import { getHotelGalleryByItsId } from "../../../services/hotels/Hotels.service";
-import style from './HotelGallery.module.css';
+import style from "./HotelGallery.module.css";
 
 const HotelGallery = ({ hotelId }: { hotelId: number }) => {
   const [hotelGallery, setHotelGallery] = useState<
@@ -25,7 +25,7 @@ const HotelGallery = ({ hotelId }: { hotelId: number }) => {
   const responsive = {
     0: { items: 1 },
     600: { items: 1 },
-    1024: { items: 1 },
+    1024: { items: 2 },
   };
 
   return (
@@ -36,9 +36,15 @@ const HotelGallery = ({ hotelId }: { hotelId: number }) => {
         responsive={responsive}
         infinite
         disableButtonsControls
+        mouseTracking
       >
         {hotelGallery.map((image, index) => (
-          <img key={index} src={image.url} className={style.hotelImage} alt={`Image ${index + 1}`} />
+          <img
+            key={index}
+            src={image.url}
+            className={style.hotelImage}
+            alt={`Image ${index + 1}`}
+          />
         ))}
       </AliceCarousel>
     </div>

@@ -13,6 +13,8 @@ import style from "./Hotel.module.css";
 import Map from "../../components/hotelComponents/mapContainer/MapContainer.component";
 import HotelGallery from "../../components/hotelComponents/hotelGallery/HotelGallery.component";
 import RoomContainer from "../../components/hotelComponents/roomContainer/RoomContainer.component";
+import HotelAmenitiesContainer from "../../components/hotelComponents/amenitiesContainer/HotelAmenitiesContainer.component";
+import SmallButtonLoader from "../../components/common/loaders/SmallButtonLoaders.component";
 
 type HotelInfo = {
   hotelName: string;
@@ -77,13 +79,18 @@ export default function Hotel() {
   return (
     <div className={style.hotelPageContainer}>
       <div className={style.gelleryContainer}>
-        <HotelGallery hotelId={hotelId}/>
+        <HotelGallery hotelId={hotelId} />
       </div>
 
       <div className={style.hotelInfoContainer}>
         <div className={style.hoteInfo}>
           <h2>{hotelInfo?.hotelName}</h2>
-          <Rating name="simple-controlled" value={sanitizedRating} readOnly size="large" />
+          <Rating
+            name="simple-controlled"
+            value={sanitizedRating}
+            readOnly
+            size="large"
+          />
           <p>{hotelInfo?.description}</p>
         </div>
         <Map
@@ -91,9 +98,9 @@ export default function Hotel() {
           longitude={hotelInfo?.longitude || 0}
         />
       </div>
-
+      <HotelAmenitiesContainer hotelId={hotelId} />
       <div className={style.roomsContainer}>
-        <RoomContainer hotelId={hotelId}/>
+        <RoomContainer hotelId={hotelId} />
       </div>
     </div>
   );

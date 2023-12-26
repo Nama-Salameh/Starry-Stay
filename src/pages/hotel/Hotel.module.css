@@ -11,7 +11,7 @@
   display: flex;
   justify-content: center;
   gap: 30px;
-  margin: 15px;
+  margin: 0px 15px;
   padding: 10px 0;
   font-size: 18px;
 }
@@ -30,5 +30,11 @@
   .hotelInfoContainer {
     display: flex;
     flex-direction: column;
+  }
+}
+@media (min-width: 1001px) {
+  .hotelInfoContainer {
+    height: 300px;
+    overflow: hidden;
   }
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getRecentlyVisitedHotels } from "../../../services/home/home.service";
 import { getDecodedToken } from "../../../utils/TokenUtils";
-import Carousel from "../Carousel.component";
+import Carousel from "../../common/carousel/Carousel.component";
 import IToken from "../../../interfaces/IToken.interface";
 import { Card } from "@mui/material";
 import { Rating } from "@mui/material";
@@ -41,7 +41,7 @@ export default function RecenlyVisitedHotels() {
       <h2>{localization.recentlyVisitedHotels}</h2>
       <Carousel>
         {recentlyVisitedHotels.map((hotel) => (
-          <Card className={style.itemGrid} key={hotel.hotelId}>
+          <Card className={style.itemCard} key={hotel.hotelId}>
             <img
               src={hotel.thumbnailUrl}
               className={style.roomImage}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getFeaturedDealsHotels } from "../../../services/home/home.service";
-import Carousel from "../Carousel.component";
+import Carousel from "../../common/carousel/Carousel.component";
 import { Rating } from "@mui/material";
 import { Card } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,7 +33,7 @@ export default function FeaturedDealsHotelsContainer() {
       <h2  id={toSlug(localization.featuredDeals)}>{localization.featuredDeals}</h2>
       <Carousel>
         {featuredDealsHotels.map((hotel) => (
-          <Card className={style.itemGrid} key={hotel.hotelId}>
+          <Card className={style.itemCard} key={hotel.hotelId}>
             <div className={style.discountPercentage}>
               {(hotel.discount * 100).toFixed(0)}%
             </div>

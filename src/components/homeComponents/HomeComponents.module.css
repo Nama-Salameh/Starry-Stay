@@ -4,10 +4,10 @@
 h2 {
   margin-left: 10px;
 }
-.itemGrid {
+.itemCard {
   width: 90%;
   border: 1px solid var(--mui-palette-secondary-dark);
-  box-shadow: 0 0 15px 3px var(--mui-palette-secondary-dark);
+  box-shadow: 0 0 15px 0px var(--mui-palette-secondary-dark);
   border-radius: 5px;
   position: relative;
   margin: 0 auto;
@@ -28,13 +28,6 @@ h2 {
   margin-top: 3px;
   margin-bottom: 3px;
 }
-.carousel {
-  width: 98%;
-  margin: 0 auto;
-  position: relative;
-  z-index: -1;
-}
-
 .discountPercentage {
   position: absolute;
   top: 3px;
