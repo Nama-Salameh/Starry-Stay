@@ -1,0 +1,17 @@
+
+.hotelGalleryContainer {
+  max-width: 600px;
+  margin: auto;
+}
+.hotelImage {
+  width: 100%;
+  aspect-ratio: 16 / 15;
+  object-fit: cover;
+}
+div.alice-carousel > ul.alice-carousel__dots {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  bottom: 5px;
+  left: 50%;
+}

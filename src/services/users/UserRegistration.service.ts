@@ -1,4 +1,4 @@
-import { storeToken } from "../../utils/storageUtils/TokenStorage";
+import { storeToken } from "../../utils/storageUtils/tokenStorage/TokenStorage";
 import { axiosInstance, handleError } from "../ApisConfig";
 
 const LOGIN_URL = "api/auth/authenticate";

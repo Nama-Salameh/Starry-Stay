@@ -1,4 +1,4 @@
-import { getToken } from '../utils/storageUtils/TokenStorage';
+import { getToken } from '../utils/storageUtils/tokenStorage/TokenStorage';
 import axios, { HttpStatusCode } from 'axios';
 import { ErrorTypes } from '../enums/ErrprTypes.enum';
 

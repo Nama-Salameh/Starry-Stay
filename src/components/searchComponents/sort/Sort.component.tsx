@@ -2,7 +2,7 @@ import React from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { useSearchContext } from "../../../contexts/SearchContext.context";
+import { useSearchContext } from "../../../contexts/searchContext/SearchContext.context";
 import localization from "../../../localizationConfig";
 import style from "./Sort.module.css";
 export default function Sort() {

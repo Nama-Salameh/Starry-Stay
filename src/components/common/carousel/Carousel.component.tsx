@@ -1,9 +1,9 @@
 import MultiCarousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import React , {ReactNode} from "react";
-import style from "./HomeComponents.module.css";
+import React, { ReactNode } from "react";
+import style from "./Carousel.module.css";
 
-const Carousel: React.FC<{ children : ReactNode}> = ({ children }) => {
+const Carousel: React.FC<{ children: ReactNode }> = ({ children }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -18,29 +18,27 @@ const Carousel: React.FC<{ children : ReactNode}> = ({ children }) => {
       items: 4,
     },
     desktopSmall: {
-      breakpoint: { max: 1300, min: 1024 },
+      breakpoint: { max: 1300, min: 850 },
       items: 3,
     },
     tablet: {
-      breakpoint: { max: 900, min: 600 },
+      breakpoint: { max: 850, min: 500 },
       items: 2,
     },
     mobile: {
-      breakpoint: { max: 600, min: 0 },
+      breakpoint: { max: 500, min: 0 },
       items: 1,
     },
   };
 
   return (
-    <div>
-      <MultiCarousel
-        responsive={responsive}
-        infinite={false}
-        className={style.carousel}
-      >
-       {children}
-      </MultiCarousel>
-    </div>
+    <MultiCarousel
+      responsive={responsive}
+      infinite={false}
+      className={style.carousel}
+    >
+      {children}
+    </MultiCarousel>
   );
 };
 

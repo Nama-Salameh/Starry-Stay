@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getTrendingDestinations } from "../../../services/home/home.service";
-import Carousel from "../Carousel.component";
+import Carousel from "../../common/carousel/Carousel.component";
 import { Card } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
@@ -33,7 +33,7 @@ export default function TrendingDestinationsContainer() {
       <h2>{localization.trendingDestinations}</h2>
       <Carousel>
         {trendingDestinations.map((distination) => (
-          <Card className={style.itemGrid} key={distination.cityId}>
+          <Card className={style.itemCard} key={distination.cityId}>
             <img
               src={distination.thumbnailUrl}
               className={style.roomImage}

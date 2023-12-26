@@ -1,0 +1,17 @@
+.item {
+  width: 90%;
+  height: 150px;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  box-shadow: 0 0 10px 0px var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  position: relative;
+  padding: 1% 2%;
+  margin: 0 auto;
+  text-align: center;
+}
+.container {
+  width: 100%;
+}
+h2 {
+  margin-left: 10px;
+}
