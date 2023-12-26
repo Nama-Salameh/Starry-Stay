@@ -2,11 +2,17 @@ import React, { useEffect, useState, startTransition } from "react";
 import { useNavigate } from "react-router";
 import { getHotelAvailableRoomsByItsId } from "../../../services/hotels/Hotels.service";
 import { useTheme } from "@mui/system";
-import style from "./RoomContainer.module.css";
+import style from "./AvailableRoomContainer.module.css";
 import localization from "../../../localizationConfig";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { IconButton, useMediaQuery } from "@mui/material";
 import SmallButton from "../../common/Buttons/SmallButton.component";
+import {
+  RemoveAllRoomsFromCart,
+  addRoomToCart,
+  getAllRoomsFromCart,
+} from "../../../utils/storageUtils/cartStorage/CartStorage";
+import { useCartContext } from "../../../contexts/cartContext/CartContext.context";
 
 type AvailalbeRoom = {
   roomNumber: number;
@@ -25,16 +31,16 @@ type AvailalbeRoom = {
 export default function RoomContainer({ hotelId }: { hotelId: number }) {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { cartCount, updateCartCount } = useCartContext();
   const isSmallScreen = useMediaQuery("(max-width:1100px)");
 
   const handleRoomClick = (roomNumber: number) => {
-    startTransition(() => {
-      navigate(`/room/${roomNumber}`);
-    });
+    navigate(`/room/${roomNumber}`);
   };
 
-  const [hotelAvailableRooms, setHotelAvaiableRooms] =
-    useState<AvailalbeRoom>();
+  const [hotelAvailableRooms, setHotelAvaiableRooms] = useState<
+    AvailalbeRoom[]
+  >([]);
 
   useEffect(() => {
     const fetchHotelsData = async () => {
@@ -51,15 +57,20 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
     };
 
     fetchHotelsData();
-  }, []);
+  }, [hotelId]);
 
   console.log("hotel Available rooms is :", hotelAvailableRooms);
 
-  const handleAddToCartButtonClick = () => {
-    startTransition(() => {
-      navigate("/room");
-    });
+  const handleAddToCartButtonClick = (
+    roomNumber: number,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    if (addRoomToCart({ hotelId, roomNumber })) updateCartCount(cartCount + 1);
+    console.log("room cart", getAllRoomsFromCart());
   };
+
+  //RemoveAllRoomsFromCart();
   return (
     <div>
       <h2>{localization.availableRooms}</h2>
@@ -90,7 +101,9 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
                       icon={
                         <AddShoppingCartIcon className={style.addToCartIcon} />
                       }
-                      onClick={handleAddToCartButtonClick}
+                      onClick={(e) => {
+                        handleAddToCartButtonClick(room.roomNumber, e);
+                      }}
                     />
                   ) : (
                     <IconButton
@@ -98,7 +111,9 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
                         backgroundColor: theme.palette.primary.main,
                         borderRadius: 2,
                       }}
-                      onClick={handleAddToCartButtonClick}
+                      onClick={(e) => {
+                        handleAddToCartButtonClick(room.roomNumber, e);
+                      }}
                       className={style.addToCartButton}
                     >
                       <AddShoppingCartIcon className={style.addToCartIcon} />

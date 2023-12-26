@@ -2,12 +2,19 @@ import { Button, IconButton } from "@mui/material";
 
 const SmallButton: React.FC<{
   value: string;
-  icon?: React.ReactNode
+  icon?: React.ReactNode;
   buttonWidth?: number;
   disabled?: boolean;
-  isSecondaryBackgroundColor? : boolean;
-  onClick: () => void;
-}> = ({ value, icon, buttonWidth, disabled = false, isSecondaryBackgroundColor, onClick }) => {
+  isSecondaryBackgroundColor?: boolean;
+  onClick: (param: any) => void;
+}> = ({
+  value,
+  icon,
+  buttonWidth,
+  disabled = false,
+  isSecondaryBackgroundColor,
+  onClick,
+}) => {
   return (
     <Button
       type="submit"
@@ -26,11 +33,7 @@ const SmallButton: React.FC<{
         }),
       }}
     >
-       {icon && (
-        <IconButton sx={{margin : 0, padding :0, }}>
-          {icon}
-        </IconButton>
-      )}
+      {icon && <IconButton sx={{ margin: 0, padding: 0 }}>{icon}</IconButton>}
       {value}
     </Button>
   );

@@ -1,4 +1,4 @@
-import { getToken } from "./storageUtils/TokenStorage";
+import { getToken } from "./storageUtils/tokenStorage/TokenStorage";
 import { isExpired, decodeToken } from "react-jwt";
 
 export const getDecodedToken = () => {

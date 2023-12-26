@@ -12,7 +12,7 @@ import { Rating } from "@mui/material";
 import style from "./Hotel.module.css";
 import Map from "../../components/hotelComponents/mapContainer/MapContainer.component";
 import HotelGallery from "../../components/hotelComponents/hotelGallery/HotelGallery.component";
-import RoomContainer from "../../components/hotelComponents/roomContainer/RoomContainer.component";
+import AvailableRoomContainer from "../../components/hotelComponents/availableRoomContainer/AvailableRoomContainer.component";
 import HotelAmenitiesContainer from "../../components/hotelComponents/amenitiesContainer/HotelAmenitiesContainer.component";
 import SmallButtonLoader from "../../components/common/loaders/SmallButtonLoaders.component";
 
@@ -100,7 +100,7 @@ export default function Hotel() {
       </div>
       <HotelAmenitiesContainer hotelId={hotelId} />
       <div className={style.roomsContainer}>
-        <RoomContainer hotelId={hotelId} />
+        <AvailableRoomContainer hotelId={hotelId} />
       </div>
     </div>
   );

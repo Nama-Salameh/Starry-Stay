@@ -2,7 +2,7 @@ import React from "react";
 import { Rating } from "@mui/material";
 import localization from "../../../localizationConfig";
 import style from './StarRating.module.css';
-import { useSearchContext } from "../../../contexts/SearchContext.context";
+import { useSearchContext } from "../../../contexts/searchContext/SearchContext.context";
 
 export default function StarRating() {
   const { searchParams , setSearchParamsValue} = useSearchContext();

@@ -1,5 +1,5 @@
 import { axiosInstance, handleError } from "../ApisConfig";
-import { getToken } from "../../utils/storageUtils/TokenStorage";
+import { getToken } from "../../utils/storageUtils/tokenStorage/TokenStorage";
 const GET_FEATURED_DEALS_HOTELS = "api/home/featured-deals";
 const GET_TRENDING_DESTINATION_HOTELS = "/destinations/trending";
 

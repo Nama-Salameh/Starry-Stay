@@ -1,4 +1,4 @@
-import React, { startTransition } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,6 +23,8 @@ import { useNavigate } from "react-router-dom";
 import SmallButton from "../../../common/Buttons/SmallButton.component";
 import localization from "../../../../localizationConfig";
 import slugify from "slugify";
+import Badge from '@mui/material/Badge';
+import { useCartContext } from "../../../../contexts/cartContext/CartContext.context";
 
 const drawerWidth = 200;
 
@@ -30,6 +32,7 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const theme = useTheme();
+  const {cartCount} = useCartContext();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -133,16 +136,18 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
           </Box>
 
           {isLoggedIn() && !isSessionExpired() ? (
-            <Button
+            <IconButton
               onClick={() => startTransition(() => navigate("/checkout"))}
             >
+              <Badge badgeContent={cartCount} color="primary">
               <FontAwesomeIcon
                 icon={faShoppingCart}
                 style={{
                   color: theme.palette.secondary.main,
                 }}
               />
-            </Button>
+              </Badge>
+            </IconButton>
           ) : (
             <SmallButton
               onClick={() => startTransition(() => navigate("/login"))}

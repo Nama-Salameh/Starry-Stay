@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import style from "./RoomSelector.module.css";
 import RoomCounterControl from "./RoomCounterControl.component";
-import { useSearchContext } from "../../../../../contexts/SearchContext.context";
+import { useSearchContext } from "../../../../../contexts/searchContext/SearchContext.context";
 import localization from "../../../../../localizationConfig";
 
 const RoomSelector = () => {

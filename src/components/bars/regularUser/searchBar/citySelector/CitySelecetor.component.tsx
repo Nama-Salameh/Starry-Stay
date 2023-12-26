@@ -6,7 +6,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "./CitySelector.module.css";
-import { useSearchContext } from "../../../../../contexts/SearchContext.context";
+import { useSearchContext } from "../../../../../contexts/searchContext/SearchContext.context";
 
 const CitySelector: React.FC<{
   cities: { id: string; name: string; description: string }[];

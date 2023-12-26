@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import style from "./DatePicker.module.css";
-import { useSearchContext } from "../../../../../contexts/SearchContext.context";
+import { useSearchContext } from "../../../../../contexts/searchContext/SearchContext.context";
 import { handleError } from "../../../../../services/ApisConfig";
 
 const DateRangePickerComponent = () => {

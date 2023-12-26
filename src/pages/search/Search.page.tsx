@@ -7,7 +7,7 @@ import FilteringDialog from "../../components/dialogs/filteringDialog/FilteringD
 import FilteringContent from "../../components/searchComponents/FilteringContent.component";
 import style from "./Search.module.css";
 import TuneIcon from "@mui/icons-material/Tune";
-import { useSearchContext } from "../../contexts/SearchContext.context";
+import { useSearchContext } from "../../contexts/searchContext/SearchContext.context";
 import { getSearchResultRegularUser } from "../../services/search/Search.service";
 import HotelsContainer from "../../components/searchComponents/hotel/HotelsConatainer.component";
 import { handleError } from "../../services/ApisConfig";
