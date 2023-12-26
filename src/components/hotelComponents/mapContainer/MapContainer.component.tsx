@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import style from '../../../pages/hotel/Hotel.module.css'
+import style from './MapContainer.module.css';
 interface MapProps {
   latitude: number;
   longitude: number;

@@ -1,0 +1,9 @@
+.hotelGalleryContainer {
+  max-width: 600px;
+  margin: auto;
+}
+.hotelImage {
+  width: 100%;
+  aspect-ratio: 16 / 15;
+  object-fit: cover;
+}

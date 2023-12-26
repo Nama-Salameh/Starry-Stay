@@ -1,10 +1,11 @@
 .hotelPageContainer {
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 70px 20px;
+  padding: 130px 20px;
+  margin: 0 auto; 
 }
 .hotelInfoContainer {
   display: flex;
@@ -20,6 +21,9 @@
 .roomsContainer {
   margin-top: 15px;
   max-height: 770px;
+  width: 100%;
+}
+.gelleryContainer{
   width: 100%;
 }
 @media (max-width: 600px) {

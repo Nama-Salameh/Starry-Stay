@@ -3,11 +3,17 @@
   flex-direction: row;
   position: relative;
   margin-bottom: 3%;
-  width: 100%;
   border: 1px solid var(--mui-palette-secondary-dark);
   border-radius: 5px;
   box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
   cursor: pointer;
+  width: 48%;
+  margin: 2% 1%;
+  box-sizing: border-box;
+}
+.roomContainerWrapper {
+  display: flex;
+  flex-wrap: wrap;
 }
 .roomImage {
   width: 35%;
@@ -22,7 +28,7 @@
   flex-grow: 1;
   width: 100%;
 }
-.roomName {
+.roomNumber {
   margin: 10px 0;
 }
 .roomType {
@@ -37,14 +43,22 @@
   right: 6px;
 }
 
-@media (max-width: 700px) {
-  .roomName {
-    margin: 5px 0;
+  
+.addToCartButton{
+  border-radius: 1px;
+  background-color: var(--mui-palette-primary-main);
+}
+.addToCartIcon{
+  color: var(--mui-palette-secondary-main);
+}
+
+@media (max-width: 900px) {
+  .roomNumber , .roomType ,  .roomPrice{
+    margin: 2px 0;
   }
-  .roomType {
-    margin: 5px 0;
+  .roomContainer{
+    width: 100%;
+    margin: 3% 0;
   }
-  .roomPrice {
-    margin: 5px 0;
-  }
+
 }

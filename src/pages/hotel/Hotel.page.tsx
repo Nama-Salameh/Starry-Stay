@@ -76,8 +76,8 @@ export default function Hotel() {
 
   return (
     <div className={style.hotelPageContainer}>
-      <div className={style.gellery}>
-        <HotelGallery />
+      <div className={style.gelleryContainer}>
+        <HotelGallery hotelId={hotelId}/>
       </div>
 
       <div className={style.hotelInfoContainer}>
