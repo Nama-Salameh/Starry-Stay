@@ -13,6 +13,8 @@ import {
   getAllRoomsFromCart,
 } from "../../../utils/storageUtils/cartStorage/CartStorage";
 import { useCartContext } from "../../../contexts/cartContext/CartContext.context";
+import { isLoggedIn, isSessionExpired } from "../../../utils/TokenUtils";
+import LoginModal from "../../modals/LoginModal.component";
 
 type AvailalbeRoom = {
   roomNumber: number;
@@ -33,11 +35,7 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
   const theme = useTheme();
   const { cartCount, updateCartCount } = useCartContext();
   const isSmallScreen = useMediaQuery("(max-width:1100px)");
-
-  const handleRoomClick = (roomNumber: number) => {
-    navigate(`/room/${roomNumber}`);
-  };
-
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [hotelAvailableRooms, setHotelAvaiableRooms] = useState<
     AvailalbeRoom[]
   >([]);
@@ -59,16 +57,35 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
     fetchHotelsData();
   }, [hotelId]);
 
-  console.log("hotel Available rooms is :", hotelAvailableRooms);
 
+  const handleRoomClick = (roomNumber: number) => {
+    if (!isLoginModalOpen) {
+      navigate(`/room/${roomNumber}`);
+    }
+  };
+
+  const openLoginModal = () => {
+    setLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setLoginModalOpen(false);
+  };
   const handleAddToCartButtonClick = (
     roomNumber: number,
     e: React.MouseEvent
   ) => {
     e.stopPropagation();
-    if (addRoomToCart({ hotelId, roomNumber })) updateCartCount(cartCount + 1);
+
+    if (isLoggedIn() && !isSessionExpired()) {
+      if (addRoomToCart({ hotelId, roomNumber }))
+        updateCartCount(cartCount + 1);
+    } else {
+      openLoginModal();
+    }
     console.log("room cart", getAllRoomsFromCart());
   };
+  console.log("hotel Available rooms is :", hotelAvailableRooms);
 
   //RemoveAllRoomsFromCart();
   return (
@@ -94,6 +111,7 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
                 <p className={style.roomPrice}>
                   <b>${room.price}</b>
                 </p>
+
                 <div className={style.smallButtonContainer}>
                   {!isSmallScreen ? (
                     <SmallButton
@@ -121,6 +139,12 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
                   )}
                 </div>
               </div>
+              {isLoginModalOpen && (
+                <LoginModal
+                  isOpen={isLoginModalOpen}
+                  onClose={closeLoginModal}
+                />
+              )}
             </div>
           ))}
       </div>
