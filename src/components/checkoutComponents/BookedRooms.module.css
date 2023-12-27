@@ -1,0 +1,75 @@
+.itemsContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.roomContainer {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-bottom: 3%;
+  width: 48%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+  cursor: pointer;
+  flex-grow: 1;
+}
+.roomImage {
+  width: 50%;
+  max-height: 200px;
+  aspect-ratio: 16 / 14;
+  height: 250px;
+  margin-right: 4%;
+  border-radius: 5px;
+  object-fit: cover;
+}
+.roomInfoContainer {
+  flex-grow: 1;
+  padding: 2% 0;
+}
+
+.roomNumber,
+.roomType,
+.roomPrice,
+.hotelName,
+.capacity {
+  margin: 0;
+  padding: 0;
+}
+.roomType,
+.roomPrice,
+.hotelName,
+.capacity,
+.locationIcon {
+  color: #7f7f7f;
+}
+.capacityContainer {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.smallButtonContainer {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+.iconButton {
+  padding: 10px;
+  font-size: 16px;
+  width: 50px;
+}
+@media (max-width: 850px) {
+  .itemsContainer {
+    flex-direction: column;
+  }
+  .roomContainer {
+    width: 100%;
+  }
+}
+@media (max-width: 450px) {
+  .roomImage {
+    width: 40%;
+  }
+}

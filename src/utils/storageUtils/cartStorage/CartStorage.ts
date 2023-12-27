@@ -33,7 +33,7 @@ export function removeRoomFromCart(room: {
   const cart = getAllRoomsFromCart();
   const updatedCart = cart.filter(
     (cartItem) =>
-      cartItem.hotelId !== room.hotelId &&
+      cartItem.hotelId !== room.hotelId ||
       cartItem.roomNumber !== room.roomNumber
   );
   storeCart(updatedCart);

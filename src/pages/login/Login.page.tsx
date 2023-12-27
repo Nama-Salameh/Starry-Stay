@@ -11,9 +11,11 @@ import { useState } from "react";
 import { FormHelperText } from "@mui/material";
 import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
 import { getDecodedToken } from "../../utils/TokenUtils";
-import IToken from '../../interfaces/IToken.interface';
+import IToken from "../../interfaces/IToken.interface";
+import { useMediaQuery } from "@mui/material";
 
 export default function Login() {
+  const isSmallScreen = useMediaQuery("(max-width:550px)");
   const navigate = useNavigate();
   const [validationMessage, setValidationMessage] = useState("");
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -73,10 +75,16 @@ export default function Login() {
               {validationMessage}
             </FormHelperText>
           )}
-          {!isLoginLoading ? (
-            <BigSubmitButton text={localization.login} />
+          {!isSmallScreen ? (
+            !isLoginLoading ? (
+              <BigSubmitButton text={localization.login} />
+            ) : (
+              <BigButtonLoader />
+            )
+          ) : !isLoginLoading ? (
+            <BigSubmitButton text={localization.login} buttonWidth={340} />
           ) : (
-            <BigButtonLoader />
+            <BigButtonLoader buttonWidth={340} />
           )}
         </Form>
       </Formik>

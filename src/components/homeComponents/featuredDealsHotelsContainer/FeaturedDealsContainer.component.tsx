@@ -45,7 +45,7 @@ export default function FeaturedDealsHotelsContainer() {
             />
             <div className={style.cardInfo}>
               <h3>{hotel.hotelName}</h3>
-              <Rating value={hotel.hotelStarRating} />
+              <Rating value={hotel.hotelStarRating} readOnly/>
               <p>
                 <FontAwesomeIcon icon={faLocationDot} /> {hotel.cityName}
               </p>
