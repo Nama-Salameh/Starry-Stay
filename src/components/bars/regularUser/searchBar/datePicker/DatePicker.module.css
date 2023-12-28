@@ -26,19 +26,24 @@
   justify-content: space-between;
   margin: 0;
   height: 20px;
-  width: 95%;
+  width: 100%;}
+.datePickerDateLabels > span {
+  flex: 1; /* Distribute space equally between the spans */
+  text-align: center; /* Center-align the text within each span */
 }
 .customDatePickerDropdown {
   position: absolute;
   min-width: 300px;
 }
 
+
 .dateRangePicker {
   background-color: inherit !important;
-  width: 94%;
+  width: 100%; /* Occupy the entire width */
   color: var(--mui-palette-primary-main);
   border: none;
   cursor: pointer;
+  margin-top: 5px; /* Adjust the top margin as needed */
 }
 
 .dateRangePicker:hover,

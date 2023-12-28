@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import localization from "../../localizationConfig";
 import { getBooking } from "../../services/booking/Booking.service";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCreditCard,
+  faCalendarDays,
+  faDollarSign,
+  faClock,
+} from "@fortawesome/free-solid-svg-icons";
+
 import style from "./Confirmation.module.css";
 import {
   Table,
@@ -38,11 +48,17 @@ export default function Confirmation() {
     fetchBookingInfo();
   }, []);
   console.log("booking info ", bookingInfo);
+  const bookingDateTime = new Date(bookingInfo.bookingDateTime);
+  const formattedDate = bookingDateTime.toLocaleDateString();
+  const formattedTime = bookingDateTime.toLocaleTimeString();
+
+  console.log("Formatted Date:", formattedDate);
+  console.log("Formatted Time:", formattedTime);
+
   return (
     <div className={style.pageContainer}>
       <div className={style.bookingInfoContainer}>
-        <p className={style.confirmDate}>{bookingInfo.bookingDateTime}</p>
-        {!(bookingInfo.bookingStatus === "Confirmed") ? (
+        {bookingInfo.bookingStatus === "Confirmed" ? (
           <div>
             <div className={style.successConfirmContainer}>
               <h3>{bookingInfo.customerName} Booking successed. </h3>
@@ -79,8 +95,22 @@ export default function Confirmation() {
               </Table>
             </TableContainer>
             <div className={style.paymentInfo}>
-              <p>Payment method :{bookingInfo.paymentMethod}</p>
-              <p>Total Cost : {bookingInfo.totalCost}$</p>
+              <p>
+                <FontAwesomeIcon icon={faCreditCard} className={style.icon} />
+                <b>Payment : </b> {bookingInfo.paymentMethod}
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faDollarSign} className={style.icon} />
+                <b>Total Cost : </b> {bookingInfo.totalCost} <b>$</b>
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faCalendarDays} className={style.icon} />
+                {formattedDate}
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faClock}  className={style.icon}/>
+                {formattedTime}
+              </p>
             </div>
           </div>
         ) : (

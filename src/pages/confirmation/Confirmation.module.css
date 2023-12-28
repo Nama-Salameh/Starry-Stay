@@ -18,20 +18,27 @@
 }
 .successConfirmContainer {
   color: #11441a;
-  background-color: #d0e0d3;
-  border: 1px solid #9fd1ab;
+  background-color: #d1e2d4;
+  border: 1px solid #1c5426;
 }
 .fialedConfirmContainer {
   color: rgb(101, 20, 20);
-  background-color: #e0bdbd;
-  border: 1px solid #df7878;
+  background-color: #ebd7d7;
+  border: 1px solid rgb(159, 30, 30);
 }
 .paymentInfo {
   width: 100%;
   display: flex;
+  margin: 2px 0;
+  font-size: 14px;
   justify-content: space-between;
-  font-weight: bold;
 }
+.paymentInfo >p{
+margin-left: 5px;
+}
+.paymentInfo p .icon {
+    margin-right: 10px; 
+  }
 .confirmDate {
   text-align: right;
 }
@@ -41,12 +48,21 @@
 .boldTableCell {
   font-weight: bold !important;
 }
-@media (max-width: 550px) {
-  .paymentInfo {
-    margin: 10px 0;
-    flex-direction: column;
-  }
-  .paymentInfo > * {
-    margin: 6px 0;
-  }
+@media (max-width: 800px) {
+    .paymentInfo {
+        margin: 10px 0;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      .paymentInfo > * {
+        margin: 6px 0;
+        width: 49%;
+      }
+      .paymentInfo p {
+        display: flex;
+        align-items: center;
+      }
+      .paymentInfo .icon {
+        margin-right: 10px;
+      }
 }
