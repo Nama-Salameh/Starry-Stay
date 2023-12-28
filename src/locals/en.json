@@ -69,5 +69,6 @@
   "confirm" : "Confirm",
   "cash" : "Cash",
   "creditCard" : "Credit Card" , 
-  "paymentMethod" : "Payment method"
+  "paymentMethod" : "Payment method",
+  "totalCost" : "Total Cost"
 }

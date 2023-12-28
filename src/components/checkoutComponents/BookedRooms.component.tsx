@@ -64,8 +64,17 @@ type RoomInfo = {
     description: string;
   }[];
 };
-
-export default function BookedRooms() {
+type RoomDetails = {
+  roomNumber: number;
+  roomType: string;
+  price: number;
+  hotelName: string;
+};
+export default function BookedRooms({
+  onRoomDetailsChange,
+}: {
+  onRoomDetailsChange: (details: RoomDetails[]) => void;
+}) {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery("(max-width:1300px)");
   const allRoomsFromCart = getAllRoomsFromCart();
@@ -73,14 +82,15 @@ export default function BookedRooms() {
   const userInfo: IToken = getDecodedToken() as IToken;
   console.log("user Info is ", userInfo);
   const { cartCount, updateCartCount } = useCartContext();
-
-  const getBook = getBooking(+userInfo.user_id);
-  console.log("getBook ", getBook);
+  const [totalCost, setTotalCost] = useState(0);
 
   useEffect(() => {
     const fetchRoomsInfo = async () => {
       try {
+        let totalCost = 0;
         const roomDetails: RoomInfo[] = [];
+        const getBook = await getBooking(+userInfo.user_id);
+        console.log("getBook ", getBook);
 
         for (const room of allRoomsFromCart) {
           const hotelRooms = await getHotelRoomsByItsId(
@@ -109,10 +119,20 @@ export default function BookedRooms() {
               availability: matchingRoom.availability,
               roomAmenities: matchingRoom.roomAmenities,
             });
+            totalCost += matchingRoom.price;
           }
         }
 
         setRoomsInfo(roomDetails);
+        setTotalCost(totalCost);
+        onRoomDetailsChange(
+          roomDetails.map(({ roomNumber, roomType, price, hotelName }) => ({
+            roomNumber,
+            roomType,
+            price,
+            hotelName,
+          }))
+        );
       } catch (error) {
         console.error(error);
       }
@@ -127,62 +147,69 @@ export default function BookedRooms() {
     updateCartCount(cartCount - 1);
   };
   return (
-    <div className={style.itemsContainer}>
-      {roomsInfo.map((room) => (
-        <div className={style.roomContainer}>
-          <img
-            src={room.roomPhotoUrl}
-            alt={`Room ${room.roomNumber}`}
-            className={style.roomImage}
-          />
-          <div className={style.roomInfoContainer}>
-            <h3 className={style.roomNumber}>{room.roomNumber} room</h3>
-            <p className={style.roomType}>{room.roomType} room</p>
-            <p className={style.hotelName}>
-              {" "}
-              <FontAwesomeIcon
-                icon={faLocationDot}
-                className={style.locationIcon}
-              />{" "}
-              <b>{room.hotelName} </b>
-            </p>
-
-            <div className={style.capacityContainer}>
-              <FontAwesomeIcon icon={faUsers} />
-              <p className={style.capacity}>
-                <b>{room.capacityOfAdults} adults</b>
-              </p>
-              <p className={style.capacity}>
-                <b>{room.capacityOfChildren} Children </b>
-              </p>
+    <div className={style.bookedRoomsContainer}>
+      <div className={style.itemsContainer}>
+        {roomsInfo.map((room, roomNumber) => (
+          <div className={style.roomContainer}>
+            <div className={style.roomImageContainer}>
+              <img
+                src={room.roomPhotoUrl}
+                alt={`Room ${room.roomNumber}`}
+                className={style.roomImage}
+              />
+              <div className={style.roomPrice}>{room.price}$</div>
             </div>
-            <div className={style.smallButtonContainer}>
-              {isSmallScreen ? (
-                <IconButton
-                  style={{
-                    color: theme.palette.secondary.main,
-                    backgroundColor: theme.palette.primary.main,
-                    fontSize: 20,
-                    borderRadius: 5,
-                  }}
-                >
-                  <div>
-                    <RemoveShoppingCartIcon />
-                  </div>
-                </IconButton>
-              ) : (
-                <SmallButton
-                  value={localization.deleteFromCart}
-                  buttonWidth={160}
-                  onClick={() =>
-                    handleDeleteClick(room.hotelId, room.roomNumber)
-                  }
+            <div className={style.roomInfoContainer}>
+              <h3 className={style.roomNumber}>{room.roomNumber} room</h3>
+              <p className={style.roomType}>{room.roomType} room</p>
+              <p className={style.hotelName}>
+                <FontAwesomeIcon
+                  icon={faLocationDot}
+                  className={style.locationIcon}
                 />
-              )}
+                <b> {room.hotelName} </b>
+              </p>
+
+              <div className={style.capacityContainer}>
+                <FontAwesomeIcon icon={faUsers} />
+                <p className={style.capacity}>
+                  <b>{room.capacityOfAdults} adults</b>
+                </p>
+                <p className={style.capacity}>
+                  <b>{room.capacityOfChildren} Children </b>
+                </p>
+              </div>
+              <div className={style.smallButtonContainer}>
+                {isSmallScreen ? (
+                  <IconButton
+                    style={{
+                      color: theme.palette.secondary.main,
+                      backgroundColor: theme.palette.primary.main,
+                      fontSize: 20,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <div>
+                      <RemoveShoppingCartIcon />
+                    </div>
+                  </IconButton>
+                ) : (
+                  <SmallButton
+                    value={localization.deleteFromCart}
+                    buttonWidth={160}
+                    onClick={() =>
+                      handleDeleteClick(room.hotelId, room.roomNumber)
+                    }
+                  />
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+      <div className={style.totalCostContainer}>
+        {localization.totalCost} : {totalCost}$
+      </div>
     </div>
   );
 }

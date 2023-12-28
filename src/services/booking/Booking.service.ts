@@ -24,7 +24,7 @@ const postBooking = async (
   };
   try {
     const response = await axiosInstance.post(POST_BOOKING_URL, params);
-    console.log("correctly post")
+    console.log("correctly post");
     console.log(response);
     return response.data;
   } catch (error) {
@@ -36,7 +36,7 @@ const postBooking = async (
 const getBooking = async (bookingId: number) => {
   try {
     const response = await axiosInstance.get(`/api/bookings/${bookingId}`);
-    console.log("correctly get")
+    console.log("correctly get");
     console.log(response);
     return response.data;
   } catch (error) {
