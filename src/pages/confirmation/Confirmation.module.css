@@ -1,0 +1,53 @@
+.pageContainer {
+  padding: 120px 40px;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+.bookingInfoContainer {
+  width: 100%;
+  margin: 1% 0;
+}
+
+.successConfirmContainer,
+.fialedConfirmContainer {
+  width: 100%;
+  padding: 1% 2%;
+  margin: 5% 0;
+}
+.successConfirmContainer {
+  color: #11441a;
+  background-color: #d0e0d3;
+  border: 1px solid #9fd1ab;
+}
+.fialedConfirmContainer {
+  color: rgb(101, 20, 20);
+  background-color: #e0bdbd;
+  border: 1px solid #df7878;
+}
+.paymentInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+.confirmDate {
+  text-align: right;
+}
+.bookedRoomsTable {
+  text-align: center;
+}
+.boldTableCell {
+  font-weight: bold !important;
+}
+@media (max-width: 550px) {
+  .paymentInfo {
+    margin: 10px 0;
+    flex-direction: column;
+  }
+  .paymentInfo > * {
+    margin: 6px 0;
+  }
+}
