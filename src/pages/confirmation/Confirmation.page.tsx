@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import localization from "../../localizationConfig";
 import { getBooking } from "../../services/booking/Booking.service";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCreditCard,
   faCalendarDays,
   faDollarSign,
   faClock,
+  faFilePdf,
 } from "@fortawesome/free-solid-svg-icons";
-
 import style from "./Confirmation.module.css";
 import {
   Table,
@@ -20,7 +18,12 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from "@mui/material";
+import {
+  handlePrintPdf,
+  handleSavePdf,
+} from "../../utils/pdfGeneratorUtils/PdfGeneratoeUtils";
 
 export default function Confirmation() {
   const [bookingInfo, setBookingInfo] = useState({
@@ -56,7 +59,7 @@ export default function Confirmation() {
   console.log("Formatted Time:", formattedTime);
 
   return (
-    <div className={style.pageContainer}>
+    <div className={style.pageContainer} id="confirmationPage">
       <div className={style.bookingInfoContainer}>
         {bookingInfo.bookingStatus === "Confirmed" ? (
           <div>
@@ -108,7 +111,7 @@ export default function Confirmation() {
                 {formattedDate}
               </p>
               <p>
-                <FontAwesomeIcon icon={faClock}  className={style.icon}/>
+                <FontAwesomeIcon icon={faClock} className={style.icon} />
                 {formattedTime}
               </p>
             </div>
@@ -121,6 +124,12 @@ export default function Confirmation() {
           </div>
         )}
       </div>
+      <Button onClick={() => handlePrintPdf("confirmationPage")}>
+        Print PDF
+      </Button>
+      <Button onClick={() => handleSavePdf("confirmationPage")}>
+        <FontAwesomeIcon icon={faFilePdf} />
+      </Button>
     </div>
   );
 }
