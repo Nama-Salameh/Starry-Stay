@@ -42,7 +42,7 @@ export default function Confirmation() {
     <div className={style.pageContainer}>
       <div className={style.bookingInfoContainer}>
         <p className={style.confirmDate}>{bookingInfo.bookingDateTime}</p>
-        {!(bookingInfo.bookingStatus === "Confirmed" )? (
+        {!(bookingInfo.bookingStatus === "Confirmed") ? (
           <div>
             <div className={style.successConfirmContainer}>
               <h3>{bookingInfo.customerName} Booking successed. </h3>
@@ -85,7 +85,7 @@ export default function Confirmation() {
           </div>
         ) : (
           <div className={style.fialedConfirmContainer}>
-              <h3>{bookingInfo.customerName} Booking failed. </h3>
+            <h3>{bookingInfo.customerName} Booking failed. </h3>
             <p> Please try to booking again </p>
             <p>We are sorry for this, and we will be happy for your booking.</p>
           </div>
