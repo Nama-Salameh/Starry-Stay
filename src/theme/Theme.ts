@@ -11,7 +11,7 @@ export const theme = extendTheme({
                     dark: '#002142',
                 },
                 secondary: {
-                    light: '#FAFAFA',
+                    light: '#F3F3F3',
                     main: '#F0F0F0',
                     dark: '#E2E2E2',
                 },

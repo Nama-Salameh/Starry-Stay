@@ -1,106 +1,147 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, startTransition } from "react";
 import localization from "../../localizationConfig";
-import { getBooking } from "../../services/booking/Booking.service";
-import { getAllRoomsFromCart } from "../../utils/storageUtils/cartStorage/CartStorage";
-import { getHotelRoomsByItsId } from "../../services/hotels/Hotels.service";
+import { postBooking } from "../../services/booking/Booking.service";
 import { getDecodedToken } from "../../utils/TokenUtils";
 import style from "./Checkout.module.css";
 import IToken from "../../interfaces/IToken.interface";
+import SmallButton from "../../components/common/Buttons/SmallButton.component";
+import { useMediaQuery } from "@mui/material";
+import BookedRooms from "../../components/checkoutComponents/BookedRooms.component";
+import BigSubmitButton from "../../components/common/Buttons/BigSubmitButton.component";
+import { Select, MenuItem } from "@mui/material";
+import * as Yup from "yup";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import TextInput from "../../components/common/textField/TextField.component";
+import { useNavigate } from "react-router";
+import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
 
-type HotelInfo = {
+type RoomDetails = {
+  roomNumber: number;
+  roomType: string;
+  price: number;
   hotelName: string;
-  location: string;
-  availableRooms: number;
-  imageUrl: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  starRating: number;
-  amenities: {
-    name: string;
-    description: string;
-  };
 };
-type Room = {
-  roomNumber: number;
-  roomType: string;
-  roomPhotoUrl: string;
-  price: number;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  availability: boolean;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
-};
-type RoomInfo = {
-  hotelId: number;
-  roomNumber: number;
-  roomType: string;
-  roomPhotoUrl: string;
-  price: number;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  availability: boolean;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
-};
-
 export default function Checkout() {
-  const allRoomsFromCart = getAllRoomsFromCart();
-  const [roomsInfo, setRoomsInfo] = useState<RoomInfo[]>([]);
+  const isSmallScreen = useMediaQuery("(max-width:650px)");
+  const navigate = useNavigate();
   const userInfo: IToken = getDecodedToken() as IToken;
-  console.log("user Info is ", userInfo);
+  console.log(userInfo);
+  const [selectedRooms, setSelectedRooms] = useState<RoomDetails[]>([]);
+  const handleRoomDetailsChange = (details: RoomDetails[]) => {
+    setSelectedRooms(details);
+  };
+  const [isConfirmLoading, setIsConfirmLoading] = useState(false);
 
-  const getBook = getBooking(+userInfo.user_id);
-  console.log("getBook ", getBook);
+  console.log("selected rooms : ", selectedRooms);
 
-  useEffect(() => {
-    const fetchRoomsInfo = async () => {
+  const handleFormSubmit = async (values: any, { resetForm }: any) => {
+    try {
+      setIsConfirmLoading(true);
+      console.log("Form values:", values);
+      //post booking
+      /*for (const room of selectedRooms) {
+      const bookingDateTime = new Date();
+      const bookingStatus = "Confirmed";
       try {
-        const roomDetails: RoomInfo[] = [];
-
-        for (const room of allRoomsFromCart) {
-          const hotelRooms = await getHotelRoomsByItsId(
-            room.hotelId,
-            "2024-1-1",
-            "2024-1-30"
-          );
-
-          const matchingRoom = hotelRooms.find(
-            (roomDetails: Room) => roomDetails.roomNumber === room.roomNumber
-          );
-          if (matchingRoom) {
-            roomDetails.push({
-              hotelId: room.hotelId,
-              roomNumber: room.roomNumber,
-              roomType: matchingRoom.roomType,
-              roomPhotoUrl: matchingRoom.roomPhotoUrl,
-              price: matchingRoom.price,
-              capacityOfAdults: matchingRoom.capacityOfAdults,
-              capacityOfChildren: matchingRoom.capacityOfChildren,
-              availability: matchingRoom.availability,
-              roomAmenities: matchingRoom.roomAmenities,
-            });
-          }
-        }
-        setRoomsInfo(roomDetails);
+        await postBooking(
+          `${userInfo.given_name} ${userInfo.family_name}`,
+          room.hotelName,
+          room.roomNumber.toString(),
+          room.roomType,
+          bookingDateTime,
+          room.price,
+          values.paymentMethod,
+          bookingStatus
+        );
       } catch (error) {
-        console.error(error);
+        console.error("Error posting booking:", error);
       }
-    };
-
-    fetchRoomsInfo();
-  }, []);
-  console.log("Updated room info:", roomsInfo);
-
+    }*/
+      startTransition(() => navigate("/confirmation"));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsConfirmLoading(false);
+      resetForm();
+    }
+  };
   return (
-    <div>
-      <div className={style.itemsContainer}></div>
-      <div className={style.personalInfoContainer}></div>
+    <div className={style.pageContainer}>
+      <BookedRooms onRoomDetailsChange={handleRoomDetailsChange} />
+      <div className={style.personalInfoContainer}>
+        <h2>
+          {userInfo.given_name} {userInfo.family_name}
+        </h2>
+        <Formik
+          onSubmit={handleFormSubmit}
+          initialValues={{ paymentMethod: "", specialRequests: "" }}
+          validationSchema={Yup.object({
+            paymentMethod: Yup.string().required(localization.required),
+          })}
+        >
+          {({ handleChange, values }) => (
+            <Form className={style.form}>
+              <div className={style.paymentSelectContainer}>
+                <Field
+                  as={Select}
+                  name="paymentMethod"
+                  id="paymentMethod"
+                  variant="outlined"
+                  displayEmpty
+                  className={style.paymentMethodSelector}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="" disabled>
+                    <em>{localization.paymentMethod}</em>
+                  </MenuItem>
+                  <MenuItem value={localization.cash}>
+                    {localization.cash}
+                  </MenuItem>
+                  <MenuItem value={localization.creditCard}>
+                    {localization.creditCard}
+                  </MenuItem>
+                </Field>
+                <ErrorMessage
+                  name="paymentMethod"
+                  component="div"
+                  className="error"
+                />
+              </div>
+              <TextInput
+                name="specialRequests"
+                type="text"
+                placeholder="Any Speical remarks or requests"
+                onChange={handleFormSubmit}
+                multiline
+                rows={5}
+                textFieldWidth={1}
+                className={style.specialRequsetField}
+              />
+              <div className={style.submitButton}>
+                {!isSmallScreen ? (
+                  !isConfirmLoading ? (
+                    <BigSubmitButton
+                      text={localization.confirm}
+                      disabled={!values.paymentMethod}
+                      buttonWidth={600}
+                    />
+                  ) : (
+                    <BigButtonLoader buttonWidth={600} />
+                  )
+                ) : !isConfirmLoading ? (
+                  <BigSubmitButton
+                    text={localization.confirm}
+                    disabled={!values.paymentMethod}
+                    buttonWidth={270}
+                  />
+                ) : (
+                  <BigButtonLoader buttonWidth={270} />
+                )}
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 }

@@ -64,5 +64,11 @@
   "descendingSortType": "descending",
   "ascending": "Ascending",
   "descending": "Descending",
-  "hotelAmenities" : "Hotel amenities"
+  "hotelAmenities" : "Hotel amenities",
+  "deleteFromCart" : "Delete From Cart",
+  "confirm" : "Confirm",
+  "cash" : "Cash",
+  "creditCard" : "Credit Card" , 
+  "paymentMethod" : "Payment method",
+  "totalCost" : "Total Cost"
 }

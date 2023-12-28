@@ -8,8 +8,7 @@ const TextInput: React.FC<
     textFieldWidth?: number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   }
-> = ({ label, textFieldWidth = 500, onChange, ...props }) => {
-  
+> = ({ label, textFieldWidth, onChange, ...props }) => {
   const [field, meta] = useField(props);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e);
@@ -22,7 +21,7 @@ const TextInput: React.FC<
     <div className={style.formField}>
       <label htmlFor={props.id || props.name}>{label}</label>
       <TextField
-        sx={{ width: textFieldWidth }}
+        sx={{ width: textFieldWidth || "100%" }}
         className={style.textInput}
         {...field}
         {...props}

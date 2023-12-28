@@ -1,0 +1,30 @@
+.pageContainer {
+  padding: 20px 10px;
+  padding-top: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.personalInfoContainer {
+  border: 1px solid var(--mui-palette-secondary-dark);
+  box-shadow: 0 0 15px 0px var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  padding: 2%;
+  width: 100%;
+  margin: 3% 0;
+}
+.paymentSelectContainer {
+  margin-bottom: 2%;
+}
+.specialRequsetField,
+.paymentMethodSelector {
+  background-color: var(--mui-palette-secondary-light);
+}
+.paymentMethodSelector {
+  min-width: 170px;
+}
+.submitButton {
+  display: flex;
+  justify-content: center;
+}

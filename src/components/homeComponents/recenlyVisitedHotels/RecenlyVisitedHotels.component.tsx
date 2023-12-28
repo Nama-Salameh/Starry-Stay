@@ -49,7 +49,7 @@ export default function RecenlyVisitedHotels() {
             />
             <div className={style.cardInfo}>
               <h3>{hotel.hotelName}</h3>
-              <Rating value={hotel.starRating} />
+              <Rating value={hotel.starRating} readOnly/>
               <p>
                 <FontAwesomeIcon icon={faLocationDot} /> {hotel.cityName}
               </p>
