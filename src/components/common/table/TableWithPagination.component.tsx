@@ -61,7 +61,11 @@ const TableWithNavigation: React.FC<{
                   {insertSpaceBeforeCapital(column)}
                 </TableCell>
               ))}
-              <TableCell /> <TableCell />
+              <TableCell
+                className={`${style.tableHeadCell} ${style.actionsHeadCell}`}
+              >
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -72,12 +76,12 @@ const TableWithNavigation: React.FC<{
                     {row[column]}
                   </TableCell>
                 ))}
-                <TableCell className={style.tableBodyCell}>
+                <TableCell
+                  className={`${style.tableBodyCell} ${style.actionsBodyCell}`}
+                >
                   <IconButton aria-label="edit" onClick={() => onEdit(row.id)}>
                     <FontAwesomeIcon icon={faEdit} className={style.editIcon} />
                   </IconButton>
-                </TableCell>
-                <TableCell className={style.tableBodyCell}>
                   <IconButton
                     aria-label="delete"
                     onClick={() => onDelete(row.id)}

@@ -23,13 +23,6 @@ const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
       variant="outlined"
       value={searchText}
       onChange={handleInputChange}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <SmallButton onClick={handleSearch} value={localization.search} />
-          </InputAdornment>
-        ),
-      }}
       style={{
         width: "100%",
         margin: 0,
