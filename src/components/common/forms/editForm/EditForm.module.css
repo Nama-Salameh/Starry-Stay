@@ -1,0 +1,32 @@
+.modalContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f5f5f5;
+  box-shadow: 0 3px 6px rgba(36, 36, 36, 0.16);
+  border-radius: 2px;
+  padding: 16px;
+  width: 50%;
+}
+
+.textField {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.cancelButton {
+  background-color: var(--mui-palette-secondary-main) !important;
+  color: var(--mui-palette-primary-main) !important;
+  text-transform: none !important;
+  margin-right: 10px !important;
+  width: 110px !important;
+  font-weight: bold;
+  height: 38px !important;
+}
