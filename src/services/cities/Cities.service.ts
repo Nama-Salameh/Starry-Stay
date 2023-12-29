@@ -12,4 +12,13 @@ const getCities = async () => {
   }
 };
 
-export default getCities;
+const deleteCityByItsId = async (cityId: number) => {
+  try {
+    const response = await axiosInstance.delete(`/api/cities/${cityId}`);
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+export { getCities, deleteCityByItsId };
