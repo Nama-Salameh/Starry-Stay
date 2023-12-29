@@ -64,3 +64,14 @@ export const getHotelAvailableRoomsByItsId = async (hotelId: number, checkInDate
     throw { message, type };
   }
 };
+
+export const getHotels = async ()  => {
+  try {
+    const response = await axiosInstance.get('/api/hotels');
+    console.log("response is ", response);
+    return response.data;
+  } catch (error: any) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
