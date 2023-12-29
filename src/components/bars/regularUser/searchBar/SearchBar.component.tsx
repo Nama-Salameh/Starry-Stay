@@ -1,6 +1,6 @@
 import React, { useEffect, startTransition } from "react";
 import CitySelector from "./citySelector/CitySelecetor.component";
-import getCities from "../../../../services/cities/Cities.service";
+import { getCities } from "../../../../services/cities/Cities.service";
 import DateRangePickerComponent from "./datePicker/DatePicker.component";
 import style from "./SearchBar.module.css";
 import RoomsSelector from "./roomSelector/RoomsSelector.component";

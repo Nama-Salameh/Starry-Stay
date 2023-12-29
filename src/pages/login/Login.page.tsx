@@ -43,7 +43,7 @@ export default function Login() {
   return (
     <div className={style.loginContainer}>
       <img src={logoImage} className={style.logo} alt="logo" />
-      <h1 className={style.title}>Login</h1>
+      <h1 className={style.title}>{localization.login}</h1>
       <Formik
         initialValues={{ username: "", password: "" }}
         validationSchema={Yup.object({

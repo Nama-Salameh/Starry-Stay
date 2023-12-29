@@ -10,6 +10,7 @@ import { SearchProvider } from "../contexts/searchContext/SearchContext.context"
 import { isLoggedIn, isSessionExpired } from "../utils/TokenUtils";
 import RoomDetails from "../pages/room/RoomDetails.page";
 import { CartProvider } from "../contexts/cartContext/CartContext.context";
+import SideBar from "../components/bars/admin/SideBar/SideBar.component";
 
 const Login = lazy(() => import("../pages/login/Login.page"));
 const Home = lazy(() => import("../pages/home/Home.page"));
@@ -19,7 +20,7 @@ const Checkout = lazy(() => import("../pages/checkout/Checkout.page"));
 const Confirmation = lazy(
   () => import("../pages/confirmation/Confirmation.page")
 );
-const Admin = lazy(() => import("../pages/admin/Admin.component"));
+const Admin = lazy(() => import("../pages/admin/Admin.page"));
 const AdminCities = lazy(
   () => import("../pages/admin/adminCities/AdminCities.page")
 );
@@ -54,6 +55,7 @@ export default function AppRoutes() {
                 </>
               }
             />
+
             <Route
               path="/*"
               element={
@@ -73,18 +75,26 @@ export default function AppRoutes() {
                         element={<Confirmation />}
                       ></Route>
                     </Route>
-                    <Route element={<ProtectedRoute onlyAdmins={true} />}>
-                      <Route path="/admin/*" element={<Admin />}>
-                        <Route index element={<AdminCities />} />
-                        <Route path="cities" element={<AdminCities />} />
-                        <Route path="hotels" element={<AdminHotels />} />
-                        <Route path="rooms" element={<AdminRooms />} />
-                      </Route>
-                    </Route>
                   </Routes>
                 </>
               }
             ></Route>
+
+            <Route
+              element={
+                <>
+                  <ProtectedRoute onlyAdmins={true} />
+                  <SideBar />
+                </>
+              }
+            >
+              <Route path="/admin/*" element={<Admin />}>
+                <Route index element={<AdminCities />} />
+                <Route path="cities" element={<AdminCities />} />
+                <Route path="hotels" element={<AdminHotels />} />
+                <Route path="rooms" element={<AdminRooms />} />
+              </Route>
+            </Route>
           </Routes>
         </CartProvider>
       </SearchProvider>

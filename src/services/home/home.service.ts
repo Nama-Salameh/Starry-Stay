@@ -1,5 +1,4 @@
 import { axiosInstance, handleError } from "../ApisConfig";
-import { getToken } from "../../utils/storageUtils/tokenStorage/TokenStorage";
 const GET_FEATURED_DEALS_HOTELS = "api/home/featured-deals";
 const GET_TRENDING_DESTINATION_HOTELS = "api/home/destinations/trending";
 
@@ -25,7 +24,9 @@ export const getTrendingDestinations = async () => {
 
 export const getRecentlyVisitedHotels = async (userId: number) => {
   try {
-    const response = await axiosInstance.get(`api/home/users/${userId}/recent-hotels`);
+    const response = await axiosInstance.get(
+      `api/home/users/${userId}/recent-hotels`
+    );
     return response.data;
   } catch (error: any) {
     let { message, type } = handleError(error);

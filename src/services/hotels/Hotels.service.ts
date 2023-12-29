@@ -33,14 +33,20 @@ export const getHotelAmenitiesByItsId = async (hotelId: number) => {
   }
 };
 
-export const getHotelRoomsByItsId = async (hotelId: number, checkInDate: string , checkOutDate :string) => {
-  const params={
-    hotelId : hotelId,
-    checkInDate : checkInDate,
-    checkOutDate : checkOutDate
-  }
+export const getHotelRoomsByItsId = async (
+  hotelId: number,
+  checkInDate: string,
+  checkOutDate: string
+) => {
+  const params = {
+    hotelId: hotelId,
+    checkInDate: checkInDate,
+    checkOutDate: checkOutDate,
+  };
   try {
-    const response = await axiosInstance.get(`api/hotels/${hotelId}/rooms`, {params});
+    const response = await axiosInstance.get(`api/hotels/${hotelId}/rooms`, {
+      params,
+    });
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
@@ -49,14 +55,32 @@ export const getHotelRoomsByItsId = async (hotelId: number, checkInDate: string 
   }
 };
 
-export const getHotelAvailableRoomsByItsId = async (hotelId: number, checkInDate: string , checkOutDate :string)  => {
-  const params={
-    hotelId : hotelId,
-    checkInDate : checkInDate,
-    checkOutDate : checkOutDate
+export const getHotelAvailableRoomsByItsId = async (
+  hotelId: number,
+  checkInDate: string,
+  checkOutDate: string
+) => {
+  const params = {
+    hotelId: hotelId,
+    checkInDate: checkInDate,
+    checkOutDate: checkOutDate,
   };
   try {
-    const response = await axiosInstance.get(`api/hotels/${hotelId}/available-rooms` , {params});
+    const response = await axiosInstance.get(
+      `api/hotels/${hotelId}/available-rooms`,
+      { params }
+    );
+    console.log("response is ", response);
+    return response.data;
+  } catch (error: any) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+
+export const getHotels = async () => {
+  try {
+    const response = await axiosInstance.get("/api/hotels");
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
