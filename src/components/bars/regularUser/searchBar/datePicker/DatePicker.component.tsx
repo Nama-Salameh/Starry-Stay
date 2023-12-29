@@ -11,6 +11,17 @@ import { handleError } from "../../../../../services/ApisConfig";
 const DateRangePickerComponent = () => {
   const { searchParams, setSearchParamsValue } = useSearchContext();
   const [dateRange, setDateRange] = useState<RangeValue<Dayjs>>([null, null]);
+  
+  useEffect(() => {
+    const today = dayjs();
+    const tomorrow = today.add(1, 'day');
+    const initialDateRange: RangeValue<Dayjs> = [today, tomorrow];
+
+    setSearchParamsValue("checkInDate", today.format("YYYY-MM-DD"));
+    setSearchParamsValue("checkOutDate", tomorrow.format("YYYY-MM-DD"));
+    setDateRange(initialDateRange);
+  }, []);
+  
   const onChange = (dates: RangeValue<Dayjs>) => {
     try {
       if (Array.isArray(dates) && dates.length === 2 && dates[0] && dates[1]) {

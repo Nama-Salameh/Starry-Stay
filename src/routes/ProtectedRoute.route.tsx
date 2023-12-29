@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import PageNotFound from "../pages/pageNotFound/PageNotFound.page";
-import { getDecodedToken, isLoggedIn } from "../utils/TokenUtils";
+import { getDecodedToken, isLoggedIn, isSessionExpired } from "../utils/TokenUtils";
 import IToken from "../interfaces/IToken.interface";
 
 export default function ProtectedRoutes({
@@ -15,7 +15,7 @@ export default function ProtectedRoutes({
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoggedIn()) {
+    if (!isLoggedIn() || isSessionExpired()) {
       navigate("/login");
     }
   }, []);
