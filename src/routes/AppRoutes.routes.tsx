@@ -20,7 +20,7 @@ const Checkout = lazy(() => import("../pages/checkout/Checkout.page"));
 const Confirmation = lazy(
   () => import("../pages/confirmation/Confirmation.page")
 );
-const Admin = lazy(() => import("../pages/admin/Admin.component"));
+const Admin = lazy(() => import("../pages/admin/Admin.page"));
 const AdminCities = lazy(
   () => import("../pages/admin/adminCities/AdminCities.page")
 );
