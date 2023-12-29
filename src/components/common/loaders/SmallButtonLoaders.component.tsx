@@ -5,14 +5,16 @@ import "./Loaders.module.css";
 
 export default function SmallButtonLoader({
   buttonWidth = "150px",
+  buttonHeight = "50px",
 }: {
   buttonWidth?: string;
+  buttonHeight?: string;
 }) {
   return (
     <Button
-      style={{ width: buttonWidth }}
-      disabled
       className={`${style.smallButton} small-loader`}
+      style={{ width: buttonWidth, height: buttonHeight }}
+      disabled
       variant="contained"
     >
       <Loader type="spinner-cub" size={20} />
