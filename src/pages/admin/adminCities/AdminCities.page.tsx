@@ -4,24 +4,33 @@ import { Box } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import {
+  addCityImage,
+  createCity,
   deleteCityByItsId,
   getCities,
   getCityByItsId,
   updateCity,
 } from "../../../services/cities/Cities.service";
-import DeleteConfirmationModal from "../../../components/modals/DeleteConfirmationModal.component";
+import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
 import {
   notifyError,
   notifySuccess,
 } from "../../../utils/toastUtils/Toast.utils";
-import EditForm from "../../../components/common/forms/editForm/EditFrom.component";
+import CityForm from "../../../components/common/forms/cityForm/CityFrom.component";
+import SmallButton from "../../../components/common/Buttons/SmallButton.component";
+import style from "../Admin.module.css";
+
+interface CityData {
+  name: string;
+  description: string;
+}
 
 export default function AdminCities() {
   const [citiesInfo, setcitiesInfo] = useState();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [cityToDelete, setCityToDelete] = useState<number | null>(null);
-  const [isEditFormOpen, setEditFormOpen] = useState(false);
-  const [editedData, setEditedData] = useState(null);
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [cityData, setCityData] = useState<CityData | null>(null);
 
   useEffect(() => {
     const getCitiesInfo = async () => {
@@ -29,18 +38,19 @@ export default function AdminCities() {
         const citiesInfo = await getCities();
         setcitiesInfo(citiesInfo);
       } catch (error) {
-        notifyError("No data availble now");
+        notifyError("No Cities found");
       }
     };
     getCitiesInfo();
   }, []);
+
   console.log("cities Info : ", citiesInfo);
   const handleSearch = (searchText: string) => {};
-  const handleDeleteCity = async (cityId: number) => {
+
+  const handleDeleteCityClick = async (cityId: number) => {
     setIsDeleteModalOpen(true);
     setCityToDelete(cityId);
   };
-
   const handleConfirmDelete = async () => {
     if (cityToDelete !== null) {
       try {
@@ -50,7 +60,6 @@ export default function AdminCities() {
         notifyError("Deleting a city Failed, Try again");
       }
     }
-
     setIsDeleteModalOpen(false);
     setCityToDelete(null);
   };
@@ -59,55 +68,112 @@ export default function AdminCities() {
     setCityToDelete(null);
   };
 
-  const handleEditCity = async (cityId: number) => {
+  const handleEditCityClick = async (cityId: number) => {
     try {
       const cityInfo = await getCityByItsId(cityId);
-      setEditedData(cityInfo);
-      setEditFormOpen(true);
+      setCityData(cityInfo);
+      setFormOpen(true);
     } catch (error) {
       notifyError("Failed to fetch city data. Please try again.");
     }
   };
-
   const handleCancelEdit = () => {
-    setEditFormOpen(false);
-    setEditedData(null);
+    setFormOpen(false);
+    setCityData(null);
   };
-  const handleUpdate = async (
-    cityId: number,
+  const handleConfirmUpdate = async (
     name: string,
-    description: string
+    description: string,
+    cityId: any
   ) => {
     try {
-      await updateCity(cityId, name, description);
-      const updatedCities = await getCities();
-      setcitiesInfo(updatedCities);
-      notifySuccess("The city updated successfully");
+      if (typeof cityId === "number") {
+        await updateCity(cityId, name, description);
+        const updatedCities = await getCities();
+        setcitiesInfo(updatedCities);
+        notifySuccess("The city updated successfully");
+      } else {
+        notifyError("Updating a city Failed. Please Try again");
+      }
     } catch {
       notifyError("Updating a city Failed. Please Try again");
     }
-    setEditFormOpen(false);
-    setEditedData(null);
+    setFormOpen(false);
+    setCityData(null);
+  };
+
+  const handleCreateCityClick = async () => {
+    setFormOpen(true);
+  };
+  const handleConfirmCreate = async (
+    name: string,
+    description: string,
+    imageFile: any
+  ) => {
+    try {
+      const newCity = await createCity(name, description);
+      console.log("new city is : ", newCity);
+      if (imageFile) {
+        try {
+          await addCityImage(newCity.id, imageFile);
+        } catch {
+          notifyError("Loading image Failed. Please Try again");
+        }
+      }
+      const updatedCities = await getCities();
+      setcitiesInfo(updatedCities);
+      notifySuccess("The city created successfully");
+    } catch {
+      notifyError("Creating a city Failed. Please Try again");
+    }
+    setFormOpen(false);
+    setCityData(null);
+  };
+  const handleCancelCreate = () => {
+    setFormOpen(false);
+    setCityData(null);
   };
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <SearchBar onSearch={handleSearch} />
+      <div className={style.pageHeader}>
+        <SearchBar onSearch={handleSearch} />
+        <SmallButton
+          value={localization.create}
+          buttonWidth={100}
+          onClick={handleCreateCityClick}
+        />
+      </div>
       <TableWithNavigation
         data={citiesInfo}
         itemsPerPage={5}
-        onDelete={handleDeleteCity}
-        onEdit={handleEditCity}
+        onDelete={handleDeleteCityClick}
+        onEdit={handleEditCityClick}
       />
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
-      <EditForm
-        isOpen={isEditFormOpen}
+      <CityForm
+        isOpen={isFormOpen}
         onCancel={handleCancelEdit}
-        onUpdate={handleUpdate}
-        cityInfo={editedData}
+        onSubmit={handleConfirmUpdate}
+        initialValues={{
+          name: cityData ? cityData.name : "",
+          description: cityData ? cityData.description : "",
+          imageFile: null,
+        }}
+      />
+      <CityForm
+        isOpen={isFormOpen}
+        onCancel={handleCancelCreate}
+        onSubmit={handleConfirmCreate}
+        initialValues={{
+          name: cityData ? cityData.name : "",
+          description: cityData ? cityData.description : "",
+          imageFile: null,
+        }}
+        isCreateMode={true}
       />
     </Box>
   );

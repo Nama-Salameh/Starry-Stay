@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
-import SmallButton from "../../../common/Buttons/SmallButton.component";
 import localization from "../../../../localizationConfig";
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField } from "@mui/material";
 
 const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
   onSearch,
@@ -25,9 +24,9 @@ const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
       onChange={handleInputChange}
       style={{
         width: "100%",
-        margin: 0,
-        height: "52px",
-        borderRadius: "8px",
+        marginRight: "5px",
+        height: "51px",
+        borderRadius: 2,
         paddingRight: 0,
       }}
     />

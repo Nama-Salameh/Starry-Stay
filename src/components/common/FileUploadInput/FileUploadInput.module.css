@@ -1,0 +1,15 @@
+.fileUploadContainer {
+  margin-bottom: 16px;
+}
+
+.fileInput {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.error {
+  color: #ff0000;
+  font-size: 12px;
+}

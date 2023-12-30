@@ -1,4 +1,5 @@
 import { axiosInstance, handleError } from "../ApisConfig";
+import getUrlForFile from "../../utils/fileUrlUtils/FileUrl.utils";
 
 const GET_CITIES_URL = "api/cities";
 
@@ -46,4 +47,36 @@ const getCityByItsId = async (cityId: number) => {
     throw { message, type };
   }
 };
-export { getCities, deleteCityByItsId, updateCity, getCityByItsId };
+
+const createCity = async (name: string, description: string) => {
+  const params = { name: name, description: description };
+  try {
+    const response = await axiosInstance.post("/api/cities", params);
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+
+const addCityImage = async (cityId: number, file: File) => {
+  try {
+    const imageUrl = await getUrlForFile(file);
+    const response = await axiosInstance.post(`/api/cities/${cityId}/photos`, {
+      url: imageUrl,
+    });
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+export {
+  getCities,
+  deleteCityByItsId,
+  updateCity,
+  getCityByItsId,
+  createCity,
+  addCityImage,
+};
