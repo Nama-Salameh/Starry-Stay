@@ -1,0 +1,32 @@
+.textField > * {
+  padding-left: 0 !important;
+}
+.textField {
+  width: 100%;
+  margin-right: 5px;
+  height: 51px;
+  border-radius: 2;
+  padding-right: 0;
+}
+.selectContainer {
+  width: 160px;
+}
+
+@media (max-width: 800px) {
+  .selectContainer {
+    width: 130px;
+  }
+}
+
+@media (max-width:600px) {
+  .selectContainer {
+    width: 110px;
+  }
+  .selectContainer > *{
+    font-size: 15px;
+  }
+}
+@media (max-width:600px) {
+  .selectContainer {
+    width: 100px;
+  }}

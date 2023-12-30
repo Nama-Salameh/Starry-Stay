@@ -48,6 +48,21 @@ const getCityByItsId = async (cityId: number) => {
   }
 };
 
+const getFilteredCities = async (filterOptions: {
+  name?: string;
+  searchQuery?: string;
+}) => {
+  try {
+    const response = await axiosInstance.get(GET_CITIES_URL, {
+      params: filterOptions,
+    });
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+
 const createCity = async (name: string, description: string) => {
   const params = { name: name, description: description };
   try {
@@ -65,7 +80,6 @@ const addCityImage = async (cityId: number, file: File) => {
     const response = await axiosInstance.post(`/api/cities/${cityId}/photos`, {
       url: imageUrl,
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     let { message, type } = handleError(error);
@@ -74,6 +88,7 @@ const addCityImage = async (cityId: number, file: File) => {
 };
 export {
   getCities,
+  getFilteredCities,
   deleteCityByItsId,
   updateCity,
   getCityByItsId,

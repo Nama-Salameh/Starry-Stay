@@ -9,6 +9,7 @@ import {
   deleteCityByItsId,
   getCities,
   getCityByItsId,
+  getFilteredCities,
   updateCity,
 } from "../../../services/cities/Cities.service";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
@@ -26,17 +27,19 @@ interface CityData {
 }
 
 export default function AdminCities() {
-  const [citiesInfo, setcitiesInfo] = useState();
+  const [citiesInfo, setCitiesInfo] = useState();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [cityToDelete, setCityToDelete] = useState<number | null>(null);
   const [isFormOpen, setFormOpen] = useState(false);
   const [cityData, setCityData] = useState<CityData | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>("name");
+  const [searchText, setSearchText] = useState<string>("");
 
   useEffect(() => {
     const getCitiesInfo = async () => {
       try {
         const citiesInfo = await getCities();
-        setcitiesInfo(citiesInfo);
+        setCitiesInfo(citiesInfo);
       } catch (error) {
         notifyError("No Cities found");
       }
@@ -44,8 +47,21 @@ export default function AdminCities() {
     getCitiesInfo();
   }, []);
 
-  console.log("cities Info : ", citiesInfo);
-  const handleSearch = (searchText: string) => {};
+  const handleDebouncedSearch = async () => {
+    try {
+      let filteredCities;
+      if (selectedOption === "name") {
+        filteredCities = await getFilteredCities({ name: searchText });
+      } else if (selectedOption === "description") {
+        filteredCities = await getFilteredCities({ searchQuery: searchText });
+      } else {
+        filteredCities = await getCities();
+      }
+      setCitiesInfo(filteredCities);
+    } catch (error) {
+      notifyError("Something happen, please try again.");
+    }
+  };
 
   const handleDeleteCityClick = async (cityId: number) => {
     setIsDeleteModalOpen(true);
@@ -90,7 +106,7 @@ export default function AdminCities() {
       if (typeof cityId === "number") {
         await updateCity(cityId, name, description);
         const updatedCities = await getCities();
-        setcitiesInfo(updatedCities);
+        setCitiesInfo(updatedCities);
         notifySuccess("The city updated successfully");
       } else {
         notifyError("Updating a city Failed. Please Try again");
@@ -112,7 +128,6 @@ export default function AdminCities() {
   ) => {
     try {
       const newCity = await createCity(name, description);
-      console.log("new city is : ", newCity);
       if (imageFile) {
         try {
           await addCityImage(newCity.id, imageFile);
@@ -121,7 +136,7 @@ export default function AdminCities() {
         }
       }
       const updatedCities = await getCities();
-      setcitiesInfo(updatedCities);
+      setCitiesInfo(updatedCities);
       notifySuccess("The city created successfully");
     } catch {
       notifyError("Creating a city Failed. Please Try again");
@@ -136,12 +151,20 @@ export default function AdminCities() {
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
       <div className={style.pageHeader}>
-        <SearchBar onSearch={handleSearch} />
-        <SmallButton
-          value={localization.create}
-          buttonWidth={100}
-          onClick={handleCreateCityClick}
+        <SearchBar
+          onSearch={handleDebouncedSearch}
+          selectedOption={selectedOption}
+          onOptionChange={setSelectedOption}
+          searchText={searchText}
+          onTextChange={setSearchText}
         />
+        <div className={style.buttonContainer}>
+          <SmallButton
+            value={localization.createCity}
+            buttonWidth={140}
+            onClick={handleCreateCityClick}
+          />
+        </div>
       </div>
       <TableWithNavigation
         data={citiesInfo}
