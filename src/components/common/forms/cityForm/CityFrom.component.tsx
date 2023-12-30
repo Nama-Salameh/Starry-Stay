@@ -2,38 +2,42 @@ import React, { useState, useEffect } from "react";
 import { Modal, Box, Button } from "@mui/material";
 import { Formik, Form } from "formik";
 import TextInput from "../../textField/TextField.component";
-import style from "./EditForm.module.css";
-import BigSubmitButton from "../../Buttons/BigSubmitButton.component";
+import style from "./Form.module.css";
 import SmallSubmitButton from "../../Buttons/SmallSubmitButton.component";
 import SmallButtonLoader from "../../loaders/SmallButtonLoaders.component";
 import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
-interface EditFormProps {
+
+interface CityFormProps {
   isOpen: boolean;
   onCancel: () => void;
-  onUpdate: (cityId: number, name: string, description: string) => void;
-  cityInfo: { id: number; name: string; description: string } | null;
+  onSubmit: (
+    name: string,
+    description: string,
+    cityId?: number
+  ) => Promise<void> | undefined;
+  initialValues: { name: string; description: string };
+  isCreateMode?: boolean;
 }
 
-const EditForm: React.FC<EditFormProps> = ({
+const CityForm: React.FC<CityFormProps> = ({
   isOpen,
   onCancel,
-  onUpdate,
-  cityInfo,
+  onSubmit,
+  initialValues,
+  isCreateMode = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const initialValues = {
-    name: cityInfo?.name || "",
-    description: cityInfo?.description || "",
-  };
 
-  const handleUpdate = async (values: any) => {
+  const handleFormSubmit = async (values: any) => {
     try {
       setIsLoading(true);
-      if (cityInfo) {
-        await onUpdate(cityInfo.id, values.name, values.description);
+      if (values.length === 3 && values.cityId !== undefined) {
+        await onSubmit(values.name, values.description, values.cityId);
+      } else if (isCreateMode) {
+        await onSubmit(values.name, values.description);
       }
     } catch (error) {
-      notifyError("Updating city failed..");
+      notifyError(`Failed ${isCreateMode ? "creating" : "updating"} city.`);
     } finally {
       setIsLoading(false);
     }
@@ -42,18 +46,20 @@ const EditForm: React.FC<EditFormProps> = ({
   return (
     <Modal open={isOpen} onClose={onCancel}>
       <Box className={style.modalContainer}>
-        <Formik initialValues={initialValues} onSubmit={handleUpdate}>
+        <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
           <Form>
             <TextInput
               label="City name"
               name="name"
               fullWidth
+              required
               className={style.textField}
             />
             <TextInput
               label="City description"
               name="description"
               fullWidth
+              required
               multiline
               rows={4}
               className={style.textField}
@@ -67,7 +73,10 @@ const EditForm: React.FC<EditFormProps> = ({
                 Cancel
               </Button>
               {!isLoading ? (
-                <SmallSubmitButton text={"Update"} buttonWidth={110} />
+                <SmallSubmitButton
+                  text={isCreateMode ? "Create" : "Update"}
+                  buttonWidth={110}
+                />
               ) : (
                 <SmallButtonLoader buttonWidth="110px" buttonHeight="38px" />
               )}
@@ -79,4 +88,4 @@ const EditForm: React.FC<EditFormProps> = ({
   );
 };
 
-export default EditForm;
+export default CityForm;

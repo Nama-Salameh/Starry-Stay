@@ -25,7 +25,7 @@ const SmallButton: React.FC<{
         height: 52,
         textTransform: "none",
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '400',
         borderRadius: 2,
         width: buttonWidth || "auto",
         ...(isSecondaryBackgroundColor && {

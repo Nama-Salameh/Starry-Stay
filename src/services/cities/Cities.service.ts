@@ -46,4 +46,16 @@ const getCityByItsId = async (cityId: number) => {
     throw { message, type };
   }
 };
-export { getCities, deleteCityByItsId, updateCity, getCityByItsId };
+
+const createCity = async (name: string, description: string) => {
+  const params = { name: name, description: description };
+  try {
+    const response = await axiosInstance.post("/api/cities", params);
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+
+export { getCities, deleteCityByItsId, updateCity, getCityByItsId , createCity};

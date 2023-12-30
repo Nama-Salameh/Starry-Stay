@@ -25,9 +25,9 @@ const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
       onChange={handleInputChange}
       style={{
         width: "100%",
-        margin: 0,
-        height: "52px",
-        borderRadius: "8px",
+        marginRight: "5px",
+        height: "51px",
+        borderRadius: 2,
         paddingRight: 0,
       }}
     />
