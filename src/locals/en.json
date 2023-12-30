@@ -64,11 +64,15 @@
   "descendingSortType": "descending",
   "ascending": "Ascending",
   "descending": "Descending",
-  "hotelAmenities" : "Hotel amenities",
-  "deleteFromCart" : "Delete From Cart",
-  "confirm" : "Confirm",
-  "cash" : "Cash",
-  "creditCard" : "Credit Card" , 
-  "paymentMethod" : "Payment method",
-  "totalCost" : "Total Cost"
+  "hotelAmenities": "Hotel amenities",
+  "deleteFromCart": "Delete From Cart",
+  "confirm": "Confirm",
+  "cash": "Cash",
+  "creditCard": "Credit Card",
+  "paymentMethod": "Payment method",
+  "totalCost": "Total Cost",
+  "createCity": "Create a city",
+  "createRoom" : "Create a room",
+  "createHotel" : "Create a hotel",
+  "description" :" Description"
 }

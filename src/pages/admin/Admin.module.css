@@ -1,4 +1,17 @@
-.pageHeader{
+.pageHeader {
+  display: flex;
+  flex-direction: row;
+}
+.buttonContainer {
+  margin-left: 15px; 
+}
+@media (max-width: 600px) {
+  .pageHeader {
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
+  }
+  .buttonContainer {
+    margin-left: auto; 
+    margin-bottom:5px;
+  }
 }

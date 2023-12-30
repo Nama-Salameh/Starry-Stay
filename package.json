@@ -30,6 +30,7 @@
     "html2pdf.js": "^0.10.1",
     "jspdf": "^2.5.1",
     "leaflet": "^1.9.4",
+    "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "rc-picker": "^3.14.6",
     "react": "^18.2.0",
@@ -81,6 +82,7 @@
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.8",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/react-date-range": "^1.4.9",
     "@types/react-datepicker": "^4.19.4",
     "@types/react-dom": "^18.2.18"

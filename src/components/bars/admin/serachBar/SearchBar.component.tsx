@@ -1,19 +1,47 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import localization from "../../../../localizationConfig";
-import { TextField } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  Select,
+  MenuItem,
+  FormControl,
+  SelectChangeEvent,
+} from "@mui/material";
+import style from "./SearchBar.module.css";
+import debounce from "lodash.debounce";
 
-const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
+const SearchBar: React.FC<{
+  onSearch: (searchTerm: string, selectedOption: string) => void;
+  selectedOption: string;
+  onOptionChange: React.Dispatch<React.SetStateAction<string>>;
+  searchText: string;
+  onTextChange: React.Dispatch<React.SetStateAction<string>>;
+}> = ({
   onSearch,
+  selectedOption,
+  onOptionChange,
+  searchText,
+  onTextChange,
 }) => {
-  const [searchText, setSearchText] = useState<string>("");
-
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
+    onTextChange(event.target.value);
   };
 
-  const handleSearch = () => {
-    onSearch(searchText);
+  const handleOptionChange = (event: SelectChangeEvent<string>) => {
+    onOptionChange(event.target.value);
   };
+
+  const delayedSearch = debounce(() => {
+    onSearch(searchText, selectedOption);
+  }, 500);
+
+  useEffect(() => {
+    if (searchText !== "") {
+      delayedSearch();
+      return delayedSearch.cancel;
+    }
+  }, [searchText, selectedOption]);
 
   return (
     <TextField
@@ -21,13 +49,25 @@ const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
       placeholder="Search..."
       variant="outlined"
       value={searchText}
+      className={style.textField}
       onChange={handleInputChange}
-      style={{
-        width: "100%",
-        marginRight: "5px",
-        height: "51px",
-        borderRadius: 2,
-        paddingRight: 0,
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <FormControl>
+              <Select
+                labelId="search-option-label"
+                id="search-option"
+                value={selectedOption}
+                onChange={handleOptionChange}
+                className={style.selectContainer}
+              >
+                <MenuItem value="name">{localization.name}</MenuItem>
+                <MenuItem value="description">{localization.description}</MenuItem>
+              </Select>
+            </FormControl>
+          </InputAdornment>
+        ),
       }}
     />
   );
