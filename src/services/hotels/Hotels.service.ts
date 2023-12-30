@@ -88,3 +88,14 @@ export const getHotels = async () => {
     throw { message, type };
   }
 };
+
+
+export const getFilteredHotels = async (filterOptions: { name?: string; searchQuery?: string }) => {
+  try {
+    const response = await axiosInstance.get('/api/hotels', { params: filterOptions });
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
