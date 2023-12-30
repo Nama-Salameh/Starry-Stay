@@ -6,6 +6,8 @@ import style from "./Form.module.css";
 import SmallSubmitButton from "../../Buttons/SmallSubmitButton.component";
 import SmallButtonLoader from "../../loaders/SmallButtonLoaders.component";
 import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
+import * as Yup from "yup";
+import localization from "../../../../localizationConfig";
 
 interface CityFormProps {
   isOpen: boolean;
@@ -46,11 +48,14 @@ const CityForm: React.FC<CityFormProps> = ({
   return (
     <Modal open={isOpen} onClose={onCancel}>
       <Box className={style.modalContainer}>
-        <Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
+        <Formik initialValues={initialValues} onSubmit={handleFormSubmit} validationSchema={Yup.object({
+          cityname: Yup.string().required(localization.required),
+          description: Yup.string().required(localization.required),
+        })}>
           <Form>
             <TextInput
               label="City name"
-              name="name"
+              name="cityname"
               fullWidth
               required
               className={style.textField}
