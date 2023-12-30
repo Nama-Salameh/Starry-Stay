@@ -48,7 +48,7 @@ const DateRangePickerComponent = () => {
           <span>Check-out-date</span>
         </div>
         <DatePicker.RangePicker
-          value={dateRange}
+          value={[searchParams.startDate, searchParams.endDate]}
           onChange={onChange}
           suffixIcon={null}
           className={style.dateRangePicker}
