@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent } from "react";
-import SmallButton from "../../../common/Buttons/SmallButton.component";
 import localization from "../../../../localizationConfig";
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField } from "@mui/material";
 
 const SearchBar: React.FC<{ onSearch: (searchTerm: string) => void }> = ({
   onSearch,

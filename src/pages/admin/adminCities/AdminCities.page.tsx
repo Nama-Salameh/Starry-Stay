@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import {
+  addCityImage,
   createCity,
   deleteCityByItsId,
   getCities,
@@ -19,12 +20,17 @@ import CityForm from "../../../components/common/forms/cityForm/CityFrom.compone
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";
 
+interface CityData {
+  name: string;
+  description: string;
+}
+
 export default function AdminCities() {
   const [citiesInfo, setcitiesInfo] = useState();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [cityToDelete, setCityToDelete] = useState<number | null>(null);
   const [isFormOpen, setFormOpen] = useState(false);
-  const [cityData, setCityData] = useState(null);
+  const [cityData, setCityData] = useState<CityData | null>(null);
 
   useEffect(() => {
     const getCitiesInfo = async () => {
@@ -32,11 +38,12 @@ export default function AdminCities() {
         const citiesInfo = await getCities();
         setcitiesInfo(citiesInfo);
       } catch (error) {
-        notifyError("No data availble now");
+        notifyError("No Cities found");
       }
     };
     getCitiesInfo();
   }, []);
+
   console.log("cities Info : ", citiesInfo);
   const handleSearch = (searchText: string) => {};
 
@@ -98,9 +105,21 @@ export default function AdminCities() {
   const handleCreateCityClick = async () => {
     setFormOpen(true);
   };
-  const handleConfirmCreate = async (name: string, description: string) => {
+  const handleConfirmCreate = async (
+    name: string,
+    description: string,
+    imageFile: any
+  ) => {
     try {
-      await createCity(name, description);
+      const newCity = await createCity(name, description);
+      console.log("new city is : ", newCity);
+      if (imageFile) {
+        try {
+          await addCityImage(newCity.id, imageFile);
+        } catch {
+          notifyError("Loading image Failed. Please Try again");
+        }
+      }
       const updatedCities = await getCities();
       setcitiesInfo(updatedCities);
       notifySuccess("The city created successfully");
@@ -139,13 +158,21 @@ export default function AdminCities() {
         isOpen={isFormOpen}
         onCancel={handleCancelEdit}
         onSubmit={handleConfirmUpdate}
-        initialValues={cityData || { name: "", description: "" }}
+        initialValues={{
+          name: cityData ? cityData.name : "",
+          description: cityData ? cityData.description : "",
+          imageFile: null,
+        }}
       />
       <CityForm
         isOpen={isFormOpen}
         onCancel={handleCancelCreate}
         onSubmit={handleConfirmCreate}
-        initialValues={cityData || { name: "", description: "" }}
+        initialValues={{
+          name: cityData ? cityData.name : "",
+          description: cityData ? cityData.description : "",
+          imageFile: null,
+        }}
         isCreateMode={true}
       />
     </Box>
