@@ -89,10 +89,42 @@ export const getHotels = async () => {
   }
 };
 
-
-export const getFilteredHotels = async (filterOptions: { name?: string; searchQuery?: string }) => {
+export const getFilteredHotels = async (filterOptions: {
+  name?: string;
+  searchQuery?: string;
+}) => {
   try {
-    const response = await axiosInstance.get('/api/hotels', { params: filterOptions });
+    const response = await axiosInstance.get("/api/hotels", {
+      params: filterOptions,
+    });
+    return response.data;
+  } catch (error) {
+    let { message, type } = handleError(error);
+    throw { message, type };
+  }
+};
+
+export const updateHotel = async (
+  hotelId: number,
+  name: string,
+  description: string,
+  starRating: number,
+  latitude: number,
+  longitude: number
+) => {
+  const params = {
+    hotelId: hotelId,
+    name: name,
+    description: description,
+    hotelType: 1,
+    starRating: starRating,
+    latitude: latitude,
+    longitude: longitude,
+  };
+  try {
+    const response = await axiosInstance.put(`/api/hotels/${hotelId}`, {
+      params,
+    });
     return response.data;
   } catch (error) {
     let { message, type } = handleError(error);
