@@ -13,7 +13,7 @@ import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.com
 import { getDecodedToken } from "../../utils/TokenUtils";
 import IToken from "../../interfaces/IToken.interface";
 import { useMediaQuery } from "@mui/material";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 const errorMessages = {

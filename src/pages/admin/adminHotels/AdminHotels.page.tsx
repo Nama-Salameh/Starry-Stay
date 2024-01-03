@@ -8,14 +8,13 @@ import {
   getHotels,
   updateHotel,
 } from "../../../services/hotels/Hotels.service";
-import { handleError } from "../../../services/ApisConfig";
 import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import {
   notifyError,
   notifySuccess,
 } from "../../../utils/toastUtils/Toast.utils";
 import HotelForm from "../../../components/common/forms/hotelForm/HotelForm.component";
-import IHotel from "../../../interfaces/IHotel.interface";
+import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 
 type Hotel = {
   hotelName: string;
@@ -36,6 +35,20 @@ type Hotel = {
   id?: number;
 };
 
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.serverIssues,
+  hotelToEditNotFound: localization.hotelToEditNotFound,
+  hotelsNotFound: localization.hotelsNotFound,
+  searchTimedout: localization.searchTimedout,
+};
+
+const successMessages = {
+  successUpdate: localization.hotelUpdatedSuccessfully,
+  successDelete: localization.hotelDeletedSuccessfully,
+  successCreate: localization.hotelCreatedSuccessfully,
+};
+
 export default function AdminHotels() {
   const [hotelsInfo, setHotelsInfo] = useState();
   const [selectedOption, setSelectedOption] = useState<string>("name");
@@ -49,20 +62,27 @@ export default function AdminHotels() {
       try {
         const results = await getHotels();
         setHotelsInfo(results);
-      } catch (error) {
-        let type = handleError(error);
-        throw type;
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.hotelsNotFound);
+            break;
+        }
       }
     };
 
     fetchSearchResults();
   }, []);
-  console.log("hotels info :", hotelsInfo);
 
   const handleDebouncedSearch = async () => {
     try {
       let filteredCities;
-
       if (selectedOption === "name") {
         filteredCities = await getFilteredHotels({ name: searchText });
       } else if (selectedOption === "description") {
@@ -71,8 +91,18 @@ export default function AdminHotels() {
         filteredCities = await getHotels();
       }
       setHotelsInfo(filteredCities);
-    } catch (error) {
-      notifyError("Something happen while searching for a hotel, try again");
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Timeout:
+          notifyError(errorMessages.searchTimedout);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
     }
   };
 
@@ -81,16 +111,20 @@ export default function AdminHotels() {
   const handleEditHotelClick = async (hotelId: number) => {
     try {
       const hotelInfo = await getHotelInfoByItsId(hotelId);
-      console.log("hotel Info ", hotelInfo);
-      console.log("hotel Data ", hotelData);
-      console.log("doing");
-
       setHotelData({ ...hotelInfo, id: hotelId });
-      console.log("hotel Info ", hotelInfo);
-      console.log("hotel Data ", hotelData);
       setUpdateFormOpen(true);
-    } catch (error) {
-      notifyError("Failed to fetch city data. Please try again.");
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.hotelToEditNotFound);
+          break;
+      }
     }
   };
   const handleCancelEdit = () => {
@@ -117,21 +151,24 @@ export default function AdminHotels() {
         );
         const updatedCities = await getHotels();
         setHotelsInfo(updatedCities);
-        notifySuccess("The hotel updated successfully");
-      } else {
-        notifyError("Updating a hotel Failed. Please Try again");
+        notifySuccess(successMessages.successUpdate);
       }
-    } catch {
-      notifyError("Updating a hotel Failed. Please Try again");
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.hotelToEditNotFound);
+          break;
+      }
     }
     setUpdateFormOpen(false);
     setHotelData(null);
   };
-  useEffect(() => {
-    console.log("hotelData after update:", hotelData);
-  }, [hotelData]);
-
-  console.log("hotel Data ", hotelData);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>

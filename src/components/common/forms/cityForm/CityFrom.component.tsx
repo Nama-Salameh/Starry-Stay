@@ -9,7 +9,7 @@ import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
 import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
-import { ErrorTypes } from "../../../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 
 interface CityFormProps {
   isOpen: boolean;
@@ -57,6 +57,13 @@ const CityForm: React.FC<CityFormProps> = ({
       switch (errorType) {
         case ErrorTypes.Network:
           notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Timeout:
+          notifyError(
+            `${
+              isCreateMode ? "creating" : "updating"
+            } timed out. Please try again.`
+          );
           break;
         case ErrorTypes.Unknown:
           notifyError(errorMessages.unknown);

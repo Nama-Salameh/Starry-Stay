@@ -20,6 +20,7 @@ import {
 import CityForm from "../../../components/common/forms/cityForm/CityFrom.component";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";
+import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 
 interface CityData {
   id?: number;
@@ -27,6 +28,20 @@ interface CityData {
   description: string;
 }
 
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.serverIssues,
+  cityToEditNotFound: localization.cityToEditNotFound,
+  citiessNotFound: localization.citiesNotFound,
+  searchTimedout: localization.searchTimedout,
+  cityToDeleteNotFound: localization.cityToDeleteNotFound,
+  gettingCityImageFailed: localization.gettingCityImageFailed,
+};
+const successMessages = {
+  successUpdate: localization.cityUpdatedSuccessfully,
+  successDelete: localization.cityDeletedSuccessfully,
+  successCreate: localization.cityCreatedSuccessfully,
+};
 export default function AdminCities() {
   const [citiesInfo, setCitiesInfo] = useState();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -42,8 +57,18 @@ export default function AdminCities() {
       try {
         const citiesInfo = await getCities();
         setCitiesInfo(citiesInfo);
-      } catch (error) {
-        notifyError("No Cities found");
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.citiessNotFound);
+            break;
+        }
       }
     };
     getCitiesInfo();
@@ -60,8 +85,18 @@ export default function AdminCities() {
         filteredCities = await getCities();
       }
       setCitiesInfo(filteredCities);
-    } catch (error) {
-      notifyError("Something happen, please try again.");
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Timeout:
+          notifyError(errorMessages.searchTimedout);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
     }
   };
 
@@ -73,9 +108,19 @@ export default function AdminCities() {
     if (cityToDelete !== null) {
       try {
         await deleteCityByItsId(cityToDelete);
-        notifySuccess("The city deleted successfully");
-      } catch {
-        notifyError("Deleting a city Failed, Try again");
+        notifySuccess(successMessages.successDelete);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.cityToDeleteNotFound);
+            break;
+        }
       }
     }
     setIsDeleteModalOpen(false);
@@ -89,13 +134,20 @@ export default function AdminCities() {
   const handleEditCityClick = async (cityId: number) => {
     try {
       const cityInfo = await getCityByItsId(cityId);
-      console.log("city to update", cityInfo);
       setCityData(cityInfo);
       setUpdateFormOpen(true);
-    } catch (error) {
-      notifyError("Failed to fetch city data. Please try again.");
-    } finally {
-      console.log(cityData);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.cityToEditNotFound);
+          break;
+      }
     }
   };
 
@@ -113,12 +165,20 @@ export default function AdminCities() {
         await updateCity(cityId, name, description);
         const updatedCities = await getCities();
         setCitiesInfo(updatedCities);
-        notifySuccess("The city updated successfully");
-      } else {
-        notifyError("Updating a city Failed. Please Try again");
+        notifySuccess(successMessages.successUpdate);
       }
-    } catch {
-      notifyError("Updating a city Failed. Please Try again");
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.cityToEditNotFound);
+          break;
+      }
     }
     setUpdateFormOpen(false);
     setCityData(null);
@@ -138,14 +198,21 @@ export default function AdminCities() {
         try {
           await addCityImage(newCity.id, imageFile);
         } catch {
-          notifyError("Loading image Failed. Please Try again");
+          notifyError(errorMessages.gettingCityImageFailed);
         }
       }
       const updatedCities = await getCities();
       setCitiesInfo(updatedCities);
-      notifySuccess("The city created successfully");
-    } catch {
-      notifyError("Creating a city Failed. Please Try again");
+      notifySuccess(successMessages.successCreate);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
     }
     setCreateFormOpen(false);
     setCityData(null);

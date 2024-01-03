@@ -12,7 +12,7 @@ import { getSearchResultRegularUser } from "../../services/search/Search.service
 import HotelsContainer from "../../components/searchComponents/hotel/HotelsConatainer.component";
 import Sort from "../../components/searchComponents/sort/Sort.component";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 
 const errorMessages = {
   network: localization.networkError,

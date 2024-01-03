@@ -9,6 +9,7 @@ import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
 import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
+import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 
 interface HotelFormProps {
   isOpen: boolean;
@@ -35,6 +36,11 @@ interface HotelFormProps {
   isCreateMode?: boolean;
 }
 
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.serverIssues,
+};
+
 const HotelForm: React.FC<HotelFormProps> = ({
   isOpen,
   onCancel,
@@ -51,8 +57,6 @@ const HotelForm: React.FC<HotelFormProps> = ({
       setIsLoading(true);
 
       if (values.hotelId !== undefined) {
-        console.log("Updating hotel:", values.hotelId);
-
         await onSubmit(
           values.name,
           values.description,
@@ -75,8 +79,29 @@ const HotelForm: React.FC<HotelFormProps> = ({
         );
       }
       console.log("Form submitted successfully");
-    } catch (error) {
-      notifyError(`Failed ${isCreateMode ? "creating" : "updating"} hotel.`);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Timeout:
+          notifyError(
+            `${
+              isCreateMode ? "creating" : "updating"
+            } timed out. Please try again.`
+          );
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        default:
+          notifyError(
+            `Failed ${
+              isCreateMode ? "creating" : "updating"
+            } hotel. please Try again`
+          );
+          break;
+      }
     } finally {
       setIsLoading(false);
     }
