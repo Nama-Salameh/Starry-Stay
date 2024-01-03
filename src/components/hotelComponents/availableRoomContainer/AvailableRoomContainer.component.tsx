@@ -15,7 +15,7 @@ import {
 import { useCartContext } from "../../../contexts/cartContext/CartContext.context";
 import { isLoggedIn, isSessionExpired } from "../../../utils/TokenUtils";
 import LoginModal from "../../modals/LoginModal.component";
-import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { notifyError } from "../../../utils/toastUtils/Toast.utils";
 
 type AvailalbeRoom = {

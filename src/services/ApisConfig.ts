@@ -1,6 +1,6 @@
 import { getToken } from "../utils/storageUtils/tokenStorage/TokenStorage";
 import axios, { HttpStatusCode } from "axios";
-import { ErrorTypes } from "../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../enums/ErrorTypes.enum";
 
 const BASE_URL =
   "https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/";
@@ -25,17 +25,9 @@ axiosInstance.interceptors.request.use(
 );
 
 function handleError(error: any) {
-  console.log("in handle error ");
-
   if (axios.isAxiosError(error)) {
-    console.log("in handle && axios error ");
-
     if (error.response) {
-      console.log("in handle && response ");
-
       const response = error.response;
-      console.log("in handle error response : ", response);
-
       switch (response.status) {
         case HttpStatusCode.NotFound:
           return ErrorTypes.NotFound;
@@ -49,15 +41,12 @@ function handleError(error: any) {
           return ErrorTypes.Unknown;
       }
     } else if (error.request) {
-      console.log("in handle && request ");
-
       if (error.code === "ERR_NETWORK") {
-        console.log("in handle && request && network ");
-
         return ErrorTypes.Network;
       }
-      console.log("in handle && request && no reponse");
-
+      else if (error.code === 'ECONNABORTED') {
+        return ErrorTypes.Timeout;
+      }
       return ErrorTypes.NoResponse;
     }
   }

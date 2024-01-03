@@ -10,9 +10,12 @@
   width: 50%;
 }
 
+.formContainer > * {
+  margin-bottom: 10px;
+}
 .textField {
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 0px !important;
 }
 
 .buttonContainer {
@@ -29,4 +32,13 @@
   width: 110px !important;
   font-weight: bold;
   height: 38px !important;
+}
+
+.hotelLocationContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.locationField {
+  width: 90% !important;
 }

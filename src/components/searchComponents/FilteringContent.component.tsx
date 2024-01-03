@@ -5,7 +5,7 @@ import { Divider } from "@mui/material";
 import { getAmenitiesNames } from "../../services/aminities/Aminities.service";
 import localization from "../../localizationConfig";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 
 const errorMessages = {
   network: localization.networkError,

@@ -14,7 +14,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import TextInput from "../../components/common/textField/TextField.component";
 import { useNavigate } from "react-router";
 import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 type RoomDetails = {

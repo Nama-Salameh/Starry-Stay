@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Box, Button, Input } from "@mui/material";
-import { Formik, Form } from "formik";
+import { Modal, Box, Button } from "@mui/material";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import TextInput from "../../textField/TextField.component";
 import style from "../Form.module.css";
 import SmallSubmitButton from "../../Buttons/SmallSubmitButton.component";
@@ -11,19 +11,26 @@ import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 
-interface CityFormProps {
+interface HotelFormProps {
   isOpen: boolean;
   onCancel: () => void;
   onSubmit: (
     name: string,
     description: string,
-    cityId?: number,
+    starrating: number,
+    latitude: number,
+    longitude: number,
+    hotelId?: number,
     imageFile?: File | null
   ) => Promise<void> | undefined;
   initialValues: {
     name: string;
     description: string;
-    cityId?: number | undefined;
+    hoteltype: number;
+    starrating: number;
+    latitude: number;
+    longitude: number;
+    hotelId?: number | undefined;
     imageFile?: File | null;
   };
   isCreateMode?: boolean;
@@ -34,7 +41,7 @@ const errorMessages = {
   unknown: localization.serverIssues,
 };
 
-const CityForm: React.FC<CityFormProps> = ({
+const HotelForm: React.FC<HotelFormProps> = ({
   isOpen,
   onCancel,
   onSubmit,
@@ -44,15 +51,34 @@ const CityForm: React.FC<CityFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFormSubmit = async (values: any) => {
-    console.log("values ", values);
+    console.log("Entering handleFormSubmit");
+    console.log("Submitting form with values:", values);
     try {
       setIsLoading(true);
-      console.log("id", values.cityId);
-      if (values.cityId !== undefined) {
-        await onSubmit(values.name, values.description, values.cityId);
+
+      if (values.hotelId !== undefined) {
+        await onSubmit(
+          values.name,
+          values.description,
+          values.starrating,
+          values.latitude,
+          values.longitude,
+          values.hotelId
+        );
       } else if (isCreateMode) {
-        await onSubmit(values.name, values.description, values.imageFile);
+        console.log("Creating hotel");
+
+        await onSubmit(
+          values.name,
+          values.description,
+          values.hoteltype,
+          values.starrating,
+          values.latitude,
+          values.longitude,
+          values.imageFile
+        );
       }
+      console.log("Form submitted successfully");
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -72,7 +98,7 @@ const CityForm: React.FC<CityFormProps> = ({
           notifyError(
             `Failed ${
               isCreateMode ? "creating" : "updating"
-            } city. please Try again`
+            } hotel. please Try again`
           );
           break;
       }
@@ -90,22 +116,25 @@ const CityForm: React.FC<CityFormProps> = ({
           validationSchema={Yup.object({
             name: Yup.string().required(localization.required),
             description: Yup.string().required(localization.required),
+            starrating: Yup.number().required(localization.required),
+            latitude: Yup.number().required(localization.required),
+            longitude: Yup.number().required(localization.required),
             imageFile: isCreateMode
               ? Yup.mixed().notRequired().nullable()
               : Yup.mixed(),
           })}
         >
           {(formikProps) => (
-            <Form>
+            <Form className={style.formContainer}>
               <TextInput
-                label="City name"
+                label="Hotel name"
                 name="name"
                 fullWidth
                 required
                 className={style.textField}
               />
               <TextInput
-                label="City description"
+                label="Hotel description"
                 name="description"
                 fullWidth
                 required
@@ -113,6 +142,34 @@ const CityForm: React.FC<CityFormProps> = ({
                 rows={4}
                 className={style.textField}
               />
+              <TextInput
+                label="Hotel Type"
+                name="hoteltype"
+                fullWidth
+                required
+                className={style.textField}
+              />
+              <TextInput
+                label="Hotel Rating"
+                name="starrating"
+                fullWidth
+                required
+                className={style.textField}
+              />
+              <div className={style.hotelLocationContainer}>
+                <TextInput
+                  label="latitude"
+                  name="latitude"
+                  required
+                  className={`${style.textField} ${style.locationField}`}
+                />
+                <TextInput
+                  label="longitude"
+                  name="longitude"
+                  required
+                  className={`${style.textField} ${style.locationField}`}
+                />
+              </div>
               {isCreateMode && (
                 <FileUploadInput
                   formikProps={formikProps}
@@ -146,4 +203,4 @@ const CityForm: React.FC<CityFormProps> = ({
   );
 };
 
-export default CityForm;
+export default HotelForm;

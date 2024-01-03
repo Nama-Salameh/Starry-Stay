@@ -4,7 +4,7 @@ import { getHotelInfoByItsId } from "../../../services/hotels/Hotels.service";
 import style from "./HotelAmenityContainer.module.css";
 import { Card } from "@mui/material";
 import localization from "../../../localizationConfig";
-import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { notifyError } from "../../../utils/toastUtils/Toast.utils";
 
 const errorMessages = {

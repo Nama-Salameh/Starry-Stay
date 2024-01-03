@@ -7,7 +7,7 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../HomeComponents.module.css";
 import localization from "../../../localizationConfig";
 import slugify from "slugify";
-import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { notifyError } from "../../../utils/toastUtils/Toast.utils";
 
 const errorMessages = {

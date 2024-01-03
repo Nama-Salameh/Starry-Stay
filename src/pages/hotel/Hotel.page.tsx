@@ -15,7 +15,7 @@ import HotelGallery from "../../components/hotelComponents/hotelGallery/HotelGal
 import AvailableRoomContainer from "../../components/hotelComponents/availableRoomContainer/AvailableRoomContainer.component";
 import HotelAmenitiesContainer from "../../components/hotelComponents/amenitiesContainer/HotelAmenitiesContainer.component";
 import SmallButtonLoader from "../../components/common/loaders/SmallButtonLoaders.component";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 type HotelInfo = {

@@ -6,7 +6,7 @@ import {
   getRoomInfoByItsId,
 } from "../../services/rooms/Rooms.service";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 
 const errorMessages = {
   network: localization.networkError,

@@ -6,5 +6,6 @@ export enum ErrorTypes {
     Network = "Network",
     Conflict = "Conflict",
     Unauthorized = "Unauthorized",
+    Timeout = "Timeout",
   }
   

@@ -103,3 +103,27 @@ export const getFilteredHotels = async (filterOptions: {
     throw type;
   }
 };
+export const updateHotel = async (
+  hotelId: number,
+  name: string,
+  description: string,
+  starRating: number,
+  latitude: number,
+  longitude: number
+) => {
+  const params = {
+    name: name,
+    description: description,
+    hotelType: 1,
+    starRating: starRating,
+    latitude: latitude,
+    longitude: longitude,
+  };
+  try {
+    const response = await axiosInstance.put(`/api/hotels/${hotelId}`, params);
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};

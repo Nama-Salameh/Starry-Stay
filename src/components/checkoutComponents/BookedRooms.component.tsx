@@ -21,7 +21,7 @@ import { faUsers } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 type HotelInfo = {
