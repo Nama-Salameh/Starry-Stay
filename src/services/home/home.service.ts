@@ -7,8 +7,8 @@ export const getFeaturedDealsHotels = async () => {
     const response = await axiosInstance.get(GET_FEATURED_DEALS_HOTELS);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -17,8 +17,8 @@ export const getTrendingDestinations = async () => {
     const response = await axiosInstance.get(GET_TRENDING_DESTINATION_HOTELS);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -29,7 +29,7 @@ export const getRecentlyVisitedHotels = async (userId: number) => {
     );
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };

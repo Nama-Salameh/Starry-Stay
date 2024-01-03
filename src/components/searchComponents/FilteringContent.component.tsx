@@ -4,6 +4,14 @@ import CheckboxFiltering from "./checkbox/CheckboxFiltering.component";
 import { Divider } from "@mui/material";
 import { getAmenitiesNames } from "../../services/aminities/Aminities.service";
 import localization from "../../localizationConfig";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.amenitiesNotFound,
+  unknown: localization.serverIssues,
+};
 
 export default function FilteringContent() {
   const [amenitiesNames, setAmenitiesNames] = useState<string[]>([]);
@@ -13,8 +21,18 @@ export default function FilteringContent() {
       try {
         const names = await getAmenitiesNames();
         setAmenitiesNames(names || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 
@@ -27,7 +45,10 @@ export default function FilteringContent() {
       <Divider />
       <StarRating />
       <Divider />
-      <CheckboxFiltering items={amenitiesNames} title={localization.roomAmenities} />
+      <CheckboxFiltering
+        items={amenitiesNames}
+        title={localization.roomAmenities}
+      />
       <Divider />
     </div>
   );

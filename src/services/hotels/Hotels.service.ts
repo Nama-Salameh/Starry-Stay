@@ -6,8 +6,8 @@ export const getHotelInfoByItsId = async (hotelId: number) => {
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -17,8 +17,8 @@ export const getHotelGalleryByItsId = async (hotelId: number) => {
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -28,8 +28,8 @@ export const getHotelAmenitiesByItsId = async (hotelId: number) => {
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -50,8 +50,8 @@ export const getHotelRoomsByItsId = async (
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -73,8 +73,8 @@ export const getHotelAvailableRoomsByItsId = async (
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -84,18 +84,22 @@ export const getHotels = async () => {
     console.log("response is ", response);
     return response.data;
   } catch (error: any) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
-
-export const getFilteredHotels = async (filterOptions: { name?: string; searchQuery?: string }) => {
+export const getFilteredHotels = async (filterOptions: {
+  name?: string;
+  searchQuery?: string;
+}) => {
   try {
-    const response = await axiosInstance.get('/api/hotels', { params: filterOptions });
+    const response = await axiosInstance.get("/api/hotels", {
+      params: filterOptions,
+    });
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };

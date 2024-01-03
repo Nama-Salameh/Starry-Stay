@@ -7,7 +7,14 @@ import RoomsSelector from "./roomSelector/RoomsSelector.component";
 import SmallButton from "../../../common/Buttons/SmallButton.component";
 import localization from "../../../../localizationConfig";
 import { useNavigate } from "react-router-dom";
-import { handleError } from "../../../../services/ApisConfig";
+import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
+import { ErrorTypes } from "../../../../enums/ErrprTypes.enum";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.citiesNotFound,
+  unknown: localization.serverIssues,
+};
 
 export default function SearchBar() {
   const navigate = useNavigate();
@@ -19,9 +26,18 @@ export default function SearchBar() {
     try {
       const citiesInfo = await getCities();
       setCities(citiesInfo);
-    } catch (error) {
-      let { message, type } = handleError(error);
-      throw { message, type };
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.notFound);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
     }
   };
 

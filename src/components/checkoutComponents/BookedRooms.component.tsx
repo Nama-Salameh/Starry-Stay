@@ -21,6 +21,8 @@ import { faUsers } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 type HotelInfo = {
   hotelName: string;
@@ -70,6 +72,14 @@ type RoomDetails = {
   price: number;
   hotelName: string;
 };
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.bookingRoomsNotFound,
+  unknown: localization.serverIssues,
+};
+
+
 export default function BookedRooms({
   onRoomDetailsChange,
 }: {
@@ -133,8 +143,18 @@ export default function BookedRooms({
             hotelName,
           }))
         );
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 

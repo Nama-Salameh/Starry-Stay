@@ -13,6 +13,15 @@ import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.com
 import { getDecodedToken } from "../../utils/TokenUtils";
 import IToken from "../../interfaces/IToken.interface";
 import { useMediaQuery } from "@mui/material";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  unauthorized: localization.incorrectUsernameOrPassword,
+  network: localization.networkError,
+  notFound: localization.userNotFoundError,
+  unknown: localization.serverIssues,
+};
 
 export default function Login() {
   const isSmallScreen = useMediaQuery("(max-width:550px)");
@@ -30,8 +39,22 @@ export default function Login() {
       await login(values.username, values.password);
       if (decodedToken?.userType === "Admin") navigate("/Admin");
       else navigate("/home");
-    } catch {
-      setValidationMessage(localization.incorrectUsernameOrPassword);
+    } catch (errorType) {
+      console.log("error type : " ,errorType)
+      switch (errorType) {
+        case ErrorTypes.Unauthorized:
+          setValidationMessage(errorMessages.unauthorized);
+          break;
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.notFound);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
     } finally {
       setIsLoginLoading(false);
     }
