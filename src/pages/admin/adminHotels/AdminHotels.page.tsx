@@ -48,8 +48,8 @@ export default function AdminHotels() {
         const results = await getHotels();
         setHotelsInfo(results);
       } catch (error) {
-        let { message, type } = handleError(error);
-        throw { message, type };
+        let type = handleError(error);
+        throw type;
       }
     };
 

@@ -15,6 +15,8 @@ import {
 import { useCartContext } from "../../../contexts/cartContext/CartContext.context";
 import { isLoggedIn, isSessionExpired } from "../../../utils/TokenUtils";
 import LoginModal from "../../modals/LoginModal.component";
+import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { notifyError } from "../../../utils/toastUtils/Toast.utils";
 
 type AvailalbeRoom = {
   roomNumber: number;
@@ -28,6 +30,12 @@ type AvailalbeRoom = {
     name: string;
     description: string;
   };
+};
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.hotelAvailableRoomsNotFound,
+  unknown: localization.serverIssues,
 };
 
 export default function RoomContainer({ hotelId }: { hotelId: number }) {
@@ -49,14 +57,23 @@ export default function RoomContainer({ hotelId }: { hotelId: number }) {
           "2024-1-30"
         );
         setHotelAvaiableRooms(hotelAvailableRooms || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 
     fetchHotelsData();
   }, [hotelId]);
-
 
   const handleRoomClick = (roomNumber: number) => {
     if (!isLoginModalOpen) {

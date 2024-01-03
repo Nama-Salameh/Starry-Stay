@@ -28,8 +28,8 @@ const postBooking = async (
     console.log(response);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -40,8 +40,8 @@ const getBooking = async (bookingId: number) => {
     console.log(response);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 

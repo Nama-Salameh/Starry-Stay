@@ -28,6 +28,13 @@ import {
 } from "../../utils/pdfGeneratorUtils/PdfGeneratoeUtils";
 import SmallButton from "../../components/common/Buttons/SmallButton.component";
 import { useTheme } from "@mui/system";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.serverIssues,
+};
 
 export default function Confirmation() {
   const theme = useTheme();
@@ -47,9 +54,15 @@ export default function Confirmation() {
       try {
         const bookingData = await getBooking(1);
         setBookingInfo(bookingData);
-        console.log("booking data : ", bookingData);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 

@@ -4,6 +4,14 @@ import { getHotelInfoByItsId } from "../../../services/hotels/Hotels.service";
 import style from "./HotelAmenityContainer.module.css";
 import { Card } from "@mui/material";
 import localization from "../../../localizationConfig";
+import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.hotelNotFound,
+  unknown: localization.serverIssues,
+};
 
 export default function HotelAmenitiesContainer({
   hotelId,
@@ -19,8 +27,18 @@ export default function HotelAmenitiesContainer({
         const hotelInfo = await getHotelInfoByItsId(hotelId);
         console.log("hotelInfo", hotelInfo);
         setHotelAmenities(hotelInfo.amenities || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 

@@ -15,6 +15,8 @@ import HotelGallery from "../../components/hotelComponents/hotelGallery/HotelGal
 import AvailableRoomContainer from "../../components/hotelComponents/availableRoomContainer/AvailableRoomContainer.component";
 import HotelAmenitiesContainer from "../../components/hotelComponents/amenitiesContainer/HotelAmenitiesContainer.component";
 import SmallButtonLoader from "../../components/common/loaders/SmallButtonLoaders.component";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 type HotelInfo = {
   hotelName: string;
@@ -29,6 +31,12 @@ type HotelInfo = {
     name: string;
     description: string;
   };
+};
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.hotelNotFound,
+  unknown: localization.serverIssues,
 };
 
 export default function Hotel() {
@@ -62,8 +70,18 @@ export default function Hotel() {
           "2024-1-30"
         );
         setHotelRooms(hotelRooms || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 

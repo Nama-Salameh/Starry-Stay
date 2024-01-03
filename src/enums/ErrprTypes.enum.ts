@@ -1,9 +1,10 @@
 export enum ErrorTypes {
-    NotFound,
-    BadRequest,
-    Unknown,
-    NoResponse,
-    Network,
-    Conflict,
-    Unauthorized
-}
+    NotFound = "NotFound",
+    BadRequest = "BadRequest",
+    Unknown = "Unknown",
+    NoResponse = "NoResponse",
+    Network = "Network",
+    Conflict = "Conflict",
+    Unauthorized = "Unauthorized",
+  }
+  

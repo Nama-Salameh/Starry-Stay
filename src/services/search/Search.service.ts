@@ -22,17 +22,20 @@ const getSearchResultRegularUser = async (
     adults: adults,
     children: children,
   };
-  const apiUrl = axiosInstance.getUri({ url: GET_SEARCH_REGULAR_USER_URL, params });
+  const apiUrl = axiosInstance.getUri({
+    url: GET_SEARCH_REGULAR_USER_URL,
+    params,
+  });
   console.log("API URL:", apiUrl);
-  
+
   try {
     const response = await axiosInstance.get(GET_SEARCH_REGULAR_USER_URL, {
       params: params,
     });
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 

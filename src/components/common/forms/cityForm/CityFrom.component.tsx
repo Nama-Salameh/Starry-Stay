@@ -9,6 +9,7 @@ import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
 import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
+import { ErrorTypes } from "../../../../enums/ErrprTypes.enum";
 
 interface CityFormProps {
   isOpen: boolean;
@@ -22,6 +23,11 @@ interface CityFormProps {
   initialValues: { name: string; description: string; imageFile?: File | null };
   isCreateMode?: boolean;
 }
+
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.serverIssues,
+};
 
 const CityForm: React.FC<CityFormProps> = ({
   isOpen,
@@ -40,8 +46,22 @@ const CityForm: React.FC<CityFormProps> = ({
       } else if (isCreateMode) {
         await onSubmit(values.name, values.description, values.imageFile);
       }
-    } catch (error) {
-      notifyError(`Failed ${isCreateMode ? "creating" : "updating"} city.`);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        default:
+          notifyError(
+            `Failed ${
+              isCreateMode ? "creating" : "updating"
+            } city. please Try again`
+          );
+          break;
+      }
     } finally {
       setIsLoading(false);
     }

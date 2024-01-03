@@ -10,6 +10,14 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../HomeComponents.module.css";
 import localization from "../../../localizationConfig";
 import slugify from "slugify";
+import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.recentlyVisitedHotelsNotFound,
+  unknown: localization.serverIssues,
+};
 
 export default function RecenlyVisitedHotels() {
   const [recentlyVisitedHotels, setRecentlyVisitedHotels] = useState<any[]>([]);
@@ -23,8 +31,18 @@ export default function RecenlyVisitedHotels() {
       try {
         const hotelsInfo = await getRecentlyVisitedHotels(userId);
         setRecentlyVisitedHotels(hotelsInfo || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 
@@ -49,7 +67,7 @@ export default function RecenlyVisitedHotels() {
             />
             <div className={style.cardInfo}>
               <h3>{hotel.hotelName}</h3>
-              <Rating value={hotel.starRating} readOnly/>
+              <Rating value={hotel.starRating} readOnly />
               <p>
                 <FontAwesomeIcon icon={faLocationDot} /> {hotel.cityName}
               </p>

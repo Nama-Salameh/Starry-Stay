@@ -7,7 +7,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../HomeComponents.module.css";
 import localization from "../../../localizationConfig";
-import slugify from 'slugify';
+import slugify from "slugify";
+import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.featuredDealsNotFound,
+  unknown: localization.serverIssues,
+};
 
 export default function FeaturedDealsHotelsContainer() {
   const [featuredDealsHotels, setFeaturedDealsHotels] = useState<any[]>([]);
@@ -17,8 +25,18 @@ export default function FeaturedDealsHotelsContainer() {
       try {
         const hotelsInfo = await getFeaturedDealsHotels();
         setFeaturedDealsHotels(hotelsInfo || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 
@@ -26,11 +44,13 @@ export default function FeaturedDealsHotelsContainer() {
   }, []);
 
   console.log(featuredDealsHotels);
-  const toSlug = (str : string) => slugify(str, { lower: true });
+  const toSlug = (str: string) => slugify(str, { lower: true });
 
   return (
     <div className={style.container}>
-      <h2  id={toSlug(localization.featuredDeals)}>{localization.featuredDeals}</h2>
+      <h2 id={toSlug(localization.featuredDeals)}>
+        {localization.featuredDeals}
+      </h2>
       <Carousel>
         {featuredDealsHotels.map((hotel) => (
           <Card className={style.itemCard} key={hotel.hotelId}>
@@ -45,7 +65,7 @@ export default function FeaturedDealsHotelsContainer() {
             />
             <div className={style.cardInfo}>
               <h3>{hotel.hotelName}</h3>
-              <Rating value={hotel.hotelStarRating} readOnly/>
+              <Rating value={hotel.hotelStarRating} readOnly />
               <p>
                 <FontAwesomeIcon icon={faLocationDot} /> {hotel.cityName}
               </p>
