@@ -1,37 +1,56 @@
-import React , {useState , useEffect} from 'react'
-import localization from '../../localizationConfig'
-import { getRoomAmenitiesByItsId , getRoomPhotosByItsId , getRoomInfoByItsId } from '../../services/rooms/Rooms.service';
+import React, { useState, useEffect } from "react";
+import localization from "../../localizationConfig";
+import {
+  getRoomAmenitiesByItsId,
+  getRoomPhotosByItsId,
+  getRoomInfoByItsId,
+} from "../../services/rooms/Rooms.service";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.roomNotFound,
+  unknown: localization.serverIssues,
+};
+
 export default function RoomDetails() {
-const [roomInfo , setRoomInfo] = useState();
-const [roomPhotos , setRoomPhotos] = useState();
-const [RoomAmenities , setRoomAmenities] = useState();
+  const [roomInfo, setRoomInfo] = useState();
+  const [roomPhotos, setRoomPhotos] = useState();
+  const [RoomAmenities, setRoomAmenities] = useState();
 
-    useEffect(() => {
-        const fetchRoomData = async () => {
-          try {
-            const hotelInfo = await getRoomInfoByItsId(1);
-            setRoomInfo(hotelInfo || {});
-    
-            const hotelsPhotos = await getRoomPhotosByItsId(1);
-            setRoomPhotos(hotelsPhotos || []);
-    
-            const hotelAmenities = await getRoomAmenitiesByItsId(1);
-            setRoomAmenities(hotelAmenities || []);
-          } catch (error) {
-            console.error(error);
-          }
-        };
-    
-        fetchRoomData();
-      }, []);
+  useEffect(() => {
+    const fetchRoomData = async () => {
+      try {
+        const roomInfo = await getRoomInfoByItsId(1);
+        setRoomInfo(roomInfo || {});
 
-      console.log("rooms info : " , roomInfo );
-      console.log("rooms photos : " , roomPhotos );
-      console.log("rooms amenities : " , RoomAmenities );
+        const roomPhotos = await getRoomPhotosByItsId(1);
+        setRoomPhotos(roomPhotos || []);
 
-  return (
-    <div>
-      {localization.room}
-    </div>
-  )
+        const roomAmenities = await getRoomAmenitiesByItsId(1);
+        setRoomAmenities(roomAmenities || []);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
+      }
+    };
+
+    fetchRoomData();
+  }, []);
+
+  console.log("rooms info : ", roomInfo);
+  console.log("rooms photos : ", roomPhotos);
+  console.log("rooms amenities : ", RoomAmenities);
+
+  return <div>{localization.room}</div>;
 }

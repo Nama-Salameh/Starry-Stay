@@ -3,6 +3,15 @@ import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
 import { getHotelGalleryByItsId } from "../../../services/hotels/Hotels.service";
 import style from "./HotelGallery.module.css";
+import localization from "../../../localizationConfig";
+import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.hotelGalleryNotFound,
+  unknown: localization.serverIssues,
+};
 
 const HotelGallery = ({ hotelId }: { hotelId: number }) => {
   const [hotelGallery, setHotelGallery] = useState<
@@ -14,8 +23,18 @@ const HotelGallery = ({ hotelId }: { hotelId: number }) => {
       try {
         const hotelsGallery = await getHotelGalleryByItsId(hotelId);
         setHotelGallery(hotelsGallery || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 

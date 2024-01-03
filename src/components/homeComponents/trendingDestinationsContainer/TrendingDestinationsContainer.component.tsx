@@ -7,6 +7,14 @@ import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../HomeComponents.module.css";
 import localization from "../../../localizationConfig";
 import slugify from "slugify";
+import { ErrorTypes } from "../../../enums/ErrprTypes.enum";
+import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+
+const errorMessages = {
+  network: localization.networkError,
+  notFound: localization.trendingDestinationsNotFound,
+  unknown: localization.serverIssues,
+};
 
 export default function TrendingDestinationsContainer() {
   const [trendingDestinations, setTrendingDestinations] = useState<any[]>([]);
@@ -17,8 +25,18 @@ export default function TrendingDestinationsContainer() {
       try {
         const trendingDestinationInfo = await getTrendingDestinations();
         setTrendingDestinations(trendingDestinationInfo || []);
-      } catch (error) {
-        console.error(error);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.notFound);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
 

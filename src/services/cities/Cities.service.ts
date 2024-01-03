@@ -8,8 +8,8 @@ const getCities = async () => {
     const response = await axiosInstance.get(GET_CITIES_URL);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -18,8 +18,8 @@ const deleteCityByItsId = async (cityId: number) => {
     const response = await axiosInstance.delete(`/api/cities/${cityId}`);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -33,8 +33,8 @@ const updateCity = async (
     const response = await axiosInstance.put(`/api/cities/${cityId}`, params);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -43,8 +43,8 @@ const getCityByItsId = async (cityId: number) => {
     const response = await axiosInstance.get(`/api/cities/${cityId}`);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -58,8 +58,8 @@ const getFilteredCities = async (filterOptions: {
     });
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -69,8 +69,8 @@ const createCity = async (name: string, description: string) => {
     const response = await axiosInstance.post("/api/cities", params);
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 
@@ -82,8 +82,8 @@ const addCityImage = async (cityId: number, file: File) => {
     });
     return response.data;
   } catch (error) {
-    let { message, type } = handleError(error);
-    throw { message, type };
+    let type = handleError(error);
+    throw type;
   }
 };
 export {

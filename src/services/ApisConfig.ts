@@ -1,8 +1,9 @@
-import { getToken } from '../utils/storageUtils/tokenStorage/TokenStorage';
-import axios, { HttpStatusCode } from 'axios';
-import { ErrorTypes } from '../enums/ErrprTypes.enum';
+import { getToken } from "../utils/storageUtils/tokenStorage/TokenStorage";
+import axios, { HttpStatusCode } from "axios";
+import { ErrorTypes } from "../enums/ErrprTypes.enum";
 
-const BASE_URL = "https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/";
+const BASE_URL =
+  "https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net/";
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -24,31 +25,42 @@ axiosInstance.interceptors.request.use(
 );
 
 function handleError(error: any) {
-    if (axios.isAxiosError(error) && error.response) {
+  console.log("in handle error ");
+
+  if (axios.isAxiosError(error)) {
+    console.log("in handle && axios error ");
+
+    if (error.response) {
+      console.log("in handle && response ");
+
       const response = error.response;
-      const message = response.data.error.message;
-  
+      console.log("in handle error response : ", response);
+
       switch (response.status) {
         case HttpStatusCode.NotFound:
-          return { message: message, type: ErrorTypes.NotFound };
+          return ErrorTypes.NotFound;
         case HttpStatusCode.BadRequest:
-          return { message: message, type: ErrorTypes.BadRequest }
+          return ErrorTypes.BadRequest;
         case HttpStatusCode.Conflict:
-          return { message: message, type: ErrorTypes.Conflict }
+          return ErrorTypes.Conflict;
         case HttpStatusCode.Unauthorized:
-          return { message: message, type: ErrorTypes.Unauthorized }
+          return ErrorTypes.Unauthorized;
         default:
-          return { message: message, type: ErrorTypes.Unknown }
+          return ErrorTypes.Unknown;
       }
-    } else if (axios.isAxiosError(error) && error.request) {
+    } else if (error.request) {
+      console.log("in handle && request ");
+
       if (error.code === "ERR_NETWORK") {
-        return { message: error.message, type: ErrorTypes.Network };
+        console.log("in handle && request && network ");
+
+        return ErrorTypes.Network;
       }
-      return { message: error.message, type: ErrorTypes.NoResponse };
-    } else {
-      return { message: error.message, type: ErrorTypes.Unknown };
+      console.log("in handle && request && no reponse");
+
+      return ErrorTypes.NoResponse;
     }
   }
-  
-  export { axiosInstance, handleError };
-  
+  return ErrorTypes.Unknown;
+}
+export { axiosInstance, handleError };

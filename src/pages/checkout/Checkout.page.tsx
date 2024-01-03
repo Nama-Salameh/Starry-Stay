@@ -14,6 +14,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import TextInput from "../../components/common/textField/TextField.component";
 import { useNavigate } from "react-router";
 import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
 
 type RoomDetails = {
   roomNumber: number;
@@ -21,6 +23,13 @@ type RoomDetails = {
   price: number;
   hotelName: string;
 };
+
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.serverIssues,
+  conflict: localization.conflictBookingError,
+};
+
 export default function Checkout() {
   const isSmallScreen = useMediaQuery("(max-width:650px)");
   const navigate = useNavigate();
@@ -58,8 +67,18 @@ export default function Checkout() {
       }
     }*/
       startTransition(() => navigate("/confirmation"));
-    } catch (error) {
-      console.error(error);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Conflict:
+          notifyError(errorMessages.conflict);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
     } finally {
       setIsConfirmLoading(false);
       resetForm();

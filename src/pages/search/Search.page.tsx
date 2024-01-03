@@ -10,8 +10,14 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { useSearchContext } from "../../contexts/searchContext/SearchContext.context";
 import { getSearchResultRegularUser } from "../../services/search/Search.service";
 import HotelsContainer from "../../components/searchComponents/hotel/HotelsConatainer.component";
-import { handleError } from "../../services/ApisConfig";
 import Sort from "../../components/searchComponents/sort/Sort.component";
+import { notifyError } from "../../utils/toastUtils/Toast.utils";
+import { ErrorTypes } from "../../enums/ErrprTypes.enum";
+
+const errorMessages = {
+  network: localization.networkError,
+  unknown: localization.searchUnknownError,
+};
 
 export default function Search() {
   const isSmallScreen = useMediaQuery("(max-width:900px)");
@@ -33,9 +39,15 @@ export default function Search() {
           searchParams.sort
         );
         setHotelsSearchResults(results);
-      } catch (error) {
-        let { message, type } = handleError(error);
-        throw { message, type };
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
       }
     };
     if (searchParams) {

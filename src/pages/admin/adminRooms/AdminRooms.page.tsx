@@ -8,7 +8,6 @@ const handleSearch = (searchText: string) => {};
 export default function AdminRooms() {
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <SearchBar onSearch={handleSearch} />
     </Box>
   );
 }
