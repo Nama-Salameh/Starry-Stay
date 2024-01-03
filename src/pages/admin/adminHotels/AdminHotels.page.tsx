@@ -31,15 +31,17 @@ type Hotel = {
     }
   ];
   starRating: number;
-  avaiablrRomms: number;
+  avaiableRooms: number;
   imageUrl: string;
+  id?: number;
 };
 
 export default function AdminHotels() {
   const [hotelsInfo, setHotelsInfo] = useState();
   const [selectedOption, setSelectedOption] = useState<string>("name");
   const [searchText, setSearchText] = useState<string>("");
-  const [isFormOpen, setFormOpen] = useState(false);
+  const [isCreateFormOpen, setCreateFormOpen] = useState(false);
+  const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
   const [hotelData, setHotelData] = useState<Hotel | null>(null);
 
   useEffect(() => {
@@ -83,16 +85,16 @@ export default function AdminHotels() {
       console.log("hotel Data ", hotelData);
       console.log("doing");
 
-      setHotelData(hotelInfo);
+      setHotelData({ ...hotelInfo, id: hotelId });
       console.log("hotel Info ", hotelInfo);
       console.log("hotel Data ", hotelData);
-      setFormOpen(true);
+      setUpdateFormOpen(true);
     } catch (error) {
       notifyError("Failed to fetch city data. Please try again.");
     }
   };
   const handleCancelEdit = () => {
-    setFormOpen(false);
+    setUpdateFormOpen(false);
     setHotelData(null);
   };
   const handleConfirmUpdate = async (
@@ -122,7 +124,7 @@ export default function AdminHotels() {
     } catch {
       notifyError("Updating a hotel Failed. Please Try again");
     }
-    setFormOpen(false);
+    setUpdateFormOpen(false);
     setHotelData(null);
   };
   useEffect(() => {
@@ -147,7 +149,7 @@ export default function AdminHotels() {
         onEdit={handleEditHotelClick}
       />
       <HotelForm
-        isOpen={isFormOpen}
+        isOpen={isUpdateFormOpen}
         onCancel={handleCancelEdit}
         onSubmit={handleConfirmUpdate}
         initialValues={{
@@ -157,8 +159,7 @@ export default function AdminHotels() {
           starrating: hotelData ? hotelData.starRating : 0,
           latitude: hotelData ? hotelData.latitude : 0,
           longitude: hotelData ? hotelData.longitude : 0,
-          imageFile: null,
-          
+          hotelId: hotelData ? hotelData.id : undefined,
         }}
       />
     </Box>

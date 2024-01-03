@@ -22,6 +22,7 @@ import SmallButton from "../../../components/common/Buttons/SmallButton.componen
 import style from "../Admin.module.css";
 
 interface CityData {
+  id?: number;
   name: string;
   description: string;
 }
@@ -30,7 +31,8 @@ export default function AdminCities() {
   const [citiesInfo, setCitiesInfo] = useState();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [cityToDelete, setCityToDelete] = useState<number | null>(null);
-  const [isFormOpen, setFormOpen] = useState(false);
+  const [isCreateFormOpen, setCreateFormOpen] = useState(false);
+  const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
   const [cityData, setCityData] = useState<CityData | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("name");
   const [searchText, setSearchText] = useState<string>("");
@@ -87,14 +89,18 @@ export default function AdminCities() {
   const handleEditCityClick = async (cityId: number) => {
     try {
       const cityInfo = await getCityByItsId(cityId);
+      console.log("city to update", cityInfo);
       setCityData(cityInfo);
-      setFormOpen(true);
+      setUpdateFormOpen(true);
     } catch (error) {
       notifyError("Failed to fetch city data. Please try again.");
+    } finally {
+      console.log(cityData);
     }
   };
+
   const handleCancelEdit = () => {
-    setFormOpen(false);
+    setUpdateFormOpen(false);
     setCityData(null);
   };
   const handleConfirmUpdate = async (
@@ -114,12 +120,12 @@ export default function AdminCities() {
     } catch {
       notifyError("Updating a city Failed. Please Try again");
     }
-    setFormOpen(false);
+    setUpdateFormOpen(false);
     setCityData(null);
   };
 
   const handleCreateCityClick = async () => {
-    setFormOpen(true);
+    setCreateFormOpen(true);
   };
   const handleConfirmCreate = async (
     name: string,
@@ -141,11 +147,11 @@ export default function AdminCities() {
     } catch {
       notifyError("Creating a city Failed. Please Try again");
     }
-    setFormOpen(false);
+    setCreateFormOpen(false);
     setCityData(null);
   };
   const handleCancelCreate = () => {
-    setFormOpen(false);
+    setCreateFormOpen(false);
     setCityData(null);
   };
   return (
@@ -178,17 +184,18 @@ export default function AdminCities() {
         onCancel={handleCancelDelete}
       />
       <CityForm
-        isOpen={isFormOpen}
+        isOpen={isUpdateFormOpen}
         onCancel={handleCancelEdit}
         onSubmit={handleConfirmUpdate}
         initialValues={{
           name: cityData ? cityData.name : "",
           description: cityData ? cityData.description : "",
-          imageFile: null,
+          cityId: cityData ? cityData.id : undefined,
         }}
+        isCreateMode={false}
       />
       <CityForm
-        isOpen={isFormOpen}
+        isOpen={isCreateFormOpen}
         onCancel={handleCancelCreate}
         onSubmit={handleConfirmCreate}
         initialValues={{

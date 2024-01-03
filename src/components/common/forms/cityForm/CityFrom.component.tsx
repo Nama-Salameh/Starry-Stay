@@ -20,7 +20,12 @@ interface CityFormProps {
     cityId?: number,
     imageFile?: File | null
   ) => Promise<void> | undefined;
-  initialValues: { name: string; description: string; imageFile?: File | null };
+  initialValues: {
+    name: string;
+    description: string;
+    cityId?: number | undefined;
+    imageFile?: File | null;
+  };
   isCreateMode?: boolean;
 }
 
@@ -39,9 +44,11 @@ const CityForm: React.FC<CityFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFormSubmit = async (values: any) => {
+    console.log("values ", values);
     try {
       setIsLoading(true);
-      if (Object.keys(values).length === 3 && values.cityId !== undefined) {
+      console.log("id", values.cityId);
+      if (values.cityId !== undefined) {
         await onSubmit(values.name, values.description, values.cityId);
       } else if (isCreateMode) {
         await onSubmit(values.name, values.description, values.imageFile);
@@ -74,7 +81,7 @@ const CityForm: React.FC<CityFormProps> = ({
           initialValues={initialValues}
           onSubmit={handleFormSubmit}
           validationSchema={Yup.object({
-            cityname: Yup.string().required(localization.required),
+            name: Yup.string().required(localization.required),
             description: Yup.string().required(localization.required),
             imageFile: isCreateMode
               ? Yup.mixed().notRequired().nullable()
@@ -85,7 +92,7 @@ const CityForm: React.FC<CityFormProps> = ({
             <Form>
               <TextInput
                 label="City name"
-                name="cityname"
+                name="name"
                 fullWidth
                 required
                 className={style.textField}

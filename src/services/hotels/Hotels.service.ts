@@ -112,7 +112,6 @@ export const updateHotel = async (
   longitude: number
 ) => {
   const params = {
-    hotelId: hotelId,
     name: name,
     description: description,
     hotelType: 1,
@@ -121,9 +120,7 @@ export const updateHotel = async (
     longitude: longitude,
   };
   try {
-    const response = await axiosInstance.put(`/api/hotels/${hotelId}`, {
-      params,
-    });
+    const response = await axiosInstance.put(`/api/hotels/${hotelId}`, params);
     return response.data;
   } catch (error) {
     let type = handleError(error);

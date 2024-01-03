@@ -29,6 +29,7 @@ interface HotelFormProps {
     starrating: number;
     latitude: number;
     longitude: number;
+    hotelId?: number | undefined;
     imageFile?: File | null;
   };
   isCreateMode?: boolean;
