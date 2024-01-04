@@ -19,6 +19,7 @@ import HotelForm from "../../../components/common/forms/hotelForm/HotelForm.comp
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";
+import { getCities } from "../../../services/cities/Cities.service";
 
 type Hotel = {
   hotelName: string;
@@ -39,6 +40,11 @@ type Hotel = {
   id?: number;
 };
 
+type City = {
+  id: number;
+  name: string;
+  description: string;
+};
 const errorMessages = {
   network: localization.networkError,
   unknown: localization.serverIssues,
@@ -46,6 +52,7 @@ const errorMessages = {
   hotelsNotFound: localization.hotelsNotFound,
   searchTimedout: localization.searchTimedout,
   gettingHotelImageFailed: localization.gettingHotelImageFailed,
+  citiesNotFound: localization.citiesNotFound,
 };
 
 const successMessages = {
@@ -61,9 +68,10 @@ export default function AdminHotels() {
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
   const [hotelData, setHotelData] = useState<Hotel | null>(null);
+  const [citiesInfo, setCitiesInfo] = useState<City[] | null>(null);
 
   useEffect(() => {
-    const fetchSearchResults = async () => {
+    const fetchHotels = async () => {
       try {
         const results = await getHotels();
         setHotelsInfo(results);
@@ -81,8 +89,26 @@ export default function AdminHotels() {
         }
       }
     };
-
-    fetchSearchResults();
+    const fetchCities = async () => {
+      try {
+        const citiesInfo = await getCities();
+        setCitiesInfo(citiesInfo);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.citiesNotFound);
+            break;
+        }
+      }
+    };
+    fetchHotels();
+    fetchCities();
   }, []);
 
   const handleDebouncedSearch = async () => {
@@ -260,6 +286,7 @@ export default function AdminHotels() {
           starrating: hotelData ? hotelData.starRating : 0,
           latitude: hotelData ? hotelData.latitude : 0,
           longitude: hotelData ? hotelData.longitude : 0,
+          cities: citiesInfo ? citiesInfo : null,
           hotelId: hotelData ? hotelData.id : undefined,
         }}
         isCreateMode={false}
@@ -275,7 +302,8 @@ export default function AdminHotels() {
           starrating: 0,
           latitude: 0,
           longitude: 0,
-          cityId: 0,
+          cities: citiesInfo ? citiesInfo : null,
+          cityId:null,
         }}
         isCreateMode={true}
       />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Box, Button } from "@mui/material";
+import { Modal, Box, Button, Select, MenuItem } from "@mui/material";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import TextInput from "../../textField/TextField.component";
 import style from "../Form.module.css";
@@ -10,6 +10,12 @@ import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
+
+type City = {
+  id: number;
+  name: string;
+  description: string;
+};
 
 interface HotelFormProps {
   isOpen: boolean;
@@ -32,8 +38,9 @@ interface HotelFormProps {
     starrating: number;
     latitude: number;
     longitude: number;
+    cities: City[] | null;
     hotelId?: number | undefined;
-    cityId?: number | undefined;
+    cityId?: number | null;
     imageFile?: File | null;
   };
   isCreateMode?: boolean;
@@ -54,8 +61,6 @@ const HotelForm: React.FC<HotelFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFormSubmit = async (values: any) => {
-    console.log("Entering handleFormSubmit");
-    console.log("Submitting form with values:", values);
     try {
       setIsLoading(true);
 
@@ -69,8 +74,6 @@ const HotelForm: React.FC<HotelFormProps> = ({
           values.hotelId
         );
       } else if (isCreateMode) {
-        console.log("Creating hotel");
-
         await onSubmit(
           values.name,
           values.description,
@@ -82,7 +85,6 @@ const HotelForm: React.FC<HotelFormProps> = ({
           values.imageFile
         );
       }
-      console.log("Form submitted successfully");
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -174,14 +176,42 @@ const HotelForm: React.FC<HotelFormProps> = ({
                   className={`${style.textField} ${style.locationField}`}
                 />
               </div>
-              {isCreateMode && (
-                <TextInput
-                  label="City id"
+              {isCreateMode && initialValues.cities && (
+                <Select
                   name="cityId"
                   fullWidth
                   required
+                  value={formikProps.values.cityId || localization.hotelCity}
+                  onChange={(e) =>
+                    formikProps.setFieldValue("cityId", e.target.value)
+                  }
+                  renderValue={() => {
+                    if (!formikProps.values.cityId) {
+                      return <span>{localization.hotelCity}</span>;
+                    } else {
+                      const selectedCity = initialValues.cities?.find(
+                        (city) => city.id === formikProps.values.cityId
+                      );
+                      return (
+                        <span>
+                          {selectedCity
+                            ? selectedCity.name
+                            : localization.hotelCity}
+                        </span>
+                      );
+                    }
+                  }}
                   className={style.textField}
-                />
+                >
+                  <MenuItem disabled value="">
+                    Hotel City
+                  </MenuItem>
+                  {initialValues.cities.map((city) => (
+                    <MenuItem key={city.id} value={city.id}>
+                      {city.name}
+                    </MenuItem>
+                  ))}
+                </Select>
               )}
               {isCreateMode && (
                 <FileUploadInput

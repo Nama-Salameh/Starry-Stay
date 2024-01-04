@@ -32,7 +32,7 @@ const errorMessages = {
   network: localization.networkError,
   unknown: localization.serverIssues,
   cityToEditNotFound: localization.cityToEditNotFound,
-  citiessNotFound: localization.citiesNotFound,
+  citiesNotFound: localization.citiesNotFound,
   searchTimedout: localization.searchTimedout,
   cityToDeleteNotFound: localization.cityToDeleteNotFound,
   gettingCityImageFailed: localization.gettingCityImageFailed,
@@ -66,7 +66,7 @@ export default function AdminCities() {
             notifyError(errorMessages.unknown);
             break;
           case ErrorTypes.NotFound:
-            notifyError(errorMessages.citiessNotFound);
+            notifyError(errorMessages.citiesNotFound);
             break;
         }
       }
