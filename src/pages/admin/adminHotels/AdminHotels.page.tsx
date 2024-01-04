@@ -20,6 +20,7 @@ import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";
 import { getCities } from "../../../services/cities/Cities.service";
+import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 
 type Hotel = {
   hotelName: string;
@@ -67,7 +68,16 @@ export default function AdminHotels() {
   const [searchText, setSearchText] = useState<string>("");
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
-  const [hotelData, setHotelData] = useState<Hotel | null>(null);
+  const [hotelData, setHotelData] = useState<{
+    hotelName: string;
+    description: string;
+    hoteltype: number;
+    starRating: number;
+    latitude: number;
+    longitude: number;
+    cities: City[] | null;
+    hotelId?: number;
+  } | null>(null);
   const [citiesInfo, setCitiesInfo] = useState<City[] | null>(null);
 
   useEffect(() => {
@@ -142,7 +152,21 @@ export default function AdminHotels() {
   const handleEditHotelClick = async (hotelId: number) => {
     try {
       const hotelInfo = await getHotelInfoByItsId(hotelId);
-      setHotelData({ ...hotelInfo, id: hotelId });
+      console.log("id", hotelId, "hotel info : ", hotelInfo);
+      const initialValues = {
+        hotelName: hotelInfo.hotelName,
+        description: hotelInfo.description,
+        hoteltype: 0, // Adjust this value as needed
+        starRating: hotelInfo.starRating,
+        latitude: hotelInfo.latitude,
+        longitude: hotelInfo.longitude,
+        cities: citiesInfo ? citiesInfo : null,
+        hotelId: hotelId,
+      };
+
+      console.log("initial values:", initialValues);
+
+      setHotelData(initialValues);
       setUpdateFormOpen(true);
     } catch (errorType) {
       switch (errorType) {
@@ -275,38 +299,40 @@ export default function AdminHotels() {
         onDelete={handleDeleteHotel}
         onEdit={handleEditHotelClick}
       />
-      <HotelForm
-        isOpen={isUpdateFormOpen}
-        onCancel={handleCancelEdit}
-        onSubmit={handleConfirmUpdate}
-        initialValues={{
-          name: hotelData ? hotelData.hotelName : "",
-          description: hotelData ? hotelData.description : "",
-          hoteltype: 0,
-          starrating: hotelData ? hotelData.starRating : 0,
-          latitude: hotelData ? hotelData.latitude : 0,
-          longitude: hotelData ? hotelData.longitude : 0,
-          cities: citiesInfo ? citiesInfo : null,
-          hotelId: hotelData ? hotelData.id : undefined,
-        }}
-        isCreateMode={false}
-      />
-      <HotelForm
-        isOpen={isCreateFormOpen}
-        onCancel={handleCancelCreate}
-        onSubmit={handleConfirmCreate}
-        initialValues={{
-          name: "",
-          description: "",
-          hoteltype: 0,
-          starrating: 0,
-          latitude: 0,
-          longitude: 0,
-          cities: citiesInfo ? citiesInfo : null,
-          cityId:null,
-        }}
-        isCreateMode={true}
-      />
+      <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
+        <HotelForm
+          onCancel={handleCancelEdit}
+          onSubmit={handleConfirmUpdate}
+          initialValues={{
+            name: hotelData ? hotelData.hotelName : "",
+            description: hotelData ? hotelData.description : "",
+            hoteltype: 0,
+            starrating: hotelData ? hotelData.starRating : 0,
+            latitude: hotelData ? hotelData.latitude : 0,
+            longitude: hotelData ? hotelData.longitude : 0,
+            cities: citiesInfo ? citiesInfo : null,
+            hotelId: hotelData ? hotelData.hotelId : undefined,
+          }}
+          isCreateMode={false}
+        />
+      </SlidingWindow>
+      <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
+        <HotelForm
+          onCancel={handleCancelCreate}
+          onSubmit={handleConfirmCreate}
+          initialValues={{
+            name: "",
+            description: "",
+            hoteltype: 0,
+            starrating: 0,
+            latitude: 0,
+            longitude: 0,
+            cities: citiesInfo ? citiesInfo : null,
+            cityId: null,
+          }}
+          isCreateMode={true}
+        />
+      </SlidingWindow>
     </Box>
   );
 }

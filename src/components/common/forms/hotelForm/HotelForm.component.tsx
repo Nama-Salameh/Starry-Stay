@@ -18,7 +18,6 @@ type City = {
 };
 
 interface HotelFormProps {
-  isOpen: boolean;
   onCancel: () => void;
   onSubmit: (
     name: string,
@@ -52,13 +51,13 @@ const errorMessages = {
 };
 
 const HotelForm: React.FC<HotelFormProps> = ({
-  isOpen,
   onCancel,
   onSubmit,
   initialValues,
   isCreateMode = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+  console.log("Received Initial Values:", initialValues);
 
   const handleFormSubmit = async (values: any) => {
     try {
@@ -114,135 +113,140 @@ const HotelForm: React.FC<HotelFormProps> = ({
   };
 
   return (
-    <Modal open={isOpen} onClose={onCancel}>
-      <Box className={style.modalContainer}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleFormSubmit}
-          validationSchema={Yup.object({
-            name: Yup.string().required(localization.required),
-            description: Yup.string().required(localization.required),
-            starrating: Yup.number().required(localization.required),
-            latitude: Yup.number().required(localization.required),
-            longitude: Yup.number().required(localization.required),
-            imageFile: isCreateMode
-              ? Yup.mixed().notRequired().nullable()
-              : Yup.mixed(),
-          })}
-        >
-          {(formikProps) => (
-            <Form className={style.formContainer}>
-              <TextInput
-                label="Hotel name"
-                name="name"
-                fullWidth
-                required
-                className={style.textField}
-              />
-              <TextInput
-                label="Hotel description"
-                name="description"
-                fullWidth
-                required
-                multiline
-                rows={4}
-                className={style.textField}
-              />
-              <TextInput
-                label="Hotel Type"
-                name="hoteltype"
-                fullWidth
-                required
-                className={style.textField}
-              />
-              <TextInput
-                label="Hotel Rating"
-                name="starrating"
-                fullWidth
-                required
-                className={style.textField}
-              />
-              <div className={style.hotelLocationContainer}>
-                <TextInput
-                  label="latitude"
-                  name="latitude"
-                  required
-                  className={`${style.textField} ${style.locationField}`}
-                />
-                <TextInput
-                  label="longitude"
-                  name="longitude"
-                  required
-                  className={`${style.textField} ${style.locationField}`}
-                />
-              </div>
-              {isCreateMode && initialValues.cities && (
-                <Select
-                  name="cityId"
-                  fullWidth
-                  required
-                  value={formikProps.values.cityId || localization.hotelCity}
-                  onChange={(e) =>
-                    formikProps.setFieldValue("cityId", e.target.value)
-                  }
-                  renderValue={() => {
-                    if (!formikProps.values.cityId) {
-                      return <span>{localization.hotelCity}</span>;
-                    } else {
-                      const selectedCity = initialValues.cities?.find(
-                        (city) => city.id === formikProps.values.cityId
-                      );
-                      return (
-                        <span>
-                          {selectedCity
-                            ? selectedCity.name
-                            : localization.hotelCity}
-                        </span>
-                      );
-                    }
-                  }}
-                  className={style.textField}
-                >
-                  <MenuItem disabled value="">
-                    Hotel City
-                  </MenuItem>
-                  {initialValues.cities.map((city) => (
-                    <MenuItem key={city.id} value={city.id}>
-                      {city.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-              {isCreateMode && (
-                <FileUploadInput
-                  formikProps={formikProps}
-                  label="Upload Image"
-                  name="imageFile"
-                />
-              )}
-
-              <Box className={style.buttonContainer}>
-                <Button
-                  variant="contained"
-                  onClick={onCancel}
-                  className={style.cancelButton}
-                >
-                  Cancel
-                </Button>
-                {!isLoading ? (
-                  <SmallSubmitButton
-                    text={isCreateMode ? "Create" : "Update"}
-                    buttonWidth={110}
-                  />
-                ) : (
-                  <SmallButtonLoader buttonWidth="110px" buttonHeight="38px" />
-                )}
-              </Box>
-            </Form>
+    <Formik
+      enableReinitialize={true}
+      initialValues={initialValues}
+      onSubmit={handleFormSubmit}
+      validationSchema={Yup.object({
+        name: Yup.string().required(localization.required),
+        description: Yup.string().required(localization.required),
+        starrating: Yup.number().required(localization.required),
+        latitude: Yup.number().required(localization.required),
+        longitude: Yup.number().required(localization.required),
+        imageFile: isCreateMode
+          ? Yup.mixed().notRequired().nullable()
+          : Yup.mixed(),
+      })}
+    >
+      {(formikProps) => (
+        <Form className={style.formContainer}>
+          <h3>{isCreateMode ? "Create" : "Update"} Hotel</h3>
+          <TextInput
+            label="Hotel name"
+            name="name"
+            fullWidth
+            required
+            className={style.textField}
+          />
+          <TextInput
+            label="Hotel description"
+            name="description"
+            fullWidth
+            required
+            multiline
+            rows={4}
+            className={style.textField}
+          />
+          <TextInput
+            label="Hotel Type"
+            name="hoteltype"
+            fullWidth
+            required
+            className={style.textField}
+          />
+          <TextInput
+            label="Hotel Rating"
+            name="starrating"
+            fullWidth
+            required
+            className={style.textField}
+          />
+          <div className={style.hotelLocationContainer}>
+            <TextInput
+              label="latitude"
+              name="latitude"
+              required
+              className={`${style.textField} ${style.locationField}`}
+            />
+            <TextInput
+              label="longitude"
+              name="longitude"
+              required
+              className={`${style.textField} ${style.locationField}`}
+            />
+          </div>
+          {isCreateMode && initialValues.cities && (
+            <Select
+              name="cityId"
+              fullWidth
+              required
+              value={formikProps.values.cityId || localization.hotelCity}
+              onChange={(e) =>
+                formikProps.setFieldValue("cityId", e.target.value)
+              }
+              renderValue={() => {
+                if (!formikProps.values.cityId) {
+                  return <span>{localization.hotelCity}</span>;
+                } else {
+                  const selectedCity = initialValues.cities?.find(
+                    (city) => city.id === formikProps.values.cityId
+                  );
+                  return (
+                    <span>
+                      {selectedCity
+                        ? selectedCity.name
+                        : localization.hotelCity}
+                    </span>
+                  );
+                }
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200,
+                  },
+                },
+              }}
+              className={style.textField}
+            >
+              <MenuItem disabled value="">
+                Hotel City
+              </MenuItem>
+              {initialValues.cities.map((city) => (
+                <MenuItem key={city.id} value={city.id}>
+                  {city.name}
+                </MenuItem>
+              ))}
+            </Select>
           )}
-        </Formik>
-      </Box>
-    </Modal>
+          {isCreateMode && (
+            <FileUploadInput
+              formikProps={formikProps}
+              label="Upload Image"
+              name="imageFile"
+            />
+          )}
+
+          <Box className={style.buttonContainer}>
+            <Button
+              variant="contained"
+              onClick={onCancel}
+              className={style.cancelButton}
+            >
+              Cancel
+            </Button>
+            {!isLoading ? (
+              <SmallSubmitButton
+                text={isCreateMode ? "Create" : "Update"}
+                buttonWidth={110}
+              />
+            ) : (
+              <SmallButtonLoader buttonWidth="110px" buttonHeight="38px" />
+            )}
+          </Box>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
