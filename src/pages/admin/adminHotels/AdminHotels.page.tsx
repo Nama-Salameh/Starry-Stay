@@ -3,6 +3,8 @@ import localization from "../../../localizationConfig";
 import { Box } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import {
+  addHotelImage,
+  createHotel,
   getFilteredHotels,
   getHotelInfoByItsId,
   getHotels,
@@ -15,6 +17,8 @@ import {
 } from "../../../utils/toastUtils/Toast.utils";
 import HotelForm from "../../../components/common/forms/hotelForm/HotelForm.component";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
+import SmallButton from "../../../components/common/Buttons/SmallButton.component";
+import style from "../Admin.module.css";
 
 type Hotel = {
   hotelName: string;
@@ -41,6 +45,7 @@ const errorMessages = {
   hotelToEditNotFound: localization.hotelToEditNotFound,
   hotelsNotFound: localization.hotelsNotFound,
   searchTimedout: localization.searchTimedout,
+  gettingHotelImageFailed: localization.gettingHotelImageFailed,
 };
 
 const successMessages = {
@@ -170,15 +175,74 @@ export default function AdminHotels() {
     setHotelData(null);
   };
 
+  const handleCreateHotelClick = async () => {
+    setCreateFormOpen(true);
+  };
+  const handleConfirmCreate = async (
+    name: string,
+    description: string,
+    starRating: number,
+    latitude: number,
+    longitude: number,
+    hotelType: any,
+    cityId: any,
+    imageFile: any
+  ) => {
+    try {
+      const newHotel = await createHotel(
+        cityId,
+        name,
+        description,
+        hotelType,
+        starRating,
+        latitude,
+        longitude
+      );
+      if (imageFile) {
+        try {
+          await addHotelImage(newHotel.id, imageFile);
+        } catch {
+          notifyError(errorMessages.gettingHotelImageFailed);
+        }
+      }
+      const updatedHotels = await getHotels();
+      setHotelsInfo(updatedHotels);
+      notifySuccess(successMessages.successCreate);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
+    }
+    setCreateFormOpen(false);
+    setHotelData(null);
+  };
+  const handleCancelCreate = () => {
+    setCreateFormOpen(false);
+    setHotelData(null);
+  };
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <SearchBar
-        onSearch={handleDebouncedSearch}
-        selectedOption={selectedOption}
-        onOptionChange={setSelectedOption}
-        searchText={searchText}
-        onTextChange={setSearchText}
-      />
+      <div className={style.pageHeader}>
+        <SearchBar
+          onSearch={handleDebouncedSearch}
+          selectedOption={selectedOption}
+          onOptionChange={setSelectedOption}
+          searchText={searchText}
+          onTextChange={setSearchText}
+        />
+        <div className={style.buttonContainer}>
+          <SmallButton
+            value={localization.createHotel}
+            buttonWidth={140}
+            onClick={handleCreateHotelClick}
+          />
+        </div>
+      </div>
       <TableWithNavigation
         data={hotelsInfo}
         itemsPerPage={5}
@@ -198,6 +262,22 @@ export default function AdminHotels() {
           longitude: hotelData ? hotelData.longitude : 0,
           hotelId: hotelData ? hotelData.id : undefined,
         }}
+        isCreateMode={false}
+      />
+      <HotelForm
+        isOpen={isCreateFormOpen}
+        onCancel={handleCancelCreate}
+        onSubmit={handleConfirmCreate}
+        initialValues={{
+          name: "",
+          description: "",
+          hoteltype: 0,
+          starrating: 0,
+          latitude: 0,
+          longitude: 0,
+          cityId: 0,
+        }}
+        isCreateMode={true}
       />
     </Box>
   );

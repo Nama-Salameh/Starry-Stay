@@ -1,4 +1,5 @@
 import { axiosInstance, handleError } from "../ApisConfig";
+import getUrlForFile from "../../utils/fileUrlUtils/FileUrl.utils";
 
 export const getHotelInfoByItsId = async (hotelId: number) => {
   try {
@@ -121,6 +122,46 @@ export const updateHotel = async (
   };
   try {
     const response = await axiosInstance.put(`/api/hotels/${hotelId}`, params);
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+
+
+export const createHotel = async (
+  cityId: number,
+  name: string,
+  description: string,
+  hotelType:number,
+  starRating: number,
+  latitude: number,
+  longitude: number
+) => {
+  const params = {
+    name: name,
+    description: description,
+    hotelType: hotelType,
+    starRating: starRating,
+    latitude: latitude,
+    longitude: longitude,
+  };
+  try {
+    const response = await axiosInstance.post(`/api/cities/${cityId}/hotels`, params);
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+
+export const addHotelImage = async (hotelId: number, file: File) => {
+  try {
+    const imageUrl = await getUrlForFile(file);
+    const response = await axiosInstance.post(`/api/hotels/${hotelId}/photos`, {
+      url: imageUrl,
+    });
     return response.data;
   } catch (error) {
     let type = handleError(error);

@@ -21,6 +21,8 @@ interface HotelFormProps {
     latitude: number,
     longitude: number,
     hotelId?: number,
+    hotelType?: number,
+    cityId?: number,
     imageFile?: File | null
   ) => Promise<void> | undefined;
   initialValues: {
@@ -31,6 +33,7 @@ interface HotelFormProps {
     latitude: number;
     longitude: number;
     hotelId?: number | undefined;
+    cityId?: number | undefined;
     imageFile?: File | null;
   };
   isCreateMode?: boolean;
@@ -71,10 +74,11 @@ const HotelForm: React.FC<HotelFormProps> = ({
         await onSubmit(
           values.name,
           values.description,
-          values.hoteltype,
           values.starrating,
           values.latitude,
           values.longitude,
+          values.hoteltype,
+          values.cityId,
           values.imageFile
         );
       }
@@ -170,6 +174,15 @@ const HotelForm: React.FC<HotelFormProps> = ({
                   className={`${style.textField} ${style.locationField}`}
                 />
               </div>
+              {isCreateMode && (
+                <TextInput
+                  label="City id"
+                  name="cityId"
+                  fullWidth
+                  required
+                  className={style.textField}
+                />
+              )}
               {isCreateMode && (
                 <FileUploadInput
                   formikProps={formikProps}

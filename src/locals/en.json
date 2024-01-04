@@ -103,5 +103,6 @@
   "cityDeletedSuccessfully": "The city deleted successfully",
   "cityCreatedSuccessfully": "The city created successfully",
   "cityToDeleteNotFound": "The city you trying to delete is not found",
-  "gettingCityImageFailed": "Loading the city image Failed."
+  "gettingCityImageFailed": "Loading the city image Failed.",
+  "gettingHotelImageFailed": "Loading the hotel image Failed."
 }
