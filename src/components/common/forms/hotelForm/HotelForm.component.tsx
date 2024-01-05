@@ -123,6 +123,8 @@ const HotelForm: React.FC<HotelFormProps> = ({
         starrating: Yup.number().required(localization.required),
         latitude: Yup.number().required(localization.required),
         longitude: Yup.number().required(localization.required),
+        cityId: Yup.number().required(localization.required),
+        hoteltype: Yup.number().required(localization.required),
         imageFile: isCreateMode
           ? Yup.mixed().notRequired().nullable()
           : Yup.mixed(),

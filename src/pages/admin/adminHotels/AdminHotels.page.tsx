@@ -117,6 +117,7 @@ export default function AdminHotels() {
         }
       }
     };
+
     fetchHotels();
     fetchCities();
   }, []);
@@ -156,7 +157,7 @@ export default function AdminHotels() {
       const initialValues = {
         hotelName: hotelInfo.hotelName,
         description: hotelInfo.description,
-        hoteltype: 0, // Adjust this value as needed
+        hoteltype: 0,
         starRating: hotelInfo.starRating,
         latitude: hotelInfo.latitude,
         longitude: hotelInfo.longitude,

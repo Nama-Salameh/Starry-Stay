@@ -1,4 +1,4 @@
-.formContainer{
+.formContainer {
   padding-top: 3%;
 }
 .formContainer > * {
@@ -13,6 +13,10 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 100%;
 }
 
 .cancelButton {

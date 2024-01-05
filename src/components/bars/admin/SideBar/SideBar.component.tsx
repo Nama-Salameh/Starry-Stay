@@ -1,4 +1,4 @@
-import React, { startTransition, ReactNode } from "react";
+import React, { startTransition, ReactNode, useState } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -20,24 +20,10 @@ import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BedIcon from "@mui/icons-material/Bed";
 import topBarLogo from "../../../../assets/images/topbarLogo.jpeg";
 import style from "./SideBar.module.css";
+import { Link } from "react-router-dom";
 const drawerWidth = 240;
 
-const NavigationLink: React.FC<{ to: string; children: ReactNode }> = ({
-  to,
-  children,
-}) => {
-  const handleClick = () => {
-    startTransition(() => {
-      window.location.href = to;
-    });
-  };
 
-  return (
-    <div onClick={handleClick} style={{ cursor: "pointer" }}>
-      {children}
-    </div>
-  );
-};
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -116,14 +102,19 @@ const Drawer = styled(MuiDrawer, {
 
 export default function SideBar() {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-
+  const [open, setOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("cities");
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleOptionClick = (option: string) => {
+    setSelectedOption(option);
   };
 
   return (
@@ -152,7 +143,10 @@ export default function SideBar() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
+          <IconButton
+            onClick={handleDrawerClose}
+            sx={{ color: theme.palette.secondary.main }}
+          >
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
             ) : (
@@ -163,12 +157,26 @@ export default function SideBar() {
         <Divider />
         <List>
           <ListItem disablePadding>
-            <NavigationLink to="/admin/hotels">
+            <Link
+              to="/admin/hotels"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <ListItemButton
+                selected={selectedOption === "hotels"}
+                onClick={() => handleOptionClick("hotels")}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
+                  backgroundColor:
+                    selectedOption === "hotels"
+                      ? `${theme.palette.secondary.main} !important`
+                      : theme.palette.primary.main,
+
+                  color:
+                    selectedOption === "hotels"
+                      ? theme.palette.primary.main
+                      : theme.palette.secondary.light,
                 }}
               >
                 <ListItemIcon
@@ -176,7 +184,10 @@ export default function SideBar() {
                     minWidth: 0,
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
-                    color: theme.palette.secondary.light, // Set icon color to secondary light
+                    color:
+                      selectedOption === "hotels"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
                   }}
                 >
                   <ApartmentIcon />
@@ -185,19 +196,35 @@ export default function SideBar() {
                   primary="Manage Hotels"
                   sx={{
                     opacity: open ? 1 : 0,
-                    color: theme.palette.secondary.light, // Set text color to secondary light
+                    color:
+                      selectedOption === "hotels"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
                   }}
                 />
               </ListItemButton>
-            </NavigationLink>
+            </Link>
           </ListItem>
           <ListItem disablePadding>
-            <NavigationLink to="/admin/rooms">
+            <Link
+              to="/admin/rooms"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <ListItemButton
+                selected={selectedOption === "rooms"}
+                onClick={() => handleOptionClick("rooms")}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
+                  backgroundColor:
+                    selectedOption === "rooms"
+                      ? `${theme.palette.secondary.main} !important`
+                      : theme.palette.primary.main,
+                  color:
+                    selectedOption === "rooms"
+                      ? theme.palette.primary.main
+                      : theme.palette.secondary.light,
                 }}
               >
                 <ListItemIcon
@@ -205,7 +232,10 @@ export default function SideBar() {
                     minWidth: 0,
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
-                    color: theme.palette.secondary.light, // Set icon color to secondary light
+                    color:
+                      selectedOption === "rooms"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
                   }}
                 >
                   <BedIcon />
@@ -214,19 +244,36 @@ export default function SideBar() {
                   primary="Manage Rooms"
                   sx={{
                     opacity: open ? 1 : 0,
-                    color: theme.palette.secondary.light, // Set text color to secondary light
+                    color:
+                      selectedOption === "rooms"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
                   }}
                 />
               </ListItemButton>
-            </NavigationLink>
+            </Link>
           </ListItem>
           <ListItem disablePadding>
-            <NavigationLink to="/admin/cities">
+            <Link
+              to="/admin/cities"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <ListItemButton
+                selected={selectedOption === "cities"}
+                onClick={() => handleOptionClick("cities")}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
+                  backgroundColor:
+                    selectedOption === "cities"
+                      ? `${theme.palette.secondary.main} !important`
+                      : theme.palette.primary.main,
+
+                  color:
+                    selectedOption === "cities"
+                      ? theme.palette.primary.main
+                      : theme.palette.secondary.light,
                 }}
               >
                 <ListItemIcon
@@ -234,7 +281,10 @@ export default function SideBar() {
                     minWidth: 0,
                     mr: open ? 3 : "auto",
                     justifyContent: "center",
-                    color: theme.palette.secondary.light, // Set icon color to secondary light
+                    color:
+                      selectedOption === "cities"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
                   }}
                 >
                   <LocationCityIcon />
@@ -243,11 +293,14 @@ export default function SideBar() {
                   primary="Manage Cities"
                   sx={{
                     opacity: open ? 1 : 0,
-                    color: theme.palette.secondary.light, // Set text color to secondary light
+                    color:
+                      selectedOption === "cities"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
                   }}
                 />
               </ListItemButton>
-            </NavigationLink>
+            </Link>
           </ListItem>
         </List>
       </Drawer>

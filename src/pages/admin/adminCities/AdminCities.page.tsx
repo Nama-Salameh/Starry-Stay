@@ -21,6 +21,7 @@ import CityForm from "../../../components/common/forms/cityForm/CityFrom.compone
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
+import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 
 interface CityData {
   id?: number;
@@ -250,28 +251,31 @@ export default function AdminCities() {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
-      <CityForm
-        isOpen={isUpdateFormOpen}
-        onCancel={handleCancelEdit}
-        onSubmit={handleConfirmUpdate}
-        initialValues={{
-          name: cityData ? cityData.name : "",
-          description: cityData ? cityData.description : "",
-          cityId: cityData ? cityData.id : undefined,
-        }}
-        isCreateMode={false}
-      />
-      <CityForm
-        isOpen={isCreateFormOpen}
-        onCancel={handleCancelCreate}
-        onSubmit={handleConfirmCreate}
-        initialValues={{
-          name: cityData ? cityData.name : "",
-          description: cityData ? cityData.description : "",
-          imageFile: null,
-        }}
-        isCreateMode={true}
-      />
+      <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
+        <CityForm
+          onCancel={handleCancelEdit}
+          onSubmit={handleConfirmUpdate}
+          initialValues={{
+            name: cityData ? cityData.name : "",
+            description: cityData ? cityData.description : "",
+            cityId: cityData ? cityData.id : undefined,
+          }}
+          isCreateMode={false}
+        />
+      </SlidingWindow>
+
+      <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
+        <CityForm
+          onCancel={handleCancelCreate}
+          onSubmit={handleConfirmCreate}
+          initialValues={{
+            name: cityData ? cityData.name : "",
+            description: cityData ? cityData.description : "",
+            imageFile: null,
+          }}
+          isCreateMode={true}
+        />{" "}
+      </SlidingWindow>
     </Box>
   );
 }

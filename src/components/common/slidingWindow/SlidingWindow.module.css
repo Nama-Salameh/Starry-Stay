@@ -21,3 +21,9 @@
 .close-button {
   margin-bottom: 16px;
 }
+
+@media (max-width: 750px) {
+  .sliding-window {
+    width: 70%;
+  }
+}
