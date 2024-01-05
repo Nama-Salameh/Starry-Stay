@@ -75,6 +75,7 @@
   "createRoom": "Create a room",
   "createHotel": "Create a hotel",
   "description": " Description",
+  "hotelCity":"Hotel city",
   "networkError": "Check your network and try again.",
   "serverIssues": "Having some internal issues, please try in another time.",
   "userNotFoundError": "The user not found, you must sign up and try to login again.",
@@ -103,5 +104,6 @@
   "cityDeletedSuccessfully": "The city deleted successfully",
   "cityCreatedSuccessfully": "The city created successfully",
   "cityToDeleteNotFound": "The city you trying to delete is not found",
-  "gettingCityImageFailed": "Loading the city image Failed."
+  "gettingCityImageFailed": "Loading the city image Failed.",
+  "gettingHotelImageFailed": "Loading the hotel image Failed."
 }

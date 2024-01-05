@@ -1,25 +1,15 @@
 import React  from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet} from "react-router-dom";
+import { Box } from "@mui/material";
 
-const Admin = () => {
-  const navigate = useNavigate();
-
-  const handleNavigation = (path: string) => {
-      navigate(`/admin/${path}`);
-  };
-
+ const Admin = () => {
   return (
-    <div>
-      <div className="sidebar">
-        <button onClick={() => handleNavigation("cities")}>Cities</button>
-        <button onClick={() => handleNavigation("hotels")}>Hotels</button>
-        <button onClick={() => handleNavigation("rooms")}>Rooms</button>
-      </div>
+    <Box component="main" sx={{ flexGrow: 1, pt:4 }}>
+      
       <div className="content">
         <Outlet />
       </div>
-    </div>
+    </Box>
   );
 };
-
 export default Admin;

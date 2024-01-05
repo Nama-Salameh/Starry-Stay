@@ -1,15 +1,6 @@
-.modalContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #f5f5f5;
-  box-shadow: 0 3px 6px rgba(36, 36, 36, 0.16);
-  border-radius: 2px;
-  padding: 16px;
-  width: 50%;
+.formContainer {
+  padding-top: 3%;
 }
-
 .formContainer > * {
   margin-bottom: 10px;
 }
@@ -22,6 +13,10 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 100%;
 }
 
 .cancelButton {

@@ -12,7 +12,6 @@ import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 
 interface CityFormProps {
-  isOpen: boolean;
   onCancel: () => void;
   onSubmit: (
     name: string,
@@ -35,7 +34,6 @@ const errorMessages = {
 };
 
 const CityForm: React.FC<CityFormProps> = ({
-  isOpen,
   onCancel,
   onSubmit,
   initialValues,
@@ -82,67 +80,67 @@ const CityForm: React.FC<CityFormProps> = ({
   };
 
   return (
-    <Modal open={isOpen} onClose={onCancel}>
-      <Box className={style.modalContainer}>
-        <Formik
-          initialValues={initialValues}
-          onSubmit={handleFormSubmit}
-          validationSchema={Yup.object({
-            name: Yup.string().required(localization.required),
-            description: Yup.string().required(localization.required),
-            imageFile: isCreateMode
-              ? Yup.mixed().notRequired().nullable()
-              : Yup.mixed(),
-          })}
-        >
-          {(formikProps) => (
-            <Form>
-              <TextInput
-                label="City name"
-                name="name"
-                fullWidth
-                required
-                className={style.textField}
+    <Formik
+      enableReinitialize
+      initialValues={initialValues}
+      onSubmit={handleFormSubmit}
+      validationSchema={Yup.object({
+        name: Yup.string().required(localization.required),
+        description: Yup.string().required(localization.required),
+        imageFile: isCreateMode
+          ? Yup.mixed().notRequired().nullable()
+          : Yup.mixed(),
+      })}
+    >
+      {(formikProps) => {
+        return (
+          <Form>
+            <h3>{isCreateMode ? "Create" : "Update"} City</h3>
+            <TextInput
+              label="City name"
+              name="name"
+              fullWidth
+              required
+              className={style.textField}
+            />
+            <TextInput
+              label="City description"
+              name="description"
+              fullWidth
+              required
+              multiline
+              rows={4}
+              className={style.textField}
+            />
+            {isCreateMode && (
+              <FileUploadInput
+                formikProps={formikProps}
+                label="Upload Image"
+                name="imageFile"
               />
-              <TextInput
-                label="City description"
-                name="description"
-                fullWidth
-                required
-                multiline
-                rows={4}
-                className={style.textField}
-              />
-              {isCreateMode && (
-                <FileUploadInput
-                  formikProps={formikProps}
-                  label="Upload Image"
-                  name="imageFile"
-                />
-              )}
+            )}
 
-              <Box className={style.buttonContainer}>
-                <Button
-                  variant="contained"
-                  onClick={onCancel}
-                  className={style.cancelButton}
-                >
-                  Cancel
-                </Button>
-                {!isLoading ? (
-                  <SmallSubmitButton
-                    text={isCreateMode ? "Create" : "Update"}
-                    buttonWidth={110}
-                  />
-                ) : (
-                  <SmallButtonLoader buttonWidth="110px" buttonHeight="38px" />
-                )}
-              </Box>
-            </Form>
-          )}
-        </Formik>
-      </Box>
-    </Modal>
+            <Box className={style.buttonContainer}>
+              <Button
+                variant="contained"
+                onClick={onCancel}
+                className={style.cancelButton}
+              >
+                Cancel
+              </Button>
+              {!isLoading ? (
+                <SmallSubmitButton
+                  text={isCreateMode ? "Create" : "Update"}
+                  buttonWidth={110}
+                />
+              ) : (
+                <SmallButtonLoader buttonWidth="110px" buttonHeight="38px" />
+              )}
+            </Box>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 
