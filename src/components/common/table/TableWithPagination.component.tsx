@@ -10,6 +10,7 @@ import {
   TablePagination,
   Typography,
   Box,
+  Switch,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import style from "./TableWithPagination.module.css";
@@ -31,12 +32,10 @@ const TableWithNavigation: React.FC<{
     setPage(newPage);
   };
 
-  if (!data.length) {
-    return <div>No Hotels Added yet</div>;
-  }
-
   const columns = Object.keys(data[0] || {});
-  const filteredColumns = columns.filter((column) => column !== "id");
+  const filteredColumns = columns.filter(
+    (column) => column !== "id" && column !== "roomPhotoUrl"
+  );
   const startIdx = page * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
 
@@ -64,7 +63,7 @@ const TableWithNavigation: React.FC<{
               <TableCell
                 className={`${style.tableHeadCell} ${style.actionsHeadCell}`}
               >
-                Actions
+                Actions 
               </TableCell>
             </TableRow>
           </TableHead>
@@ -73,7 +72,15 @@ const TableWithNavigation: React.FC<{
               <TableRow key={row.id} className={style.tableBodyRow}>
                 {filteredColumns.map((column) => (
                   <TableCell key={column} className={style.tableBodyCell}>
-                    {row[column]}
+                    {column === "roomAmenities" ? (
+                      (row[column] as { name: string; description: string }[])
+                        .map((amenity) => amenity.name)
+                        .join(", ")
+                    ) : column === "availability" ? (
+                      <Switch checked={row[column]} disabled={true} />
+                    ) : (
+                      row[column]
+                    )}
                   </TableCell>
                 ))}
                 <TableCell
