@@ -24,7 +24,7 @@ interface Row {
 const TableWithNavigation: React.FC<{
   data?: Row[];
   itemsPerPage: number;
-  onDelete: (id: number) => void;
+  onDelete: (params: { id: number; relatedId?: number }) => void;
   onEdit: (id: number) => void;
 }> = ({ data = [], itemsPerPage, onDelete, onEdit }) => {
   const [page, setPage] = useState(0);
@@ -34,7 +34,8 @@ const TableWithNavigation: React.FC<{
 
   const columns = Object.keys(data[0] || {});
   const filteredColumns = columns.filter(
-    (column) => column !== "id" && column !== "roomPhotoUrl"
+    (column) =>
+      column !== "id" && column !== "roomPhotoUrl" && column !== "hotelId"
   );
   const startIdx = page * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
@@ -63,7 +64,7 @@ const TableWithNavigation: React.FC<{
               <TableCell
                 className={`${style.tableHeadCell} ${style.actionsHeadCell}`}
               >
-                Actions 
+                Actions
               </TableCell>
             </TableRow>
           </TableHead>
@@ -91,7 +92,12 @@ const TableWithNavigation: React.FC<{
                   </IconButton>
                   <IconButton
                     aria-label="delete"
-                    onClick={() => onDelete(row.id)}
+                    onClick={() =>
+                      onDelete({
+                        id: row.roomNumber ? row.roomNumber : row.id,
+                        relatedId: row.hotelId ? row.hotelId : undefined,
+                      })
+                    }
                   >
                     <DeleteIcon className={style.deleteIcon} />
                   </IconButton>

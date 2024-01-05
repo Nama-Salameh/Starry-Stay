@@ -5,12 +5,17 @@ import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.compon
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import style from "../Admin.module.css";
-import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+import {
+  notifyError,
+  notifySuccess,
+} from "../../../utils/toastUtils/Toast.utils";
 import {
   getHotelRoomsByItsId,
   getHotels,
 } from "../../../services/hotels/Hotels.service";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
+import { deleteRoom } from "../../../services/rooms/Rooms.service";
+import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
 
 type Hotel = {
   id: number;
@@ -48,6 +53,7 @@ const errorMessages = {
   roomsNotFound: localization.roomsNotFound,
   searchTimedout: localization.searchTimedout,
   gettingRoomImageFailed: localization.gettingRoomImageFailed,
+  roomToDeleteNotFound: localization.roomToDeleteNotFound,
 };
 
 const successMessages = {
@@ -56,21 +62,57 @@ const successMessages = {
   successCreate: localization.roomCreatedSuccessfully,
 };
 
-const handleDebouncedSearch = (searchText: string) => {};
-const handleDeleteRoom = () => {};
-const handleCreateRoomClick = () => {};
-const handleEditRoomClick = () => {};
-
 export default function AdminRooms() {
   const [hotelsInfo, setHotelsInfo] = useState<Hotel[]>([]);
-  const [RoomsInfoWithoutHotelId, setRoomsInfoWithoutHotelId] = useState<
-    Room[]
-  >([]);
   const [RoomsInfoWithHotelId, setRoomsInfoWithHotelId] = useState<
     RoomWithHotelId[]
   >([]);
   const [selectedOption, setSelectedOption] = useState<string>("name");
   const [searchText, setSearchText] = useState<string>("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [roomToDelete, setRoomToDelete] = useState<{
+    id: number;
+    relatedId: number;
+  } | null>(null);
+
+  const handleDebouncedSearch = (searchText: string) => {};
+
+  const handleDeleteRoomClick = async (params: {
+    id: number;
+    relatedId: any;
+  }) => {
+    setIsDeleteModalOpen(true);
+    setRoomToDelete(params);
+  };
+  const handleConfirmDelete = async () => {
+    if (roomToDelete !== null) {
+      try {
+        await deleteRoom(roomToDelete.id, roomToDelete.relatedId);
+        notifySuccess(successMessages.successDelete);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.roomToDeleteNotFound);
+            break;
+        }
+      }
+    }
+    setIsDeleteModalOpen(false);
+    setRoomToDelete(null);
+  };
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setRoomToDelete(null);
+  };
+
+  const handleCreateRoomClick = () => {};
+  const handleEditRoomClick = () => {};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,7 +121,6 @@ export default function AdminRooms() {
         setHotelsInfo(hotels);
 
         const roomsWithHotelId: RoomWithHotelId[] = [];
-        const roomsWithoutHotelId: Room[] = [];
 
         await Promise.all(
           hotels.map(async (hotel: Hotel) => {
@@ -93,12 +134,10 @@ export default function AdminRooms() {
               hotelId: hotel.id,
             }));
             roomsWithHotelId.push(...roomsForHotelWithHotelId);
-            roomsWithoutHotelId.push(...hotelRooms);
           })
         );
 
         setRoomsInfoWithHotelId(roomsWithHotelId);
-        setRoomsInfoWithoutHotelId(roomsWithoutHotelId);
       } catch (errorType) {
         switch (errorType) {
           case ErrorTypes.Network:
@@ -116,8 +155,6 @@ export default function AdminRooms() {
     fetchData();
   }, []);
 
-  console.log("hotels info", hotelsInfo);
-  console.log("rooms without", RoomsInfoWithoutHotelId);
   console.log("rooms with", RoomsInfoWithHotelId);
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
@@ -138,10 +175,17 @@ export default function AdminRooms() {
         </div>
       </div>
       <TableWithNavigation
-        data={RoomsInfoWithoutHotelId}
+        data={RoomsInfoWithHotelId}
         itemsPerPage={5}
-        onDelete={handleDeleteRoom}
+        onDelete={({ id, relatedId }) =>
+          handleDeleteRoomClick({ id, relatedId })
+        }
         onEdit={handleEditRoomClick}
+      />
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
       />
     </Box>
   );
