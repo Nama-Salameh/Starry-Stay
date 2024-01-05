@@ -14,8 +14,14 @@ import {
   getHotels,
 } from "../../../services/hotels/Hotels.service";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
-import { deleteRoom } from "../../../services/rooms/Rooms.service";
+import {
+  deleteRoom,
+  getRoomInfoByItsId,
+  updateRoom,
+} from "../../../services/rooms/Rooms.service";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
+import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
+import RoomForm from "../../../components/common/forms/roomForm/RoomForm.component";
 
 type Hotel = {
   id: number;
@@ -45,6 +51,11 @@ type Room = {
 type RoomWithHotelId = Room & {
   hotelId: number;
 };
+type RoomToEditOrCreate = {
+  roomNumber: number;
+  cost: number;
+  roomId: number;
+};
 const errorMessages = {
   network: localization.networkError,
   unknown: localization.serverIssues,
@@ -67,52 +78,16 @@ export default function AdminRooms() {
   const [RoomsInfoWithHotelId, setRoomsInfoWithHotelId] = useState<
     RoomWithHotelId[]
   >([]);
+  const [roomData, setRoomData] = useState<RoomToEditOrCreate | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("name");
   const [searchText, setSearchText] = useState<string>("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
+  const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [roomToDelete, setRoomToDelete] = useState<{
     id: number;
     relatedId: number;
   } | null>(null);
-
-  const handleDebouncedSearch = (searchText: string) => {};
-
-  const handleDeleteRoomClick = async (params: {
-    id: number;
-    relatedId: any;
-  }) => {
-    setIsDeleteModalOpen(true);
-    setRoomToDelete(params);
-  };
-  const handleConfirmDelete = async () => {
-    if (roomToDelete !== null) {
-      try {
-        await deleteRoom(roomToDelete.id, roomToDelete.relatedId);
-        notifySuccess(successMessages.successDelete);
-      } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.roomToDeleteNotFound);
-            break;
-        }
-      }
-    }
-    setIsDeleteModalOpen(false);
-    setRoomToDelete(null);
-  };
-  const handleCancelDelete = () => {
-    setIsDeleteModalOpen(false);
-    setRoomToDelete(null);
-  };
-
-  const handleCreateRoomClick = () => {};
-  const handleEditRoomClick = () => {};
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,6 +130,97 @@ export default function AdminRooms() {
     fetchData();
   }, []);
 
+  const handleDebouncedSearch = (searchText: string) => {};
+
+  const handleDeleteRoomClick = async (params: {
+    id: number;
+    relatedId: any;
+  }) => {
+    setIsDeleteModalOpen(true);
+    setRoomToDelete(params);
+  };
+  const handleConfirmDelete = async () => {
+    if (roomToDelete !== null) {
+      try {
+        await deleteRoom(roomToDelete.id, roomToDelete.relatedId);
+        notifySuccess(successMessages.successDelete);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.roomToDeleteNotFound);
+            break;
+        }
+      }
+    }
+    setIsDeleteModalOpen(false);
+    setRoomToDelete(null);
+  };
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setRoomToDelete(null);
+  };
+
+  const handleCreateRoomClick = () => {};
+
+  const handleEditRoomClick = async (roomId: number) => {
+    
+    console.log("roomId:", roomId); 
+    try {
+      const roomInfo = await getRoomInfoByItsId(roomId);
+      setRoomData({ ...roomInfo, id: roomId });  // Add 'id' property
+      setUpdateFormOpen(true);
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.roomToEditNotFound);
+          break;
+      }
+    }
+  };
+
+  const handleCancelEdit = async () => {
+    setUpdateFormOpen(false);
+    setRoomData(null);
+  };
+  const handleConfirmUpdate = async (
+    roomNumber: number,
+    cost: number,
+    roomId: number
+  ) => {
+    try {
+      if (typeof roomId === "number") {
+        await updateRoom(roomId, roomNumber, cost);
+        notifySuccess(successMessages.successUpdate);
+      }
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.NotFound:
+          notifyError(errorMessages.roomToEditNotFound);
+          break;
+      }
+    }
+    setUpdateFormOpen(false);
+    setRoomData(null);
+  };
+
   console.log("rooms with", RoomsInfoWithHotelId);
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
@@ -187,6 +253,18 @@ export default function AdminRooms() {
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
       />
+      <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
+        <RoomForm
+          onCancel={handleCancelEdit}
+          onSubmit={handleConfirmUpdate}
+          initialValues={{
+            roomNumber: roomData ? roomData.roomNumber : null,
+            cost: roomData ? roomData.cost : null,
+            roomId: roomData ? roomData.roomId : null,
+          }}
+          isCreateMode={false}
+        />
+      </SlidingWindow>
     </Box>
   );
 }

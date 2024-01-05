@@ -41,3 +41,20 @@ export const deleteRoom = async (hotelId: number, roomId: number) => {
     throw type;
   }
 };
+
+export const updateRoom = async (
+  roomId: number,
+  roomNumber: number,
+  cost: number
+) => {
+  const params = {
+    roomNumber: roomId,
+    cost: cost,
+  };
+  try {
+    await axiosInstance.delete(`api/rooms/${roomId}`, { params });
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
