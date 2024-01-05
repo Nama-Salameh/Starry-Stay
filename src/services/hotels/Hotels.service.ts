@@ -168,3 +168,13 @@ export const addHotelImage = async (hotelId: number, file: File) => {
     throw type;
   }
 };
+
+export const deleteHotel = async (hotelId: number, cityId:number) => {
+  try {
+    const response = await axiosInstance.post(`/api/cities/${cityId}/hotels/${hotelId}`);
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};
