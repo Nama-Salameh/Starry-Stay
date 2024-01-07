@@ -2,5 +2,10 @@
   width: 100%;
   position: relative;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  z-index: 900;
+  gap: 10px;
+}
+.carousel > * {
+  margin: auto;
 }

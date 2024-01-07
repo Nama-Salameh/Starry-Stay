@@ -1,24 +1,19 @@
 import React, { useRef, useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import style from './MapContainer.module.css';
+import style from "./MapContainer.module.css";
+import { Button } from "@mui/material";
 interface MapProps {
   latitude: number;
   longitude: number;
+  onClose: () => void;
 }
 
-const Map: React.FC<MapProps> = ({ latitude, longitude }) => {
+const Map: React.FC<MapProps> = ({ latitude, longitude, onClose }) => {
   const mapRef = useRef<L.Map | null>(null);
 
   const toggleFullScreen = () => {
-    const mapContainer = document.getElementById("map");
-    if (mapContainer) {
-      if (!document.fullscreenElement) {
-        mapContainer.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    }
+    onClose();
   };
   useEffect(() => {
     const mapContainer = document.getElementById("map");
@@ -33,15 +28,14 @@ const Map: React.FC<MapProps> = ({ latitude, longitude }) => {
       });
 
       L.marker([latitude, longitude], { icon: locationIcon }).addTo(map);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
-        map
-      );
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?lang=en").addTo(map);
+
 
       mapRef.current = map;
 
       const handleFullScreenChange = () => {
         if (!document.fullscreenElement) {
-          mapContainer.removeEventListener("click", toggleFullScreen);
+          onClose();
         }
       };
       document.addEventListener("fullscreenchange", handleFullScreenChange);
@@ -57,11 +51,18 @@ const Map: React.FC<MapProps> = ({ latitude, longitude }) => {
           "fullscreenchange",
           handleFullScreenChange
         );
-        mapContainer.removeEventListener("click", toggleFullScreen);
       };
     }
-  }, [latitude, longitude]);
+  }, [latitude, longitude, onClose]);
 
-  return <div id="map" className={style.mapContainer}/>;
+  return (
+    <div id="map" className={style.mapContainer}>
+      <div className={style.mapButtonContainer}>
+        <Button className={style.closeButton} onClick={toggleFullScreen}>
+          Close map
+        </Button>
+      </div>
+    </div>
+  );
 };
 export default Map;

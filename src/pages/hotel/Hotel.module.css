@@ -1,40 +1,67 @@
 .hotelPageContainer {
-  width: 90%;
+  width: 60%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 130px 20px;
-  margin: 0 auto; 
+  padding: 110px 20px;
+  position: relative;
+}
+.hotelPageContainer.mapHidden {
+  width: 80%;
+  margin: auto;
 }
 .hotelInfoContainer {
   display: flex;
-  justify-content: center;
-  gap: 30px;
-  margin: 0px 15px;
-  padding: 10px 0;
-  font-size: 18px;
+  position: relative;
+  margin-bottom: 5px;
 }
 .hotelInfo {
+  display: flex;
+  flex-direction: column;
   padding-top: 0;
+}
+.hotelName {
+  margin: 0;
+  padding: 0;
+}
+.hotelImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 12px;
+}
+.hotelGalleryContainer {
+  padding: 20px;
+}
+.hotelGalleryImage {
+  height: 230px;
+  width: 220px;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.hotelDetails {
+  padding: 4%;
+  border: 1px solid var(--mui-palette-secondary-dark);
 }
 .roomsContainer {
   margin-top: 15px;
   max-height: 770px;
   width: 100%;
 }
-.gelleryContainer{
-  width: 100%;
+.gelleryContainer {
+  width: 60%;
 }
-@media (max-width: 600px) {
-  .hotelInfoContainer {
-    display: flex;
-    flex-direction: column;
-  }
+.mapButtonContainer {
+  text-align: end;
 }
-@media (min-width: 1001px) {
-  .hotelInfoContainer {
-    height: 300px;
-    overflow: hidden;
-  }
+.toggleMapButton {
+  z-index: 999;
+  text-transform: none !important;
+  width: 100px;
+}
+h4 {
+  margin: 0;
+  padding: 0;
+  color: grey;
 }
