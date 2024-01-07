@@ -173,7 +173,17 @@ export const deleteHotel = async (hotelId: number, cityId:number) => {
   try {
     const response = await axiosInstance.post(`/api/cities/${cityId}/hotels/${hotelId}`);
     return response.data;
-  } catch (error) {
+  } catch (error) { let type = handleError(error);
+    throw type;
+  }
+};
+
+export const getHotelReviewsByItsId = async (hotelId: number) => {
+  try {
+    const response = await axiosInstance.get(`api/hotels/${hotelId}/reviews`);
+    console.log("response is ", response);
+    return response.data;
+  } catch (error: any) {
     let type = handleError(error);
     throw type;
   }

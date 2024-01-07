@@ -10,6 +10,7 @@ import {
   TablePagination,
   Typography,
   Box,
+  Switch,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import style from "./TableWithPagination.module.css";
@@ -23,7 +24,7 @@ interface Row {
 const TableWithNavigation: React.FC<{
   data?: Row[];
   itemsPerPage: number;
-  onDelete: (id: number) => void;
+  onDelete: (params: { id: number; relatedId?: number }) => void;
   onEdit: (id: number) => void;
 }> = ({ data = [], itemsPerPage, onDelete, onEdit }) => {
   const [page, setPage] = useState(0);
@@ -31,12 +32,11 @@ const TableWithNavigation: React.FC<{
     setPage(newPage);
   };
 
-  if (!data.length) {
-    return <div>No Hotels Added yet</div>;
-  }
-
   const columns = Object.keys(data[0] || {});
-  const filteredColumns = columns.filter((column) => column !== "id");
+  const filteredColumns = columns.filter(
+    (column) =>
+      column !== "id" && column !== "roomPhotoUrl" && column !== "hotelId"
+  );
   const startIdx = page * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
 
@@ -73,7 +73,15 @@ const TableWithNavigation: React.FC<{
               <TableRow key={row.id} className={style.tableBodyRow}>
                 {filteredColumns.map((column) => (
                   <TableCell key={column} className={style.tableBodyCell}>
-                    {row[column]}
+                    {column === "roomAmenities" ? (
+                      (row[column] as { name: string; description: string }[])
+                        .map((amenity) => amenity.name)
+                        .join(", ")
+                    ) : column === "availability" ? (
+                      <Switch checked={row[column]} disabled={true} />
+                    ) : (
+                      row[column]
+                    )}
                   </TableCell>
                 ))}
                 <TableCell
@@ -84,7 +92,12 @@ const TableWithNavigation: React.FC<{
                   </IconButton>
                   <IconButton
                     aria-label="delete"
-                    onClick={() => onDelete(row.id)}
+                    onClick={() =>
+                      onDelete({
+                        id: row.roomNumber ? row.roomNumber : row.id,
+                        relatedId: row.hotelId ? row.hotelId : undefined,
+                      })
+                    }
                   >
                     <DeleteIcon className={style.deleteIcon} />
                   </IconButton>

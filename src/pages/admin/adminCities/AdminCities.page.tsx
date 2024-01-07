@@ -243,7 +243,7 @@ export default function AdminCities() {
       <TableWithNavigation
         data={citiesInfo}
         itemsPerPage={5}
-        onDelete={handleDeleteCityClick}
+        onDelete={({ id: cityId }) => handleDeleteCityClick(cityId)}
         onEdit={handleEditCityClick}
       />
       <DeleteConfirmationModal
