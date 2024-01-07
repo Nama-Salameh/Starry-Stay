@@ -5,6 +5,7 @@ import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.compon
 import {
   addHotelImage,
   createHotel,
+  deleteHotel,
   getFilteredHotels,
   getHotelInfoByItsId,
   getHotels,
@@ -21,6 +22,7 @@ import SmallButton from "../../../components/common/Buttons/SmallButton.componen
 import style from "../Admin.module.css";
 import { getCities } from "../../../services/cities/Cities.service";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
+import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
 
 type Hotel = {
   hotelName: string;
@@ -38,7 +40,7 @@ type Hotel = {
   starRating: number;
   avaiableRooms: number;
   imageUrl: string;
-  id?: number;
+  cityId: number;
 };
 
 type City = {
@@ -54,6 +56,7 @@ const errorMessages = {
   searchTimedout: localization.searchTimedout,
   gettingHotelImageFailed: localization.gettingHotelImageFailed,
   citiesNotFound: localization.citiesNotFound,
+  hotelToDeleteNotFound: localization.hotelToDeleteNotFound,
 };
 
 const successMessages = {
@@ -66,6 +69,8 @@ export default function AdminHotels() {
   const [hotelsInfo, setHotelsInfo] = useState();
   const [selectedOption, setSelectedOption] = useState<string>("name");
   const [searchText, setSearchText] = useState<string>("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [hotelToDelete, setHotelToDelete] = useState<number | null>(null);
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
   const [hotelData, setHotelData] = useState<{
@@ -122,6 +127,7 @@ export default function AdminHotels() {
     fetchCities();
   }, []);
 
+  console.log("hotels", hotelsInfo);
   const handleDebouncedSearch = async () => {
     try {
       let filteredCities;
@@ -148,8 +154,37 @@ export default function AdminHotels() {
     }
   };
 
-  const handleDeleteHotel = () => {};
-
+  const handleDeleteHotelClick = async (hotelId: number) => {
+    setIsDeleteModalOpen(true);
+    setHotelToDelete(hotelId);
+  };
+  const handleConfirmDelete = async () => {
+    if (hotelToDelete !== null) {
+      try {
+        const hotelInfo = (await getHotelInfoByItsId(hotelToDelete)) as Hotel;
+        await deleteHotel(hotelToDelete, hotelInfo.cityId);
+        notifySuccess(successMessages.successDelete);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.hotelToDeleteNotFound);
+            break;
+        }
+      }
+    }
+    setIsDeleteModalOpen(false);
+    setHotelToDelete(null);
+  };
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setHotelToDelete(null);
+  };
   const handleEditHotelClick = async (hotelId: number) => {
     try {
       const hotelInfo = await getHotelInfoByItsId(hotelId);
@@ -297,8 +332,13 @@ export default function AdminHotels() {
       <TableWithNavigation
         data={hotelsInfo}
         itemsPerPage={5}
-        onDelete={handleDeleteHotel}
+        onDelete={({ id: hotelId }) => handleDeleteHotelClick(hotelId)}
         onEdit={handleEditHotelClick}
+      />
+      <DeleteConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
       />
       <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
         <HotelForm
