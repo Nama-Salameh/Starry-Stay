@@ -48,11 +48,11 @@ export const updateRoom = async (
   cost: number
 ) => {
   const params = {
-    roomNumber: roomId,
+    roomNumber: roomNumber,
     cost: cost,
   };
   try {
-    await axiosInstance.delete(`api/rooms/${roomId}`, { params });
+    await axiosInstance.put(`api/rooms/${roomId}`, { params });
   } catch (error: any) {
     let type = handleError(error);
     throw type;

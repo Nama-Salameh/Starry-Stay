@@ -35,6 +35,7 @@ type Hotel = {
 
 type Room = {
   id: number;
+  roomNumber: number;
   roomPhotoUrl: string;
   roomType: string;
   capacityOfAdults: number;
@@ -169,11 +170,10 @@ export default function AdminRooms() {
   const handleCreateRoomClick = () => {};
 
   const handleEditRoomClick = async (roomId: number) => {
-    
-    console.log("roomId:", roomId); 
+    console.log("roomId:", roomId);
     try {
       const roomInfo = await getRoomInfoByItsId(roomId);
-      setRoomData({ ...roomInfo, id: roomId });  // Add 'id' property
+      setRoomData({ ...roomInfo, id: roomId });
       setUpdateFormOpen(true);
     } catch (errorType) {
       switch (errorType) {
