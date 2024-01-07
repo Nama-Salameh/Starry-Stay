@@ -4,6 +4,7 @@ const SmallButton: React.FC<{
   value: string;
   icon?: React.ReactNode;
   buttonWidth?: number;
+  buttonHieght?: number;
   disabled?: boolean;
   isSecondaryBackgroundColor?: boolean;
   onClick: (param: any) => void;
@@ -11,6 +12,7 @@ const SmallButton: React.FC<{
   value,
   icon,
   buttonWidth,
+  buttonHieght,
   disabled = false,
   isSecondaryBackgroundColor,
   onClick,
@@ -22,7 +24,7 @@ const SmallButton: React.FC<{
       disabled={disabled}
       onClick={onClick}
       sx={{
-        height: 52,
+        height: buttonHieght || 52,
         textTransform: "none",
         fontSize: 16,
         fontWeight: '400',

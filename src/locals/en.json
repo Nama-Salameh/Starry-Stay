@@ -112,5 +112,11 @@
   "roomDeletedSuccessfully": "The room deleted successfully",
   "roomCreatedSuccessfully": "The room created successfully",
   "roomToDeleteNotFound": "The room you trying to delete is not found",
-  "roomsNotFound": "Rooms not found"
+  "roomsNotFound": "Rooms not found",
+  "seeAmenititesDetails": "See amenities details",
+  "Rooms": "Rooms",
+  "seeAllRooms" : "See all rooms",
+  "hideRooms" : "Hide rooms",
+  "seeAllReviews" : "See all reviews",
+  "hideAllReviews" : "Hide all reviews"
 }
