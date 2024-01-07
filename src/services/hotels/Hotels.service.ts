@@ -129,12 +129,11 @@ export const updateHotel = async (
   }
 };
 
-
 export const createHotel = async (
   cityId: number,
   name: string,
   description: string,
-  hotelType:number,
+  hotelType: number,
   starRating: number,
   latitude: number,
   longitude: number
@@ -148,7 +147,10 @@ export const createHotel = async (
     longitude: longitude,
   };
   try {
-    const response = await axiosInstance.post(`/api/cities/${cityId}/hotels`, params);
+    const response = await axiosInstance.post(
+      `/api/cities/${cityId}/hotels`,
+      params
+    );
     return response.data;
   } catch (error) {
     let type = handleError(error);
@@ -162,6 +164,18 @@ export const addHotelImage = async (hotelId: number, file: File) => {
     const response = await axiosInstance.post(`/api/hotels/${hotelId}/photos`, {
       url: imageUrl,
     });
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+
+export const deleteHotel = async (hotelId: number, cityId: number) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/cities/${cityId}/hotels/${hotelId}`
+    );
     return response.data;
   } catch (error) {
     let type = handleError(error);
