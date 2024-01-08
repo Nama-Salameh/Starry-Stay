@@ -168,6 +168,13 @@ export default function AdminRooms() {
                 : parseInt(e.target.value as string, 10);
             setSelectedHotel(newSelectedHotel);
           }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                maxHeight: 200,
+              },
+            },
+          }}
           className={style.selectContainer}
         >
           <MenuItem disabled value="">
@@ -175,7 +182,7 @@ export default function AdminRooms() {
           </MenuItem>
           {hotelsInfo.map((hotel) => (
             <MenuItem key={hotel.id} value={hotel.id}>
-              Rooms for {hotel.name}
+              {hotel.name}
             </MenuItem>
           ))}
         </Select>
