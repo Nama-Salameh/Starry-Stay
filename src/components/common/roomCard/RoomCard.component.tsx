@@ -1,7 +1,7 @@
 import React, { useEffect, useState, startTransition } from "react";
 import { useTheme } from "@mui/system";
 import { useNavigate } from "react-router";
-import LoginModal from "../../modals/LoginModal.component";
+import LoginModal from "../../modals/loginModal/LoginModal.component";
 import localization from "../../../localizationConfig";
 import style from "./RoomCard.module.css";
 import { IconButton } from "@mui/material";

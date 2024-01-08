@@ -7,6 +7,8 @@ import {
 } from "../../services/rooms/Rooms.service";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
+import style from "./RoomDetails.module.css";
+import { CircularProgress } from "@mui/material";
 
 const errorMessages = {
   network: localization.networkError,
@@ -18,6 +20,7 @@ export default function RoomDetails() {
   const [roomInfo, setRoomInfo] = useState();
   const [roomPhotos, setRoomPhotos] = useState();
   const [RoomAmenities, setRoomAmenities] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchRoomData = async () => {
@@ -42,6 +45,8 @@ export default function RoomDetails() {
             notifyError(errorMessages.unknown);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -52,5 +57,15 @@ export default function RoomDetails() {
   console.log("rooms photos : ", roomPhotos);
   console.log("rooms amenities : ", RoomAmenities);
 
-  return <div>{localization.room}</div>;
+  return (
+    <div>
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
+        </div>
+      )}
+      {!isLoading && (<div>{localization.room}</div>)}
+    </div>
+  );
 }

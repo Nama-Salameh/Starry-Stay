@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import localization from "../../../localizationConfig";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import {
   addHotelImage,
@@ -84,6 +84,7 @@ export default function AdminHotels() {
     hotelId?: number;
   } | null>(null);
   const [citiesInfo, setCitiesInfo] = useState<City[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -120,6 +121,8 @@ export default function AdminHotels() {
             notifyError(errorMessages.citiesNotFound);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -313,67 +316,77 @@ export default function AdminHotels() {
   };
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <div className={style.pageHeader}>
-        <SearchBar
-          onSearch={handleDebouncedSearch}
-          selectedOption={selectedOption}
-          onOptionChange={setSelectedOption}
-          searchText={searchText}
-          onTextChange={setSearchText}
-        />
-        <div className={style.buttonContainer}>
-          <SmallButton
-            value={localization.createHotel}
-            buttonWidth={140}
-            onClick={handleCreateHotelClick}
-          />
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
         </div>
-      </div>
-      <TableWithNavigation
-        data={hotelsInfo}
-        itemsPerPage={5}
-        onDelete={({ id: hotelId }) => handleDeleteHotelClick(hotelId)}
-        onEdit={handleEditHotelClick}
-      />
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
-      <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
-        <HotelForm
-          onCancel={handleCancelEdit}
-          onSubmit={handleConfirmUpdate}
-          initialValues={{
-            name: hotelData ? hotelData.hotelName : "",
-            description: hotelData ? hotelData.description : "",
-            hoteltype: 0,
-            starrating: hotelData ? hotelData.starRating : 0,
-            latitude: hotelData ? hotelData.latitude : 0,
-            longitude: hotelData ? hotelData.longitude : 0,
-            cities: citiesInfo ? citiesInfo : null,
-            hotelId: hotelData ? hotelData.hotelId : undefined,
-          }}
-          isCreateMode={false}
-        />
-      </SlidingWindow>
-      <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
-        <HotelForm
-          onCancel={handleCancelCreate}
-          onSubmit={handleConfirmCreate}
-          initialValues={{
-            name: "",
-            description: "",
-            hoteltype: 0,
-            starrating: 0,
-            latitude: 0,
-            longitude: 0,
-            cities: citiesInfo ? citiesInfo : null,
-            cityId: null,
-          }}
-          isCreateMode={true}
-        />
-      </SlidingWindow>
+      )}
+      {!isLoading && (
+        <div>
+          <div className={style.pageHeader}>
+            <SearchBar
+              onSearch={handleDebouncedSearch}
+              selectedOption={selectedOption}
+              onOptionChange={setSelectedOption}
+              searchText={searchText}
+              onTextChange={setSearchText}
+            />
+            <div className={style.buttonContainer}>
+              <SmallButton
+                value={localization.createHotel}
+                buttonWidth={140}
+                onClick={handleCreateHotelClick}
+              />
+            </div>
+          </div>
+          <TableWithNavigation
+            data={hotelsInfo}
+            itemsPerPage={5}
+            onDelete={({ id: hotelId }) => handleDeleteHotelClick(hotelId)}
+            onEdit={handleEditHotelClick}
+          />
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          />
+          <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
+            <HotelForm
+              onCancel={handleCancelEdit}
+              onSubmit={handleConfirmUpdate}
+              initialValues={{
+                name: hotelData ? hotelData.hotelName : "",
+                description: hotelData ? hotelData.description : "",
+                hoteltype: 0,
+                starrating: hotelData ? hotelData.starRating : 0,
+                latitude: hotelData ? hotelData.latitude : 0,
+                longitude: hotelData ? hotelData.longitude : 0,
+                cities: citiesInfo ? citiesInfo : null,
+                hotelId: hotelData ? hotelData.hotelId : undefined,
+              }}
+              isCreateMode={false}
+            />
+          </SlidingWindow>
+          <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
+            <HotelForm
+              onCancel={handleCancelCreate}
+              onSubmit={handleConfirmCreate}
+              initialValues={{
+                name: "",
+                description: "",
+                hoteltype: 0,
+                starrating: 0,
+                latitude: 0,
+                longitude: 0,
+                cities: citiesInfo ? citiesInfo : null,
+                cityId: null,
+              }}
+              isCreateMode={true}
+            />
+          </SlidingWindow>
+        </div>
+      )}
     </Box>
   );
 }

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import localization from "../../../localizationConfig";
-import { Box, FormControl, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  FormControl,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
@@ -65,9 +71,9 @@ export default function AdminRooms() {
   const [hotelsInfo, setHotelsInfo] = useState<Hotel[]>([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [roomToDelete, setRoomToDelete] = useState<number | null>(null);
-
   const [selectedHotel, setSelectedHotel] = useState<number | null>(null);
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleDeleteRoomClick = async (id: any) => {
     setIsDeleteModalOpen(true);
@@ -121,6 +127,8 @@ export default function AdminRooms() {
             notifyError(errorMessages.hotelsNotFound);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchHotelsAndSetDefault();
@@ -158,54 +166,64 @@ export default function AdminRooms() {
   console.log(rooms);
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <div className={style.pageHeaderRooms}>
-        <Select
-          value={selectedHotel}
-          onChange={(e) => {
-            const newSelectedHotel =
-              e.target.value === ""
-                ? null
-                : parseInt(e.target.value as string, 10);
-            setSelectedHotel(newSelectedHotel);
-          }}
-          MenuProps={{
-            PaperProps: {
-              style: {
-                maxHeight: 200,
-              },
-            },
-          }}
-          className={style.selectContainer}
-        >
-          <MenuItem disabled value="">
-            <em>Hotels</em>
-          </MenuItem>
-          {hotelsInfo.map((hotel) => (
-            <MenuItem key={hotel.id} value={hotel.id}>
-              {hotel.name}
-            </MenuItem>
-          ))}
-        </Select>
-
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
+        </div>
+      )}
+      {!isLoading && (
         <div>
-          <SmallButton
-            value={localization.createRoom}
-            buttonWidth={140}
-            onClick={handleCreateRoomClick}
+          <div className={style.pageHeaderRooms}>
+            <Select
+              value={selectedHotel}
+              onChange={(e) => {
+                const newSelectedHotel =
+                  e.target.value === ""
+                    ? null
+                    : parseInt(e.target.value as string, 10);
+                setSelectedHotel(newSelectedHotel);
+              }}
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: 200,
+                  },
+                },
+              }}
+              className={style.selectContainer}
+            >
+              <MenuItem disabled value="">
+                <em>Hotels</em>
+              </MenuItem>
+              {hotelsInfo.map((hotel) => (
+                <MenuItem key={hotel.id} value={hotel.id}>
+                  {hotel.name}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <div>
+              <SmallButton
+                value={localization.createRoom}
+                buttonWidth={140}
+                onClick={handleCreateRoomClick}
+              />
+            </div>
+          </div>
+          <TableWithNavigation
+            data={rooms}
+            itemsPerPage={5}
+            onDelete={({ id: roomId }) => handleDeleteRoomClick(roomId)}
+            onEdit={handleEditRoomClick}
+          />
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCancelDelete}
           />
         </div>
-      </div>
-      <TableWithNavigation
-        data={rooms}
-        itemsPerPage={5}
-        onDelete={({ id: roomId }) => handleDeleteRoomClick(roomId)}
-        onEdit={handleEditRoomClick}
-      />
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
+      )}
     </Box>
   );
 }
