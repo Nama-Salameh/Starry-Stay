@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import localization from "../../../localizationConfig";
-import { Box } from "@mui/material";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
@@ -29,6 +29,7 @@ type Hotel = {
 
 type Room = {
   id: number;
+  roomNumber: number;
   roomPhotoUrl: string;
   roomType: string;
   capacityOfAdults: number;
@@ -42,9 +43,7 @@ type Room = {
   price: number;
   availability: boolean;
 };
-type RoomWithHotelId = Room & {
-  hotelId: number;
-};
+
 const errorMessages = {
   network: localization.networkError,
   unknown: localization.serverIssues,
@@ -64,30 +63,20 @@ const successMessages = {
 
 export default function AdminRooms() {
   const [hotelsInfo, setHotelsInfo] = useState<Hotel[]>([]);
-  const [RoomsInfoWithHotelId, setRoomsInfoWithHotelId] = useState<
-    RoomWithHotelId[]
-  >([]);
-  const [selectedOption, setSelectedOption] = useState<string>("name");
-  const [searchText, setSearchText] = useState<string>("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [roomToDelete, setRoomToDelete] = useState<{
-    id: number;
-    relatedId: number;
-  } | null>(null);
+  const [roomToDelete, setRoomToDelete] = useState<number | null>(null);
 
-  const handleDebouncedSearch = (searchText: string) => {};
+  const [selectedHotel, setSelectedHotel] = useState<number | null>(null);
+  const [rooms, setRooms] = useState<Room[]>([]);
 
-  const handleDeleteRoomClick = async (params: {
-    id: number;
-    relatedId: any;
-  }) => {
+  const handleDeleteRoomClick = async (id: any) => {
     setIsDeleteModalOpen(true);
-    setRoomToDelete(params);
+    setRoomToDelete(id);
   };
   const handleConfirmDelete = async () => {
-    if (roomToDelete !== null) {
+    if (roomToDelete !== null && typeof selectedHotel === "number") {
       try {
-        await deleteRoom(roomToDelete.id, roomToDelete.relatedId);
+        await deleteRoom(selectedHotel, roomToDelete);
         notifySuccess(successMessages.successDelete);
       } catch (errorType) {
         switch (errorType) {
@@ -115,29 +104,11 @@ export default function AdminRooms() {
   const handleEditRoomClick = () => {};
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchHotelsAndSetDefault = async () => {
       try {
         const hotels: Hotel[] = await getHotels();
         setHotelsInfo(hotels);
-
-        const roomsWithHotelId: RoomWithHotelId[] = [];
-
-        await Promise.all(
-          hotels.map(async (hotel: Hotel) => {
-            const hotelRooms = await getHotelRoomsByItsId(
-              hotel.id,
-              "2024-1-1",
-              "2024-1-30"
-            );
-            const roomsForHotelWithHotelId = hotelRooms.map((room: Room) => ({
-              ...room,
-              hotelId: hotel.id,
-            }));
-            roomsWithHotelId.push(...roomsForHotelWithHotelId);
-          })
-        );
-
-        setRoomsInfoWithHotelId(roomsWithHotelId);
+        setSelectedHotel(hotels.length > 0 ? hotels[0].id : null);
       } catch (errorType) {
         switch (errorType) {
           case ErrorTypes.Network:
@@ -152,21 +123,64 @@ export default function AdminRooms() {
         }
       }
     };
-    fetchData();
+    fetchHotelsAndSetDefault();
   }, []);
 
-  console.log("rooms with", RoomsInfoWithHotelId);
+  useEffect(() => {
+    const fetchRooms = async () => {
+      try {
+        if (selectedHotel !== null) {
+          const hotelRooms = (await getHotelRoomsByItsId(
+            selectedHotel,
+            "2024-1-1",
+            "2024-1-30"
+          )) as Room[];
+          setRooms(hotelRooms);
+        }
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+          case ErrorTypes.NotFound:
+            notifyError(errorMessages.roomsNotFound);
+            break;
+        }
+      }
+    };
+
+    fetchRooms();
+  }, [selectedHotel]);
+
+  console.log(rooms);
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <div className={style.pageHeader}>
-        <SearchBar
-          onSearch={handleDebouncedSearch}
-          selectedOption={selectedOption}
-          onOptionChange={setSelectedOption}
-          searchText={searchText}
-          onTextChange={setSearchText}
-        />
-        <div className={style.buttonContainer}>
+      <div className={style.pageHeaderRooms}>
+        <Select
+          value={selectedHotel}
+          onChange={(e) => {
+            const newSelectedHotel =
+              e.target.value === ""
+                ? null
+                : parseInt(e.target.value as string, 10);
+            setSelectedHotel(newSelectedHotel);
+          }}
+          className={style.selectContainer}
+        >
+          <MenuItem disabled value="">
+            <em>Hotels</em>
+          </MenuItem>
+          {hotelsInfo.map((hotel) => (
+            <MenuItem key={hotel.id} value={hotel.id}>
+              Rooms for {hotel.name}
+            </MenuItem>
+          ))}
+        </Select>
+
+        <div>
           <SmallButton
             value={localization.createRoom}
             buttonWidth={140}
@@ -175,11 +189,9 @@ export default function AdminRooms() {
         </div>
       </div>
       <TableWithNavigation
-        data={RoomsInfoWithHotelId}
+        data={rooms}
         itemsPerPage={5}
-        onDelete={({ id, relatedId }) =>
-          handleDeleteRoomClick({ id, relatedId })
-        }
+        onDelete={({ id: roomId }) => handleDeleteRoomClick(roomId)}
         onEdit={handleEditRoomClick}
       />
       <DeleteConfirmationModal
