@@ -5,7 +5,7 @@ import { getDecodedToken } from "../../utils/TokenUtils";
 import style from "./Checkout.module.css";
 import IToken from "../../interfaces/IToken.interface";
 import SmallButton from "../../components/common/Buttons/SmallButton.component";
-import { useMediaQuery } from "@mui/material";
+import { CircularProgress, useMediaQuery } from "@mui/material";
 import BookedRooms from "../../components/checkoutComponents/BookedRooms.component";
 import BigSubmitButton from "../../components/common/Buttons/BigSubmitButton.component";
 import { Select, MenuItem } from "@mui/material";
@@ -40,6 +40,7 @@ export default function Checkout() {
     setSelectedRooms(details);
   };
   const [isConfirmLoading, setIsConfirmLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   console.log("selected rooms : ", selectedRooms);
 
@@ -81,86 +82,97 @@ export default function Checkout() {
       }
     } finally {
       setIsConfirmLoading(false);
+      setIsLoading(false);
       resetForm();
     }
   };
   return (
     <div className={style.pageContainer}>
-      <BookedRooms onRoomDetailsChange={handleRoomDetailsChange} />
-      <div className={style.personalInfoContainer}>
-        <h2>
-          {userInfo.given_name} {userInfo.family_name}
-        </h2>
-        <Formik
-          onSubmit={handleFormSubmit}
-          initialValues={{ paymentMethod: "", specialRequests: "" }}
-          validationSchema={Yup.object({
-            paymentMethod: Yup.string().required(localization.required),
-          })}
-        >
-          {({ handleChange, values }) => (
-            <Form className={style.form}>
-              <div className={style.paymentSelectContainer}>
-                <Field
-                  as={Select}
-                  name="paymentMethod"
-                  id="paymentMethod"
-                  variant="outlined"
-                  displayEmpty
-                  className={style.paymentMethodSelector}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="" disabled>
-                    <em>{localization.paymentMethod}</em>
-                  </MenuItem>
-                  <MenuItem value={localization.cash}>
-                    {localization.cash}
-                  </MenuItem>
-                  <MenuItem value={localization.creditCard}>
-                    {localization.creditCard}
-                  </MenuItem>
-                </Field>
-                <ErrorMessage
-                  name="paymentMethod"
-                  component="div"
-                  className="error"
-                />
-              </div>
-              <TextInput
-                name="specialRequests"
-                type="text"
-                placeholder="Any Speical remarks or requests"
-                onChange={handleFormSubmit}
-                multiline
-                rows={5}
-                textFieldWidth={1}
-                className={style.specialRequsetField}
-              />
-              <div className={style.submitButton}>
-                {!isSmallScreen ? (
-                  !isConfirmLoading ? (
-                    <BigSubmitButton
-                      text={localization.confirm}
-                      disabled={!values.paymentMethod}
-                      buttonWidth={600}
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
+        </div>
+      )}
+      {!isLoading && (
+        <div>
+          <BookedRooms onRoomDetailsChange={handleRoomDetailsChange} />
+          <div className={style.personalInfoContainer}>
+            <h2>
+              {userInfo.given_name} {userInfo.family_name}
+            </h2>
+            <Formik
+              onSubmit={handleFormSubmit}
+              initialValues={{ paymentMethod: "", specialRequests: "" }}
+              validationSchema={Yup.object({
+                paymentMethod: Yup.string().required(localization.required),
+              })}
+            >
+              {({ handleChange, values }) => (
+                <Form className={style.form}>
+                  <div className={style.paymentSelectContainer}>
+                    <Field
+                      as={Select}
+                      name="paymentMethod"
+                      id="paymentMethod"
+                      variant="outlined"
+                      displayEmpty
+                      className={style.paymentMethodSelector}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="" disabled>
+                        <em>{localization.paymentMethod}</em>
+                      </MenuItem>
+                      <MenuItem value={localization.cash}>
+                        {localization.cash}
+                      </MenuItem>
+                      <MenuItem value={localization.creditCard}>
+                        {localization.creditCard}
+                      </MenuItem>
+                    </Field>
+                    <ErrorMessage
+                      name="paymentMethod"
+                      component="div"
+                      className="error"
                     />
-                  ) : (
-                    <BigButtonLoader buttonWidth={600} />
-                  )
-                ) : !isConfirmLoading ? (
-                  <BigSubmitButton
-                    text={localization.confirm}
-                    disabled={!values.paymentMethod}
-                    buttonWidth={270}
+                  </div>
+                  <TextInput
+                    name="specialRequests"
+                    type="text"
+                    placeholder="Any Speical remarks or requests"
+                    onChange={handleFormSubmit}
+                    multiline
+                    rows={5}
+                    textFieldWidth={1}
+                    className={style.specialRequsetField}
                   />
-                ) : (
-                  <BigButtonLoader buttonWidth={270} />
-                )}
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
+                  <div className={style.submitButton}>
+                    {!isSmallScreen ? (
+                      !isConfirmLoading ? (
+                        <BigSubmitButton
+                          text={localization.confirm}
+                          disabled={!values.paymentMethod}
+                          buttonWidth={600}
+                        />
+                      ) : (
+                        <BigButtonLoader buttonWidth={600} />
+                      )
+                    ) : !isConfirmLoading ? (
+                      <BigSubmitButton
+                        text={localization.confirm}
+                        disabled={!values.paymentMethod}
+                        buttonWidth={270}
+                      />
+                    ) : (
+                      <BigButtonLoader buttonWidth={270} />
+                    )}
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

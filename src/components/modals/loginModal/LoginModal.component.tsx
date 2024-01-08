@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Backdrop, Fade, Box } from "@mui/material";
-import Login from "../../pages/login/Login.page";
+import Login from "../../../pages/login/Login.page";
 
 interface LoginModalProps {
   isOpen: boolean;

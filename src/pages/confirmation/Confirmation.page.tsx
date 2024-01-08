@@ -21,6 +21,7 @@ import {
   Paper,
   Button,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import {
   handlePrintPdf,
@@ -48,6 +49,7 @@ export default function Confirmation() {
     roomType: "",
     totalCost: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchBookingInfo = async () => {
@@ -63,6 +65,8 @@ export default function Confirmation() {
             notifyError(errorMessages.unknown);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -78,113 +82,130 @@ export default function Confirmation() {
 
   return (
     <div className={style.pageContainer} id="confirmationPage">
-      <div className={style.bookingInfoContainer}>
-        <div className={style.fileeOptionsContainer}>
-          <IconButton
-            onClick={() => handlePrintPdf("confirmationPage")}
-            sx={{
-              backgroundColor: "var(--mui-palette-primary-main)",
-              fontSize: 20,
-              borderRadius: 5,
-              marginRight: 2,
-            }}
-            style={{
-              color: theme.palette.secondary.main,
-              backgroundColor: theme.palette.primary.main,
-              fontSize: 20,
-              borderRadius: 5,
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faFilePdf}
-              color="var(--mui-palette-secondary-main)"
-              fontSize="medium"
-            />
-          </IconButton>
-          <IconButton
-            onClick={() => handleSavePdf("confirmationPage")}
-            style={{
-              color: theme.palette.secondary.main,
-              backgroundColor: theme.palette.primary.main,
-              fontSize: 20,
-              borderRadius: 5,
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faFileDownload}
-              color="var(--mui-palette-secondary-main)"
-              fontSize="medium"
-            />
-          </IconButton>
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
         </div>
-        {bookingInfo.bookingStatus === "Confirmed" ? (
-          <div>
-            <div className={style.successConfirmContainer}>
-              <h3>{bookingInfo.customerName} Booking successed. </h3>
-              <p> We wish you having a nice travelling. </p>
-              <p>
-                And please remember, you can booking another rooms at any time.
-              </p>
-            </div>
-            <div className={style.confirmationInfo}>
-              <TableContainer
-                component={Paper}
-                className={style.bookedRoomsTable}
-              >
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className={style.boldTableCell}>
-                        Room Number
-                      </TableCell>
-                      <TableCell className={style.boldTableCell}>
-                        Room Type
-                      </TableCell>
-                      <TableCell className={style.boldTableCell}>
-                        Hotel Name
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    <TableRow key={bookingInfo.roomNumber}>
-                      <TableCell>{bookingInfo.roomNumber}</TableCell>
-                      <TableCell>{bookingInfo.roomType}</TableCell>
-                      <TableCell>{bookingInfo.hotelName}</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <div className={style.paymentInfo}>
+      )}
+      {!isLoading && (
+        <div className={style.bookingInfoContainer}>
+          <div className={style.fileeOptionsContainer}>
+            <IconButton
+              onClick={() => handlePrintPdf("confirmationPage")}
+              sx={{
+                backgroundColor: "var(--mui-palette-primary-main)",
+                fontSize: 20,
+                borderRadius: 5,
+                marginRight: 2,
+              }}
+              style={{
+                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.primary.main,
+                fontSize: 20,
+                borderRadius: 5,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFilePdf}
+                color="var(--mui-palette-secondary-main)"
+                fontSize="medium"
+              />
+            </IconButton>
+            <IconButton
+              onClick={() => handleSavePdf("confirmationPage")}
+              style={{
+                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.primary.main,
+                fontSize: 20,
+                borderRadius: 5,
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faFileDownload}
+                color="var(--mui-palette-secondary-main)"
+                fontSize="medium"
+              />
+            </IconButton>
+          </div>
+          {bookingInfo.bookingStatus === "Confirmed" ? (
+            <div>
+              <div className={style.successConfirmContainer}>
+                <h3>{bookingInfo.customerName} Booking successed. </h3>
+                <p> We wish you having a nice travelling. </p>
                 <p>
-                  <FontAwesomeIcon icon={faCreditCard} className={style.icon} />
-                  <b>Payment : </b> {bookingInfo.paymentMethod}
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faDollarSign} className={style.icon} />
-                  <b>Total Cost : </b> {bookingInfo.totalCost} <b>$</b>
-                </p>
-                <p>
-                  <FontAwesomeIcon
-                    icon={faCalendarDays}
-                    className={style.icon}
-                  />
-                  {formattedDate}
-                </p>
-                <p>
-                  <FontAwesomeIcon icon={faClock} className={style.icon} />
-                  {formattedTime}
+                  And please remember, you can booking another rooms at any
+                  time.
                 </p>
               </div>
+              <div className={style.confirmationInfo}>
+                <TableContainer
+                  component={Paper}
+                  className={style.bookedRoomsTable}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell className={style.boldTableCell}>
+                          Room Number
+                        </TableCell>
+                        <TableCell className={style.boldTableCell}>
+                          Room Type
+                        </TableCell>
+                        <TableCell className={style.boldTableCell}>
+                          Hotel Name
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      <TableRow key={bookingInfo.roomNumber}>
+                        <TableCell>{bookingInfo.roomNumber}</TableCell>
+                        <TableCell>{bookingInfo.roomType}</TableCell>
+                        <TableCell>{bookingInfo.hotelName}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <div className={style.paymentInfo}>
+                  <p>
+                    <FontAwesomeIcon
+                      icon={faCreditCard}
+                      className={style.icon}
+                    />
+                    <b>Payment : </b> {bookingInfo.paymentMethod}
+                  </p>
+                  <p>
+                    <FontAwesomeIcon
+                      icon={faDollarSign}
+                      className={style.icon}
+                    />
+                    <b>Total Cost : </b> {bookingInfo.totalCost} <b>$</b>
+                  </p>
+                  <p>
+                    <FontAwesomeIcon
+                      icon={faCalendarDays}
+                      className={style.icon}
+                    />
+                    {formattedDate}
+                  </p>
+                  <p>
+                    <FontAwesomeIcon icon={faClock} className={style.icon} />
+                    {formattedTime}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className={style.fialedConfirmContainer}>
-            <h3>{bookingInfo.customerName} Booking failed. </h3>
-            <p> Please try to booking again </p>
-            <p>We are sorry for this, and we will be happy for your booking.</p>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className={style.fialedConfirmContainer}>
+              <h3>{bookingInfo.customerName} Booking failed. </h3>
+              <p> Please try to booking again </p>
+              <p>
+                We are sorry for this, and we will be happy for your booking.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

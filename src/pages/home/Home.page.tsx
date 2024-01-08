@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import SearchBar from "../../components/bars/regularUser/searchBar/SearchBar.component";
@@ -13,12 +13,13 @@ export default function Home() {
   return (
     <div>
       <SearchBar />
-      <Box component="main" sx={{ p: 1.5, pt: 12 }}>
-        <Toolbar />
-        <FeaturedDealsHotelsContainer />
-        {isLoggedIn() && !isSessionExpired() && <RecenlyVisitedHotels />}
-        <TrendingDestinationsContainer />
-      </Box>
+      
+        <Box component="main" sx={{ p: 1.5, pt: 12 }}>
+          <Toolbar />
+          <FeaturedDealsHotelsContainer />
+          {isLoggedIn() && !isSessionExpired() && <RecenlyVisitedHotels />}
+          <TrendingDestinationsContainer />
+        </Box>
     </div>
   );
 }

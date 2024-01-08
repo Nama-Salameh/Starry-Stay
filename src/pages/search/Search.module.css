@@ -1,6 +1,14 @@
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
 .pageContainer {
-  overflow-y: hidden;
+  overflow-y: auto; /* Change from hidden to auto to enable scrolling */
   max-height: 100vh;
+  position: relative;
 }
 .filterSideBarContainer {
   width: 20%;
@@ -16,13 +24,12 @@
 .hotelsContainerWithoutSideBar {
   margin-top: 60px;
   flex-grow: 1;
-  max-height: 710px;
   overflow-y: auto;
   grid: 10px;
 }
 .hotelsContainer {
   margin-top: 5px;
-  max-height: 770px;
+  flex-grow: 1;
   overflow-y: auto;
 }
 .bigPageContainer {
@@ -36,13 +43,15 @@
 }
 .filtersContainer {
   position: fixed;
-  top: 155px;
-  z-index: 1000;
+  top: 140px !important;
+  padding:2% 0 ;
+  z-index: 1002;
   width: 98%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: var(--mui-palette-secondary-main);
 }
 .bigPageContainer {
   flex-grow: 1;
