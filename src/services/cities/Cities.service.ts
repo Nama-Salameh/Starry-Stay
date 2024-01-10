@@ -86,6 +86,25 @@ const addCityImage = async (cityId: number, file: File) => {
     throw type;
   }
 };
+
+const getCityHotels = async (cityId: number) => {
+  try {
+    const response = await axiosInstance.get(`/api/cities/${cityId}/hotels`);
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+const getCityPhotos = async (cityId: number) => {
+  try {
+    const response = await axiosInstance.get(`/api/cities/${cityId}/photos`);
+    return response.data;
+  } catch (error) {
+    let type = handleError(error);
+    throw type;
+  }
+};
 export {
   getCities,
   getFilteredCities,
@@ -94,4 +113,6 @@ export {
   getCityByItsId,
   createCity,
   addCityImage,
+  getCityHotels,
+  getCityPhotos,
 };

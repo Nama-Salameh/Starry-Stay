@@ -21,7 +21,7 @@ interface Row {
   id: number;
   [key: string]: any;
 }
-const TableWithNavigation: React.FC<{
+const TableWithPagination: React.FC<{
   data?: Row[];
   itemsPerPage: number;
   onDelete: (params: { id: number; relatedId?: number }) => void;
@@ -125,4 +125,4 @@ const TableWithNavigation: React.FC<{
   );
 };
 
-export default TableWithNavigation;
+export default TableWithPagination;

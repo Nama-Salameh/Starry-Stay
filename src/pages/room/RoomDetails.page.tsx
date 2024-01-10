@@ -1,38 +1,85 @@
 import React, { useState, useEffect } from "react";
 import localization from "../../localizationConfig";
 import {
-  getRoomAmenitiesByItsId,
   getRoomPhotosByItsId,
   getRoomInfoByItsId,
 } from "../../services/rooms/Rooms.service";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import style from "./RoomDetails.module.css";
-import { CircularProgress } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
+import { useParams } from "react-router-dom";
+import AmenitiesContainer from "../../components/common/amenitiesContainer/AmenitiesContainer.component";
+import Carousel from "../../components/common/carousel/Carousel.component";
+import GroupsIcon from "@mui/icons-material/Groups";
+import SmallButton from "../../components/common/Buttons/SmallButton.component";
+import { isLoggedIn, isSessionExpired } from "../../utils/TokenUtils";
+import { useCartContext } from "../../contexts/cartContext/CartContext.context";
+import LoginModal from "../../components/modals/loginModal/LoginModal.component";
+import { createBrowserHistory } from "history";
 
 const errorMessages = {
   network: localization.networkError,
   notFound: localization.roomNotFound,
   unknown: localization.serverIssues,
+  timeout: localization.roomDetailsTimedout,
+};
+
+type Room = {
+  roomId: number;
+  roomNumber: number;
+  roomPhotoUrl: string;
+  roomType: string;
+  capacityOfAdults: number;
+  capacityOfChildren: number;
+  roomAmenities: {
+    name: string;
+    description: string;
+  }[];
+  price: number;
+  availability: boolean;
+};
+type RoomGallery = {
+  id: number;
+  url: string;
+};
+
+const responsive = {
+  allScreens: {
+    breakpoint: { max: 4000, min: 0 },
+    items: 1,
+    centerPadding: 50,
+    custom: {
+      width: 1500,
+      height: 600,
+    },
+  },
 };
 
 export default function RoomDetails() {
-  const [roomInfo, setRoomInfo] = useState();
-  const [roomPhotos, setRoomPhotos] = useState();
-  const [RoomAmenities, setRoomAmenities] = useState();
+  const params = useParams();
+  const roomIdString = params.roomId;
+  const hotelIdString = params.hotelId;
+  const roomId: number = roomIdString ? parseInt(roomIdString, 10) : 0;
+  const hotelId: number = hotelIdString ? parseInt(hotelIdString, 10) : 0;
+  const [roomInfo, setRoomInfo] = useState<Room>();
+  const [roomPhotos, setRoomPhotos] = useState<RoomGallery[]>();
   const [isLoading, setIsLoading] = useState(true);
+  const { handleAddToCart } = useCartContext();
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const history = createBrowserHistory();
 
+  useEffect(() => {
+    document.title = localization.roomPageTitle;
+  })
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
-        const roomInfo = await getRoomInfoByItsId(1);
+        const roomInfo = await getRoomInfoByItsId(roomId);
         setRoomInfo(roomInfo || {});
 
-        const roomPhotos = await getRoomPhotosByItsId(1);
+        const roomPhotos = await getRoomPhotosByItsId(roomId);
         setRoomPhotos(roomPhotos || []);
-
-        const roomAmenities = await getRoomAmenitiesByItsId(1);
-        setRoomAmenities(roomAmenities || []);
       } catch (errorType) {
         switch (errorType) {
           case ErrorTypes.Network:
@@ -44,6 +91,9 @@ export default function RoomDetails() {
           case ErrorTypes.Unknown:
             notifyError(errorMessages.unknown);
             break;
+          case ErrorTypes.Timeout:
+            notifyError(errorMessages.timeout);
+            break;
         }
       } finally {
         setIsLoading(false);
@@ -53,19 +103,93 @@ export default function RoomDetails() {
     fetchRoomData();
   }, []);
 
-  console.log("rooms info : ", roomInfo);
-  console.log("rooms photos : ", roomPhotos);
-  console.log("rooms amenities : ", RoomAmenities);
+  const handleAddToCartButtonClick = (
+    roomNumber: number,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    console.log(hotelId, roomNumber);
+    if (isLoggedIn() && !isSessionExpired()) {
+      handleAddToCart(hotelId, roomNumber);
+    } else {
+      openLoginModal();
+    }
+  };
+  const openLoginModal = () => {
+    setLoginModalOpen(true);
+  };
 
+  const closeLoginModal = () => {
+    setLoginModalOpen(false);
+  };
+  const handleGoBack = () => {
+    history.back();
+  };
   return (
-    <div>
+    <div className={style.pageContainer}>
+      {!isLoading && (
+        <Button
+          variant="outlined"
+          className={style.backButton}
+          onClick={handleGoBack}
+        >
+          &lt; {localization.back}
+        </Button>
+      )}
       {isLoading && (
         <div className={style.loadingContainer}>
           <CircularProgress color="primary" />
-          <span>Loading...</span>
+          <span>{localization.loading}</span>
         </div>
       )}
-      {!isLoading && (<div>{localization.room}</div>)}
+      <div className={style.roomPageContainer}>
+        {!isLoading && (
+          <div className={style.roomInfoContainer}>
+            {roomPhotos && (
+              <div className={style.carosuselContainer}>
+                <Carousel responsive={responsive}>
+                  {roomPhotos?.map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.url}
+                      className={style.roomGalleryImage}
+                      alt={`Image ${roomInfo?.roomNumber}`}
+                    />
+                  ))}
+                </Carousel>
+              </div>
+            )}
+            <div className={style.roomDetailsContainer}>
+              <h3 className={style.roomNumber}>
+                {roomInfo?.roomNumber} {localization.room}
+              </h3>
+              <h4 className={style.roomType}>
+                {roomInfo?.roomType} {localization.room}
+              </h4>
+              <span className={style.capacityContainer}>
+                <GroupsIcon className={style.capacityIcon} />
+                {roomInfo?.capacityOfAdults} {localization.adults},
+                {roomInfo?.capacityOfChildren} {localization.children}.
+              </span>
+              <AmenitiesContainer amenities={roomInfo?.roomAmenities || []} />
+
+              {roomInfo?.availability && (
+                <div className={style.smallButtonContainer}>
+                  <SmallButton
+                    value={localization.addToCart}
+                    onClick={(e) => {
+                      handleAddToCartButtonClick(roomInfo?.roomNumber, e);
+                    }}
+                  ></SmallButton>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        {isLoginModalOpen && (
+          <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+        )}
+      </div>
     </div>
   );
 }

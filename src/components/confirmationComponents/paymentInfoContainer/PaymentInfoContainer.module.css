@@ -1,0 +1,36 @@
+.paymentInfo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 14px;
+  justify-content: space-between;
+  border: 1px solid;
+  height: 100%;
+}
+.paymentInfo > p {
+  margin-left: 5px;
+  width: 100%;
+}
+.paymentInfo p .icon {
+  margin-right: 10px;
+}
+
+@media (max-width: 800px) {
+  .paymentInfo {
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .paymentInfo > * {
+    margin: 6px 0;
+    width: 49%;
+  }
+  .paymentInfo p {
+    display: flex;
+    align-items: center;
+  }
+  .paymentInfo .icon {
+    margin-right: 10px;
+  }
+}

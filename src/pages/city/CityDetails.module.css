@@ -1,0 +1,52 @@
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.pageContainer {
+  width: 100%;
+  padding: 110px 20px;
+}
+.cityPageContainer {
+  width: 90%;
+  padding-top: 10x;
+  margin: 20px auto;
+}
+.backButton {
+  cursor: pointer;
+  text-transform: none;
+}
+.cityName {
+  margin: 0;
+  padding: 0;
+}
+.carosuselContainer {
+  width: 100% !important;
+}
+.cityGalleryImage {
+  height: 400px;
+  width: 90%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.cityHotels {
+  margin: 3% 0;
+}
+.cityHotels > * {
+  margin: 0;
+  padding: 0;
+}
+.hotelCardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .hotelCardContainer {
+    flex-direction: column;
+  }
+}

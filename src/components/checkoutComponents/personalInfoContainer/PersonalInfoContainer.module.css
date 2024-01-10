@@ -1,0 +1,17 @@
+.submitButton {
+  display: flex;
+  justify-content: center;
+}
+
+.paymentSelectContainer {
+  margin-bottom: 2%;
+}
+
+.specialRequsetField,
+.paymentMethodSelector {
+  background-color: var(--mui-palette-secondary-light);
+}
+
+.paymentMethodSelector {
+  min-width: 170px;
+}

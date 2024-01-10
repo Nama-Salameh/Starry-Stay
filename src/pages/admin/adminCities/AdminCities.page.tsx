@@ -23,6 +23,7 @@ import style from "../Admin.module.css";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 import CircularProgress from "@mui/material/CircularProgress";
+import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
 
 interface CityData {
   id?: number;
@@ -55,6 +56,9 @@ export default function AdminCities() {
   const [searchText, setSearchText] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    document.title = localization.adminCitiesPageTitle;
+  });
   useEffect(() => {
     const getCitiesInfo = async () => {
       try {
@@ -252,7 +256,7 @@ export default function AdminCities() {
               />
             </div>
           </div>
-          <TableWithNavigation
+          <TableWithPagination
             data={citiesInfo}
             itemsPerPage={5}
             onDelete={({ id: cityId }) => handleDeleteCityClick(cityId)}

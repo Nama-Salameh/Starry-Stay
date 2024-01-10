@@ -5,3 +5,92 @@
   justify-content: center;
   height: 100vh;
 }
+.pageContainer {
+  width: 100%;
+  padding: 110px 20px;
+}
+.roomPageContainer {
+  width: 90%;
+  padding-top: 12px;
+  position: relative;
+  display: flex !important;
+  margin: 0 auto;
+}
+.backButton {
+  cursor: pointer;
+  text-transform: none;
+}
+.roomInfoContainer {
+  width: 100%;
+  display: flex !important;
+}
+.carosuselContainer {
+  width: 48% !important;
+}
+.roomDetailsContainer {
+  position: relative;
+  margin-bottom: 5px;
+  width: 48% !important;
+  padding-left: 20px;
+  height: 300px;
+}
+.roomNumber {
+  margin: 0;
+  padding: 0;
+}
+.roomImage {
+  width: 120px;
+  height: 120px;
+  border-radius: 5px;
+  object-fit: cover;
+  margin-right: 12px;
+}
+.roomGalleryImage {
+  height: 400px;
+  width: 90%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+.capacityContainer {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  color: grey;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 40px;
+  font-size: 14px;
+}
+.capacityIcon {
+  margin-right: 4px;
+}
+.roomDetailsContainer > * {
+  margin: 3px 0;
+}
+
+.smallButtonContainer {
+  position: absolute;
+  bottom: 0px;
+  right: 6px;
+}
+@media (max-width: 1100px) {
+  .roomInfoContainer {
+    flex-direction: column !important;
+    gap: 60px !important;
+  }
+  .roomDetailsContainer {
+    width: 100% !important;
+    height: 350px;
+  }
+  .carosuselContainer {
+    width: 100% !important;
+  }
+
+  .smallButtonContainer {
+    position: absolute;
+    bottom: 0px;
+    right: 6px;
+  }
+}

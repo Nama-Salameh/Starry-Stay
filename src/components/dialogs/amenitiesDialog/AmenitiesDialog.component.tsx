@@ -12,11 +12,16 @@ import LocalBarIcon from "@mui/icons-material/LocalBar";
 import style from "./AmenitiesDialog.module.css";
 import CloseIcon from "@mui/icons-material/Close";
 import { Divider, IconButton } from "@mui/material";
+import HotTubIcon from "@mui/icons-material/HotTub";
+import WaterIcon from "@mui/icons-material/Water";
+import TvIcon from "@mui/icons-material/Tv";
+import BedIcon from "@mui/icons-material/Bed";
+import RoomServiceIcon from "@mui/icons-material/RoomService";
 
 interface AmenityDialogProps {
   open: boolean;
   handleClose: () => void;
-  amenities: { name: string; description: string }[];
+  amenities: { id?: number; name: string; description: string }[];
 }
 
 const amenityIcons: Record<string, JSX.Element | undefined> = {
@@ -25,6 +30,11 @@ const amenityIcons: Record<string, JSX.Element | undefined> = {
   "Mini Bar": <LocalBarIcon className={style.icon} />,
   "Swimming Pool": <PoolIcon className={style.icon} />,
   "Fitness Center": <FitnessCenterIcon className={style.icon} />,
+  "Jacuzzi": <HotTubIcon className={style.icon} />,
+  "Ocean View": <WaterIcon className={style.icon} />,
+  "TV": <TvIcon className={style.icon} />,
+  "King Size Bed": <BedIcon className={style.icon} />,
+  "Room Service": <RoomServiceIcon className={style.icon} />,
 };
 
 const AmenityDialog: React.FC<AmenityDialogProps> = ({

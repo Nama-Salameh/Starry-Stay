@@ -11,6 +11,7 @@ import { isLoggedIn, isSessionExpired } from "../utils/TokenUtils";
 import RoomDetails from "../pages/room/RoomDetails.page";
 import { CartProvider } from "../contexts/cartContext/CartContext.context";
 import SideBar from "../components/bars/admin/SideBar/SideBar.component";
+import CityDetails from "../pages/city/CityDetails.page";
 
 const Login = lazy(() => import("../pages/login/Login.page"));
 const Home = lazy(() => import("../pages/home/Home.page"));
@@ -65,13 +66,20 @@ export default function AppRoutes() {
                     <Route path="*" element={<PageNotFound />}></Route>
                     <Route path="/search" element={<Search />}></Route>
                     <Route path="/hotel/:hotelId" element={<Hotel />}></Route>
-                    <Route path="/room" element={<RoomDetails />}></Route>
+                    <Route
+                      path="/city/:cityId"
+                      element={<CityDetails />}
+                    ></Route>
+                    <Route
+                      path="/hotel/:hotelId/room/:roomId"
+                      element={<RoomDetails />}
+                    />
                     <Route element={<ProtectedRoute />}>
                       <Route path="/checkout" element={<Checkout />}></Route>
                     </Route>
                     <Route element={<ProtectedRoute />}>
                       <Route
-                        path="/confirmation"
+                        path="/confirmation/:confirmationNumber"
                         element={<Confirmation />}
                       ></Route>
                     </Route>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, startTransition } from "react";
+import React, { useState, startTransition } from "react";
 import { useTheme } from "@mui/system";
 import { useNavigate } from "react-router";
 import LoginModal from "../../modals/loginModal/LoginModal.component";
@@ -7,13 +7,10 @@ import style from "./RoomCard.module.css";
 import { IconButton } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import GroupsIcon from "@mui/icons-material/Groups";
-import {
-  RemoveAllRoomsFromCart,
-  addRoomToCart,
-  getAllRoomsFromCart,
-} from "../../../utils/storageUtils/cartStorage/CartStorage";
+import { removeRoomFromCart } from "../../../utils/storageUtils/cartStorage/CartStorage";
 import { useCartContext } from "../../../contexts/cartContext/CartContext.context";
 import { isLoggedIn, isSessionExpired } from "../../../utils/TokenUtils";
+import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 
 type Room = {
   roomId: number;
@@ -27,24 +24,28 @@ type Room = {
   roomAmenities: {
     name: string;
     description: string;
-  };
+  }[];
 };
 
 export default function RoomCard({
   room,
   hotelId,
+  isBooked = false,
 }: {
   room: Room;
   hotelId: number;
+  isBooked?: boolean;
 }) {
   const navigate = useNavigate();
   const theme = useTheme();
-  const { cartCount, updateCartCount } = useCartContext();
+  const { cartCount, handleAddToCart, updateCartCount } = useCartContext();
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   const handleRoomClick = (roomNumber: number) => {
     if (!isLoginModalOpen) {
-      navigate(`/room/${roomNumber}`);
+      startTransition(() => {
+        navigate(`/hotel/${hotelId}/room/${roomNumber}`);
+      });
     }
   };
   const handleAddToCartButtonClick = (
@@ -54,12 +55,20 @@ export default function RoomCard({
     e.stopPropagation();
 
     if (isLoggedIn() && !isSessionExpired()) {
-      if (addRoomToCart({ hotelId, roomNumber }))
-        updateCartCount(cartCount + 1);
+      handleAddToCart(hotelId, roomNumber);
     } else {
       openLoginModal();
     }
-    console.log("room cart", getAllRoomsFromCart());
+  };
+  const handleDeleteClick = (
+    hotelId: number,
+    roomNumber: number,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+
+    removeRoomFromCart({ hotelId, roomNumber });
+    updateCartCount(cartCount - 1);
   };
   const openLoginModal = () => {
     setLoginModalOpen(true);
@@ -86,17 +95,21 @@ export default function RoomCard({
         </div>
       </div>
       <div className={style.roomInfoContainer}>
-        <h3 className={style.roomNumber}>{room.roomNumber} room</h3>
-        <p className={style.roomType}>{room.roomType} room</p>
+        <h3 className={style.roomNumber}>
+          {room.roomNumber} {localization.room}
+        </h3>
+        <p className={style.roomType}>
+          {room.roomType} {localization.room}
+        </p>
         <div className={style.capacityContainer}>
           <GroupsIcon className={style.capacityIcon} />
           <p>
-            {room.capacityOfAdults} Adults,
-            {room.capacityOfChildren} Children.
+            {room.capacityOfAdults} {localization.adults},
+            {room.capacityOfChildren} {localization.children}.
           </p>
         </div>
 
-        {room.availability && (
+        {room.availability && !isBooked && (
           <div className={style.smallButtonContainer}>
             <IconButton
               sx={{
@@ -109,6 +122,23 @@ export default function RoomCard({
               className={style.addToCartButton}
             >
               <AddShoppingCartIcon className={style.addToCartIcon} />
+            </IconButton>
+          </div>
+        )}
+        {isBooked && (
+          <div className={style.smallButtonContainer}>
+            <IconButton
+              sx={{
+                color: theme.palette.secondary.main,
+                backgroundColor: theme.palette.primary.main,
+                borderRadius: 2,
+              }}
+              onClick={(e) => {
+                handleDeleteClick(hotelId, room.roomNumber, e);
+              }}
+              className={style.deleteFromCartButton}
+            >
+              <RemoveShoppingCartIcon className={style.deleteFromCartIcon} />
             </IconButton>
           </div>
         )}
