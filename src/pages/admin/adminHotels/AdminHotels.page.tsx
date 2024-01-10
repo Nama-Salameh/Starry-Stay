@@ -23,6 +23,7 @@ import style from "../Admin.module.css";
 import { getCities } from "../../../services/cities/Cities.service";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
+import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
 
 type Hotel = {
   hotelName: string;
@@ -85,6 +86,10 @@ export default function AdminHotels() {
   } | null>(null);
   const [citiesInfo, setCitiesInfo] = useState<City[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    document.title = localization.adminHotelsPageTitle;
+  });
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -340,7 +345,7 @@ export default function AdminHotels() {
               />
             </div>
           </div>
-          <TableWithNavigation
+          <TableWithPagination
             data={hotelsInfo}
             itemsPerPage={5}
             onDelete={({ id: hotelId }) => handleDeleteHotelClick(hotelId)}

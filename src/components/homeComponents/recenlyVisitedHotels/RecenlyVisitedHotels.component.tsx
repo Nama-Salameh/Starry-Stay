@@ -1,56 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { getRecentlyVisitedHotels } from "../../../services/home/home.service";
-import { getDecodedToken } from "../../../utils/TokenUtils";
+import React, { startTransition } from "react";
 import Carousel from "../../common/carousel/Carousel.component";
-import IToken from "../../../interfaces/IToken.interface";
-import { Card } from "@mui/material";
-import { Rating } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../HomeComponents.module.css";
 import localization from "../../../localizationConfig";
 import slugify from "slugify";
-import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
-import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+import HotelHomeCard from "../../common/homePageCard/HomePageCard.component";
+import { useNavigate } from "react-router-dom";
 
-const errorMessages = {
-  network: localization.networkError,
-  notFound: localization.recentlyVisitedHotelsNotFound,
-  unknown: localization.serverIssues,
+type recentlyVisitedHotel = {
+  hotelId: number;
+  hotelName: string;
+  cityName: string;
+  thumbnailUrl: string;
+  starRating: number;
+  visitDate:Date;
 };
 
-export default function RecenlyVisitedHotels() {
-  const [recentlyVisitedHotels, setRecentlyVisitedHotels] = useState<any[]>([]);
-  const decodedToken: IToken | null = getDecodedToken() as IToken | null;
-  const userIdString = decodedToken?.user_id || "";
-  const userId = parseInt(userIdString, 10);
+export default function RecenlyVisitedHotels({
+  recentlyVisitedHotels,
+}: {
+  recentlyVisitedHotels: recentlyVisitedHotel[];
+}) {
+  const navigate = useNavigate();
   const toSlug = (str: string) => slugify(str, { lower: true });
 
-  useEffect(() => {
-    const fetchRecentlyVisitedHotelsInfo = async () => {
-      try {
-        const hotelsInfo = await getRecentlyVisitedHotels(userId);
-        setRecentlyVisitedHotels(hotelsInfo || []);
-      } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
-      }
-    };
-
-    fetchRecentlyVisitedHotelsInfo();
-  }, []);
-
-  console.log("recently : ", recentlyVisitedHotels);
-
+  const handleHotelClick = (hotelId: number) => {
+    startTransition(() => {
+      navigate(`/hotel/${hotelId}`);
+    });
+  };
   return (
     <div
       className={style.container}
@@ -58,21 +35,18 @@ export default function RecenlyVisitedHotels() {
     >
       <h2>{localization.recentlyVisitedHotels}</h2>
       <Carousel>
-        {recentlyVisitedHotels.map((hotel) => (
-          <Card className={style.itemCard} key={hotel.hotelId}>
-            <img
-              src={hotel.thumbnailUrl}
-              className={style.roomImage}
-              alt={hotel.hotelName}
-            />
-            <div className={style.cardInfo}>
-              <h3>{hotel.hotelName}</h3>
-              <Rating value={hotel.starRating} readOnly />
-              <p>
-                <FontAwesomeIcon icon={faLocationDot} /> {hotel.cityName}
-              </p>
-            </div>
-          </Card>
+        {recentlyVisitedHotels.map((hotel: any) => (
+          <HotelHomeCard
+            info={{
+              id: hotel.hotelId,
+              imageUrl: hotel.thumbnailUrl,
+              name: hotel.hotelName,
+              cityName: hotel.cityName,
+              starRating: hotel.starRating,
+              visitDate: hotel.visitDate,
+            }}
+            onClick={handleHotelClick}
+          />
         ))}
       </Carousel>
     </div>

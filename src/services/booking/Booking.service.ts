@@ -24,8 +24,6 @@ const postBooking = async (
   };
   try {
     const response = await axiosInstance.post(POST_BOOKING_URL, params);
-    console.log("correctly post");
-    console.log(response);
     return response.data;
   } catch (error) {
     let type = handleError(error);

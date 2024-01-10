@@ -1,4 +1,4 @@
-.loadingContainer{
+.loadingContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,12 +6,22 @@
   height: 100vh;
 }
 .pageContainer {
-  padding: 20px 10px;
-  padding-top: 120px;
+  padding: 110px 20px;
+  width: 100%;
+}
+.checkoutPageContainer {
+  padding-top: 12px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.backButton {
+  cursor: pointer;
+  text-transform: none;
+}
+.bookedRoomsContainer {
+  display: flex;
 }
 .personalInfoContainer {
   border: 1px solid var(--mui-palette-secondary-dark);
@@ -21,17 +31,11 @@
   width: 100%;
   margin: 3% 0;
 }
-.paymentSelectContainer {
-  margin-bottom: 2%;
+.totalCost{
+  text-align: end;
 }
-.specialRequsetField,
-.paymentMethodSelector {
-  background-color: var(--mui-palette-secondary-light);
-}
-.paymentMethodSelector {
-  min-width: 170px;
-}
-.submitButton {
-  display: flex;
-  justify-content: center;
+@media (max-width: 800px) {
+  .bookedRoomsContainer {
+    flex-direction: column;
+  }
 }

@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import localization from "../../../localizationConfig";
-import {
-  Box,
-  CircularProgress,
-  FormControl,
-  MenuItem,
-  Select,
-} from "@mui/material";
-import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
+import { Box, CircularProgress, MenuItem, Select } from "@mui/material";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
-import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import style from "../Admin.module.css";
 import {
   notifyError,
@@ -22,6 +14,7 @@ import {
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { deleteRoom } from "../../../services/rooms/Rooms.service";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
+import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
 
 type Hotel = {
   id: number;
@@ -75,6 +68,10 @@ export default function AdminRooms() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    document.title = localization.adminRoomsPageTitle;
+  });
+  
   const handleDeleteRoomClick = async (id: any) => {
     setIsDeleteModalOpen(true);
     setRoomToDelete(id);
@@ -211,7 +208,7 @@ export default function AdminRooms() {
               />
             </div>
           </div>
-          <TableWithNavigation
+          <TableWithPagination
             data={rooms}
             itemsPerPage={5}
             onDelete={({ id: roomId }) => handleDeleteRoomClick(roomId)}

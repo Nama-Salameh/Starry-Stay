@@ -7,7 +7,7 @@ import TextInput from "../../components/common/textField/TextField.component";
 import BigSubmitButton from "../../components/common/Buttons/BigSubmitButton.component";
 import { login } from "../../services/users/UserRegistration.service";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormHelperText } from "@mui/material";
 import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
 import { getDecodedToken } from "../../utils/TokenUtils";
@@ -21,6 +21,7 @@ const errorMessages = {
   network: localization.networkError,
   notFound: localization.userNotFoundError,
   unknown: localization.serverIssues,
+  timeout: localization.loginTimedout,
 };
 
 export default function Login() {
@@ -30,6 +31,9 @@ export default function Login() {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const decodedToken: IToken | null = getDecodedToken() as IToken | null;
 
+  useEffect(() => {
+    document.title = localization.loginPageTitle;
+  })
   const handleLogin = async (values: {
     username: string;
     password: string;
@@ -40,7 +44,7 @@ export default function Login() {
       if (decodedToken?.userType === "Admin") navigate("/Admin");
       else navigate("/home");
     } catch (errorType) {
-      console.log("error type : " ,errorType)
+      console.log("error type : ", errorType);
       switch (errorType) {
         case ErrorTypes.Unauthorized:
           setValidationMessage(errorMessages.unauthorized);
@@ -53,6 +57,9 @@ export default function Login() {
           break;
         case ErrorTypes.Unknown:
           notifyError(errorMessages.unknown);
+          break;
+        case ErrorTypes.Timeout:
+          notifyError(errorMessages.timeout);
           break;
       }
     } finally {

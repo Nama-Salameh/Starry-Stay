@@ -6,12 +6,20 @@
   height: 100vh;
 }
 .pageContainer {
-  padding: 120px 40px;
-  width: 80%;
+  padding: 110px 30px;
+  width: 100%;
+}
+.ConfirmationPageContainer {
+  width: 90%;
+  padding-top: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
+}
+.backButton {
+  cursor: pointer;
+  text-transform: none;
 }
 .bookingInfoContainer {
   width: 100%;
@@ -37,50 +45,29 @@
   background-color: #ebd7d7;
   border: 1px solid rgb(159, 30, 30);
 }
-.paymentInfo {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  margin: 2px 0;
-  font-size: 14px;
-  justify-content: space-between;
-  border: 1px solid;
-}
-.paymentInfo > p {
-  margin-left: 5px;
-}
-.paymentInfo p .icon {
-  margin-right: 10px;
-}
 .confirmDate {
   text-align: right;
-}
-.bookedRoomsTable {
-  text-align: center;
-  width: 60%;
-}
-.boldTableCell {
-  font-weight: bold !important;
 }
 .confirmationInfo {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
-@media (max-width: 800px) {
-  .paymentInfo {
-    margin: 10px 0;
-    flex-wrap: wrap;
-    justify-content: space-between;
+.paymentInfoContainer {
+  width: 40%;
+}
+.bookedRoomsContainer {
+  width: 55%;
+}
+@media (max-width: 550px) {
+  .confirmationInfo {
+    flex-direction: column;
+    gap: 15px;
   }
-  .paymentInfo > * {
-    margin: 6px 0;
-    width: 49%;
+  .paymentInfoContainer {
+    width: 100%;
   }
-  .paymentInfo p {
-    display: flex;
-    align-items: center;
-  }
-  .paymentInfo .icon {
-    margin-right: 10px;
+  .bookedRoomsContainer {
+    width: 100%;
   }
 }

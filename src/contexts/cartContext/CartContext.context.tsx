@@ -1,5 +1,5 @@
 import React, { createContext, useContext, ReactNode, useState } from "react";
-import { getNumberOfRooms } from "../../utils/storageUtils/cartStorage/CartStorage";
+import { addRoomToCart, getNumberOfRooms } from "../../utils/storageUtils/cartStorage/CartStorage";
 
 const CartContext = createContext<any>(null);
 
@@ -12,8 +12,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({
   const updateCartCount = (newCount: number) => {
     setCartCount(newCount);
   };
+
+  const handleAddToCart = (hotelId: number, roomNumber: number) => {
+    if (addRoomToCart({ hotelId, roomNumber })) {
+      updateCartCount(cartCount + 1);
+    }
+  };
   return (
-    <CartContext.Provider value={{ cartCount, updateCartCount }}>
+    <CartContext.Provider value={{ cartCount, updateCartCount, handleAddToCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,0 +1,59 @@
+.hotelContainer {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-bottom: 3%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+  cursor: pointer;
+  width: 48%;
+  margin: 2% 0;
+  box-sizing: border-box;
+  position: relative;
+  padding: 0;
+}
+.hotelImage {
+  width: 40%;
+  aspect-ratio: 16 / 16;
+  margin: 0;
+  padding: 0;
+  margin-right: 4%;
+  border-radius: 5px;
+  object-fit: cover;
+  height: 100%;
+}
+
+.hotelInfoContainer {
+  padding: 7px;
+  padding-left: 5px;
+  padding-right: 10px;
+  flex: 1;
+}
+.hotelInfoContainer > * {
+  margin: 4px !important;
+  padding: 0;
+}
+.hotelInfoContainer h2 {
+  margin-left: 0;
+}
+.hotelLocation {
+  color: grey;
+}
+.hotelRating {
+  margin: 0 !important;
+}
+.amenitiesContainer > * {
+  padding: 0;
+  margin: 0 !important;
+}
+@media (max-width: 700px) {
+  .hotelContainer {
+    width: 100%;
+  }
+}
+@media (max-width: 400px) {
+  .hotelInfoContainer > * {
+    margin: 1px !important;
+  }
+}

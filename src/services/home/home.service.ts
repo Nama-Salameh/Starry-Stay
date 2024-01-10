@@ -2,7 +2,7 @@ import { axiosInstance, handleError } from "../ApisConfig";
 const GET_FEATURED_DEALS_HOTELS = "api/home/featured-deals";
 const GET_TRENDING_DESTINATION_HOTELS = "api/home/destinations/trending";
 
-export const getFeaturedDealsHotels = async () => {
+export const getFeaturedDeals = async () => {
   try {
     const response = await axiosInstance.get(GET_FEATURED_DEALS_HOTELS);
     return response.data;

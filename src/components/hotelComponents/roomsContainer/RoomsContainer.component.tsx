@@ -16,7 +16,7 @@ type Room = {
   roomAmenities: {
     name: string;
     description: string;
-  };
+  }[];
 };
 
 export default function RoomContainer({
