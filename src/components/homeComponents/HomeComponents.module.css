@@ -4,35 +4,7 @@
 h2 {
   margin-left: 10px;
 }
-.itemCard {
-  width: 90%;
-  border: 1px solid var(--mui-palette-secondary-dark);
-  box-shadow: 0 0 15px 0px var(--mui-palette-secondary-dark);
-  border-radius: 5px;
-  position: relative;
-  margin: 0 auto;
-  padding-bottom: 2px;
-}
 
-.roomImage {
-  width: 100%;
-  aspect-ratio: 16 / 15;
-  border-radius: 5px;
-  object-fit: cover;
-  transition: transform 0.3s ease-in-out;
-}
-
-.roomImage:hover {
-  transform: scale(1.1);
-}
-.cardInfo {
-  padding: 0 8px 4px 8px;
-  margin: 0;
-}
-.cardInfo > * {
-  margin-top: 3px;
-  margin-bottom: 3px;
-}
 .discountPercentage {
   position: absolute;
   top: 3px;

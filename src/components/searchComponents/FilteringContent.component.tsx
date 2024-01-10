@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import StarRating from "./starRating/StarRating.component";
 import CheckboxFiltering from "./checkbox/CheckboxFiltering.component";
-import { Divider } from "@mui/material";
+import { CircularProgress, Divider } from "@mui/material";
 import { getAmenitiesNames } from "../../services/aminities/Aminities.service";
 import localization from "../../localizationConfig";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
+import style from "./FilteringContent.module.css";
 
 const errorMessages = {
   network: localization.networkError,
@@ -15,6 +16,7 @@ const errorMessages = {
 
 export default function FilteringContent() {
   const [amenitiesNames, setAmenitiesNames] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +35,8 @@ export default function FilteringContent() {
             notifyError(errorMessages.unknown);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -41,15 +45,25 @@ export default function FilteringContent() {
 
   return (
     <div>
-      <h2>{localization.filterBy}</h2>
-      <Divider />
-      <StarRating />
-      <Divider />
-      <CheckboxFiltering
-        items={amenitiesNames}
-        title={localization.roomAmenities}
-      />
-      <Divider />
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
+        </div>
+      )}
+      {!isLoading && (
+        <div>
+          <h2>{localization.filterBy}</h2>
+          <Divider />
+          <StarRating />
+          <Divider />
+          <CheckboxFiltering
+            items={amenitiesNames}
+            title={localization.roomAmenities}
+          />
+          <Divider />
+        </div>
+      )}
     </div>
   );
 }

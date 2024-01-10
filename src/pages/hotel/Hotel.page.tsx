@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import localization from "../../localizationConfig";
 import {
   getHotelInfoByItsId,
@@ -9,16 +9,16 @@ import {
   getHotelReviewsByItsId,
 } from "../../services/hotels/Hotels.service";
 import { useParams } from "react-router-dom";
-import { Button, Rating } from "@mui/material";
+import { Button, CircularProgress, Rating } from "@mui/material";
 import style from "./Hotel.module.css";
 import Map from "../../components/hotelComponents/mapContainer/MapContainer.component";
-import HotelAmenitiesContainer from "../../components/hotelComponents/amenitiesContainer/HotelAmenitiesContainer.component";
-import SmallButtonLoader from "../../components/common/loaders/SmallButtonLoaders.component";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import ReviewsContainer from "../../components/hotelComponents/reviewsContainer/ReviewsContainer.component";
 import Carousel from "../../components/common/carousel/Carousel.component";
 import RoomContainer from "../../components/hotelComponents/roomsContainer/RoomsContainer.component";
+import AmenitiesContainer from "../../components/common/amenitiesContainer/AmenitiesContainer.component";
+import { createBrowserHistory } from "history";
 
 type HotelInfo = {
   hotelName: string;
@@ -46,7 +46,7 @@ type Room = {
   roomAmenities: {
     name: string;
     description: string;
-  };
+  }[];
 };
 
 const errorMessages = {
@@ -129,13 +129,18 @@ export default function Hotel() {
     }[]
   >([]);
   const [isMapVisible, setIsMapVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const history = createBrowserHistory();
 
+  useEffect(() => {
+    document.title = localization.hotelPageTitle;
+  });
   const toggleMapVisibility = () => {
     setIsMapVisible((prevVisibility) => !prevVisibility);
   };
 
   useEffect(() => {
-    const fetchHotelsData = async () => {
+    const fetchHotelData = async () => {
       try {
         const hotelInfo = await getHotelInfoByItsId(hotelId);
         setHotelInfo(hotelInfo);
@@ -173,86 +178,110 @@ export default function Hotel() {
             notifyError(errorMessages.unknown);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchHotelsData();
+    fetchHotelData();
   }, []);
 
-  console.log("hotel Info is :", hotelInfo);
-  console.log("hotel Gallery is :", hotelGallery);
-  console.log("hotel amenities is : ", hotelAmenities);
-  console.log("hotel Rooms is :", hotelRooms);
-  console.log("hotel reviews", hotelReviews);
-
   const sanitizedRating = Math.max(0, Math.min(5, hotelInfo?.starRating || 0));
-
+  const handleGoBack = () => {
+    history.back();
+  };
   return (
-    <div
-      className={`${style.hotelPageContainer} ${
-        isMapVisible ? "" : style.mapHidden
-      }`}
-    >
-      {!isMapVisible && (
-        <div className={style.mapButtonContainer}>
+    <div className={style.pageContainer}>
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>{localization.loading}</span>
+        </div>
+      )}
+      {!isLoading && (
+        <div className={style.buttonsContainer}>
           <Button
-            className={style.toggleMapButton}
-            onClick={toggleMapVisibility}
             variant="outlined"
+            className={style.backButton}
+            onClick={handleGoBack}
           >
-            Show map
+            &lt; {localization.back}
           </Button>
+          {!isMapVisible && (
+            <div className={style.mapButtonContainer}>
+              <Button
+                className={style.toggleMapButton}
+                onClick={toggleMapVisibility}
+                variant="outlined"
+              >
+                {localization.showMap}
+              </Button>
+            </div>
+          )}
         </div>
       )}
-      {isMapVisible && (
-        <Map
-          latitude={hotelInfo?.latitude || 0}
-          longitude={hotelInfo?.longitude || 0}
-          onClose={toggleMapVisibility}
-        />
-      )}
-      <div className={style.hotelInfoContainer}>
-        <img
-          src={hotelInfo?.imageUrl}
-          alt={hotelInfo?.hotelName}
-          className={style.hotelImage}
-        />
-        <div className={style.hoteInfo}>
-          <h2 className={style.hotelName}>{hotelInfo?.hotelName}</h2>
-          <Rating
-            name="simple-controlled"
-            value={sanitizedRating}
-            readOnly
-            size="medium"
-          />
-          <h4>{hotelInfo?.location}</h4>
-        </div>
-      </div>
-      <h3>Hotel details</h3>
-      <div className={style.hotelDetails}>
-        <Carousel
-          responsive={
-            !isMapVisible ? responsiveHotelImage : responsiveHotelImageMap
-          }
-        >
-          {hotelGallery.map((image, index) => (
-            <img
-              key={index}
-              src={image.url}
-              className={style.hotelGalleryImage}
-              alt={`Image ${index + 1}`}
-            />
-          ))}
-        </Carousel>
+      <div
+        className={`${style.hotelPageContainer} ${
+          isMapVisible ? "" : style.mapHidden
+        }`}
+      >
+        {!isLoading && (
+          <div>
+            {isMapVisible && (
+              <Map
+                latitude={hotelInfo?.latitude || 0}
+                longitude={hotelInfo?.longitude || 0}
+                onClose={toggleMapVisibility}
+              />
+            )}
+            <div className={style.hotelInfoContainer}>
+              <img
+                src={hotelInfo?.imageUrl}
+                alt={hotelInfo?.hotelName}
+                className={style.hotelImage}
+              />
+              <div className={style.hoteInfo}>
+                <h2 className={style.hotelName}>{hotelInfo?.hotelName}</h2>
+                <Rating
+                  name="simple-controlled"
+                  value={sanitizedRating}
+                  readOnly
+                  size="medium"
+                />
+                <h4>{hotelInfo?.location}</h4>
+              </div>
+            </div>
+            <h3>{localization.hotelDetails}</h3>
+            <div className={style.hotelDetails}>
+              <Carousel
+                responsive={
+                  !isMapVisible ? responsiveHotelImage : responsiveHotelImageMap
+                }
+              >
+                {hotelGallery.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image.url}
+                    className={style.hotelGalleryImage}
+                    alt={`Image ${index + 1}`}
+                  />
+                ))}
+              </Carousel>
 
-        <p>{hotelInfo?.description}</p>
+              <p>{hotelInfo?.description}</p>
 
-        <HotelAmenitiesContainer hotelId={hotelId} />
-        <h2>{localization.Rooms}</h2>
-        <RoomContainer hotelRooms={hotelRooms} hotelId={hotelId} />
-        <h2>{localization.availableRooms}</h2>
-        <RoomContainer hotelRooms={hotelAvailableRooms} hotelId={hotelId} />
-        <ReviewsContainer hotelId={hotelId} />
+              <AmenitiesContainer amenities={hotelAmenities || []} />
+              <h2>{localization.Rooms}</h2>
+              <RoomContainer hotelRooms={hotelRooms} hotelId={hotelId} />
+              <h2>{localization.availableRooms}</h2>
+              <RoomContainer
+                hotelRooms={hotelAvailableRooms}
+                hotelId={hotelId}
+              />
+              <ReviewsContainer reviews={hotelReviews} />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

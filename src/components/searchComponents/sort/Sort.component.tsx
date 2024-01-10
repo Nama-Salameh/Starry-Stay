@@ -19,8 +19,8 @@ export default function Sort() {
         value={searchParams.sort}
         onChange={handleChange}
         input={<OutlinedInput />}
-        renderValue={() => {
-          return <span>{localization.sortBy}</span>;
+        renderValue={(selectedValue) => {
+          return <span>{selectedValue || localization.sortBy}</span>;
         }}
         inputProps={{ "aria-label": "Without label" }}
         className={style.selectSortTypeContainer}

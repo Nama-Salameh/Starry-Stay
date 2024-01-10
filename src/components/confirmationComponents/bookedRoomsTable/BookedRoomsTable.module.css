@@ -1,0 +1,8 @@
+.bookedRoomsTable {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+.boldTableCell {
+  font-weight: bold !important;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, startTransition } from "react";
 import { getTrendingDestinations } from "../../../services/home/home.service";
 import Carousel from "../../common/carousel/Carousel.component";
 import { Card } from "@mui/material";
@@ -9,39 +9,28 @@ import localization from "../../../localizationConfig";
 import slugify from "slugify";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { notifyError } from "../../../utils/toastUtils/Toast.utils";
+import HotelHomeCard from "../../common/homePageCard/HomePageCard.component";
+import { useNavigate } from "react-router-dom";
 
-const errorMessages = {
-  network: localization.networkError,
-  notFound: localization.trendingDestinationsNotFound,
-  unknown: localization.serverIssues,
+type City = {
+  cityId: number;
+  cityName: string;
+  countryName: string;
+  thumbnailUrl: string;
 };
-
-export default function TrendingDestinationsContainer() {
-  const [trendingDestinations, setTrendingDestinations] = useState<any[]>([]);
+export default function TrendingDestinationsContainer({
+  trendingDestinations,
+}: {
+  trendingDestinations: City[];
+}) {
+  const navigate = useNavigate();
   const toSlug = (str: string) => slugify(str, { lower: true });
 
-  useEffect(() => {
-    const fetchTrendingDestinationsInfo = async () => {
-      try {
-        const trendingDestinationInfo = await getTrendingDestinations();
-        setTrendingDestinations(trendingDestinationInfo || []);
-      } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
-      }
-    };
-
-    fetchTrendingDestinationsInfo();
-  }, []);
+  const handleCityClick = (cityId: number) => {
+    startTransition(() => {
+      navigate(`/city/${cityId}`);
+    });
+  };
 
   return (
     <div
@@ -49,24 +38,21 @@ export default function TrendingDestinationsContainer() {
       id={toSlug(localization.trendingDestinations)}
     >
       <h2>{localization.trendingDestinations}</h2>
-      <Carousel>
-        {trendingDestinations.map((distination) => (
-          <Card className={style.itemCard} key={distination.cityId}>
-            <img
-              src={distination.thumbnailUrl}
-              className={style.roomImage}
-              alt={distination.cityName}
+      {
+        <Carousel>
+          {trendingDestinations.map((distination: any) => (
+            <HotelHomeCard
+              info={{
+                id: distination.cityId,
+                imageUrl: distination.thumbnailUrl,
+                name: distination.cityName,
+                cityName: distination.countryName,
+              }}
+              onClick={handleCityClick}
             />
-            <div className={style.cardInfo}>
-              <h3>{distination.cityName}</h3>
-              <p>
-                <FontAwesomeIcon icon={faLocationDot} />{" "}
-                {distination.countryName}
-              </p>
-            </div>
-          </Card>
-        ))}
-      </Carousel>
+          ))}
+        </Carousel>
+      }
     </div>
   );
 }

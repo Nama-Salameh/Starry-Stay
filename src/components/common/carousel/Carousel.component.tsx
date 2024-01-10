@@ -7,30 +7,30 @@ const autoResponsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },
     items: 6,
-    centerPadding: 0,
   },
   desktopLarge: {
     breakpoint: { max: 3000, min: 1600 },
     items: 5,
-    centerPadding: 50,
   },
   desktopMedium: {
     breakpoint: { max: 1600, min: 1300 },
-    items: 4,
-    centerPadding: 50,
+    items: 5,
   },
   desktopSmall: {
-    breakpoint: { max: 1300, min: 850 },
-    items: 3,
-    centerPadding: 50,
+    breakpoint: { max: 1300, min: 1000 },
+    items: 4,
   },
   tablet: {
-    breakpoint: { max: 850, min: 500 },
+    breakpoint: { max: 1000, min: 700 },
+    items: 3,
+  },
+  mobile: {
+    breakpoint: { max: 700, min: 450 },
     items: 2,
     centerPadding: 50,
   },
-  mobile: {
-    breakpoint: { max: 500, min: 0 },
+  mobileSmall: {
+    breakpoint: { max: 450, min: 0 },
     items: 1,
     centerPadding: 50,
   },
@@ -50,6 +50,7 @@ const Carousel: React.FC<{
     <MultiCarousel
       responsive={responsive || autoResponsive}
       infinite={false}
+      centerMode={false}
       className={style.carousel}
     >
       {children}

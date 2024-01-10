@@ -84,11 +84,13 @@
   right: 6px;
 }
 
-.addToCartButton {
+.addToCartButton,
+.deleteFromCartButton {
   border-radius: 1px;
   background-color: var(--mui-palette-primary-main);
 }
-.addToCartIcon {
+.addToCartIcon,
+.deleteFromCartButton {
   color: var(--mui-palette-secondary-main);
 }
 @media (max-width: 1350px) {
@@ -105,7 +107,10 @@
 }
 
 @media (max-width: 420px) {
+  .imageContainer {
+    height: 200px;
+  }
   .roomImage {
-    height: 170px;
+    height: 200px;
   }
 }

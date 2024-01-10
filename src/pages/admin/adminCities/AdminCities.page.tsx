@@ -22,6 +22,8 @@ import SmallButton from "../../../components/common/Buttons/SmallButton.componen
 import style from "../Admin.module.css";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
+import CircularProgress from "@mui/material/CircularProgress";
+import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
 
 interface CityData {
   id?: number;
@@ -52,7 +54,11 @@ export default function AdminCities() {
   const [cityData, setCityData] = useState<CityData | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("name");
   const [searchText, setSearchText] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    document.title = localization.adminCitiesPageTitle;
+  });
   useEffect(() => {
     const getCitiesInfo = async () => {
       try {
@@ -70,6 +76,8 @@ export default function AdminCities() {
             notifyError(errorMessages.citiesNotFound);
             break;
         }
+      } finally {
+        setIsLoading(false);
       }
     };
     getCitiesInfo();
@@ -224,58 +232,67 @@ export default function AdminCities() {
   };
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
-      <div className={style.pageHeader}>
-        <SearchBar
-          onSearch={handleDebouncedSearch}
-          selectedOption={selectedOption}
-          onOptionChange={setSelectedOption}
-          searchText={searchText}
-          onTextChange={setSearchText}
-        />
-        <div className={style.buttonContainer}>
-          <SmallButton
-            value={localization.createCity}
-            buttonWidth={140}
-            onClick={handleCreateCityClick}
-          />
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>Loading...</span>
         </div>
-      </div>
-      <TableWithNavigation
-        data={citiesInfo}
-        itemsPerPage={5}
-        onDelete={({ id: cityId }) => handleDeleteCityClick(cityId)}
-        onEdit={handleEditCityClick}
-      />
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-      />
-      <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
-        <CityForm
-          onCancel={handleCancelEdit}
-          onSubmit={handleConfirmUpdate}
-          initialValues={{
-            name: cityData ? cityData.name : "",
-            description: cityData ? cityData.description : "",
-            cityId: cityData ? cityData.id : undefined,
-          }}
-          isCreateMode={false}
-        />
-      </SlidingWindow>
-
-      <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
-        <CityForm
-          onCancel={handleCancelCreate}
-          onSubmit={handleConfirmCreate}
-          initialValues={{
-            name: cityData ? cityData.name : "",
-            description: cityData ? cityData.description : "",
-            imageFile: null,
-          }}
-          isCreateMode={true}
-        />{" "}
-      </SlidingWindow>
+      )}
+      {!isLoading && (
+        <div>
+          <div className={style.pageHeader}>
+            <SearchBar
+              onSearch={handleDebouncedSearch}
+              selectedOption={selectedOption}
+              onOptionChange={setSelectedOption}
+              searchText={searchText}
+              onTextChange={setSearchText}
+            />
+            <div className={style.buttonContainer}>
+              <SmallButton
+                value={localization.createCity}
+                buttonWidth={140}
+                onClick={handleCreateCityClick}
+              />
+            </div>
+          </div>
+          <TableWithPagination
+            data={citiesInfo}
+            itemsPerPage={5}
+            onDelete={({ id: cityId }) => handleDeleteCityClick(cityId)}
+            onEdit={handleEditCityClick}
+          />
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          />
+          <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
+            <CityForm
+              onCancel={handleCancelEdit}
+              onSubmit={handleConfirmUpdate}
+              initialValues={{
+                name: cityData ? cityData.name : "",
+                description: cityData ? cityData.description : "",
+                cityId: cityData ? cityData.id : undefined,
+              }}
+              isCreateMode={false}
+            />
+          </SlidingWindow>
+          <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
+            <CityForm
+              onCancel={handleCancelCreate}
+              onSubmit={handleConfirmCreate}
+              initialValues={{
+                name: cityData ? cityData.name : "",
+                description: cityData ? cityData.description : "",
+                imageFile: null,
+              }}
+              isCreateMode={true}
+            />
+          </SlidingWindow>
+        </div>
+      )}
     </Box>
   );
 }

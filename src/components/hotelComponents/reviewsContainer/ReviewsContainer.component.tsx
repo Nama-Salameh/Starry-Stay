@@ -1,47 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import style from "./ReviewsContainer.module.css";
 import { Avatar, Button, Rating } from "@mui/material";
-import { getHotelReviewsByItsId } from "../../../services/hotels/Hotels.service";
-import { notifyError } from "../../../utils/toastUtils/Toast.utils";
-import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import localization from "../../../localizationConfig";
 
-const errorMessages = {
-  network: localization.networkError,
-  notFound: localization.hotelNotFound,
-  unknown: localization.serverIssues,
-};
 
-export default function ReviewsContainer({ hotelId }: { hotelId: number }) {
-  const [hotelReviews, setHotelReviews] = useState<
-    { id: number; customerName: string; rating: number; description: string }[]
-  >([]);
-  useEffect(() => {
-    const fetchHotelAmenities = async () => {
-      try {
-        const hotelReviews = await getHotelReviewsByItsId(hotelId);
-        setHotelReviews(hotelReviews || []);
-      } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
-      }
-    };
-
-    fetchHotelAmenities();
-  }, []);
+export default function ReviewsContainer({reviews }: { reviews:{ reviewId: number; customerName: string; rating: number; description: string }[] }) {
+  
   const [showAllReviews, setShowAllReviews] = useState(false);
   const displayedReviews = showAllReviews
-    ? hotelReviews
-    : hotelReviews.slice(0, 3);
+    ? reviews
+    : reviews.slice(0, 3);
 
   const handleSeeAllReviews = () => {
     setShowAllReviews(true);
@@ -51,7 +19,7 @@ export default function ReviewsContainer({ hotelId }: { hotelId: number }) {
   };
   return (
     <div className={style.reviewsContainer}>
-      <h2>Reviews</h2>
+      <h2>{localization.reviews}</h2>
       {displayedReviews.map((review, index) => (
         <div key={index} className={style.review}>
           <div className={style.reviewsHeader}>
@@ -67,7 +35,7 @@ export default function ReviewsContainer({ hotelId }: { hotelId: number }) {
         </div>
       ))}
 
-      {hotelReviews.length > 3 && !showAllReviews && (
+      {reviews.length > 3 && !showAllReviews && (
         <Button
           onClick={handleSeeAllReviews}
           className={style.seeAllReviewsButton}
@@ -76,7 +44,7 @@ export default function ReviewsContainer({ hotelId }: { hotelId: number }) {
           {localization.seeAllReviews}
         </Button>
       )}
-      {hotelReviews.length > 3 && showAllReviews && (
+      {reviews.length > 3 && showAllReviews && (
         <Button
           onClick={handleHideAllReviews}
           className={style.hideAllReviewsButton}

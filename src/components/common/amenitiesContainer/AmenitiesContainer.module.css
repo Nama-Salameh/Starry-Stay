@@ -31,11 +31,11 @@ h2 {
   text-transform: none !important;
   margin: 3% 0 0 0 !important;
 }
-h6{
+h6 {
   margin: 0;
   padding: 0;
 }
-.amenityHeader{
+.amenityHeader {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -43,9 +43,13 @@ h6{
   font-weight: 100 !important;
 }
 
-.amenityDescription{
+.amenityDescription {
   font-size: 13px;
-
+}
+.HotelAmenitiesIcon {
+  margin-right: 25px;
+  flex-wrap: wrap;
+  color:grey;
 }
 @media (min-width: 600px) {
   .amenitiesContainer {
@@ -61,5 +65,10 @@ h6{
 @media (min-width: 1400px) {
   .amenitiesContainer {
     --items-per-line: 4;
+  }
+}
+@media (max-width:700px){
+  .HotelAmenitiesIcon {
+  display: none;
   }
 }
