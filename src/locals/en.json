@@ -154,5 +154,13 @@
   "confirmed": "Confirmed",
   "specialRemarks": "Any Speical remarks or requests",
   "bookedRooms": "Booked rooms",
-  "reviews" : "Reviews"
+  "reviews": "Reviews",
+  "cancel": "Cancel",
+  "edit": "Edit",
+  "addAmenity": "Add Amenity",
+  "update": "Update",
+  "remove": "Remove",
+  "noAmenitiesAdded": "No Amenities added",
+  "amenities": "Amenities ",
+  "hotels" : "Hotels"
 }

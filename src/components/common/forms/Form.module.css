@@ -13,9 +13,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
+  margin-right: 10px;
+  margin-top: 10px;
   width: 100%;
 }
 

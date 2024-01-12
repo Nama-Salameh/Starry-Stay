@@ -235,7 +235,7 @@ export default function AdminCities() {
       {isLoading && (
         <div className={style.loadingContainer}>
           <CircularProgress color="primary" />
-          <span>Loading...</span>
+          <span>{localization.loading}</span>
         </div>
       )}
       {!isLoading && (
@@ -259,7 +259,7 @@ export default function AdminCities() {
           <TableWithPagination
             data={citiesInfo}
             itemsPerPage={5}
-            onDelete={({ id: cityId }) => handleDeleteCityClick(cityId)}
+            onDelete={ handleDeleteCityClick}
             onEdit={handleEditCityClick}
           />
           <DeleteConfirmationModal

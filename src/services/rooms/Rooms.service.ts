@@ -41,3 +41,48 @@ export const deleteRoom = async (hotelId: number, roomId: number) => {
     throw type;
   }
 };
+
+export const updateRoom = async (
+  roomId: number,
+  roomNumber: number,
+  cost: number
+) => {
+  const params = {
+    roomNumber: roomNumber,
+    cost: cost,
+  };
+  try {
+    await axiosInstance.put(`api/rooms/${roomId}`,  params );
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+
+export const addAmenityToRoom = async (
+  roomId: number,
+  name: string,
+  description: string
+) => {
+  const params = {
+    name: name,
+    description: description,
+  };
+  try {
+    await axiosInstance.post(`api/rooms/${roomId}/amenities`,  params );
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+export const removeAmenityfromRoom = async (
+  roomId: number,
+  amenityId: number
+) => {
+  try {
+    await axiosInstance.delete(`api/rooms/${roomId}/amenities/${amenityId}`);
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
