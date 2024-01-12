@@ -15,28 +15,42 @@ type RoomAmenityForCreate = {
   name: string;
   description: string;
 };
-type RoomAmenityForUpdate = RoomAmenityForCreate & {
+type RoomAmenity = RoomAmenityForCreate & {
   id: number;
 };
+
+type CreateRoomSubmitFunction = (
+  roomNumber: number,
+  cost: number,
+  imageFile: File[],
+  roomAmenities: RoomAmenityForCreate[] | null
+) => Promise<void>;
+
+type UpdateRoomSubmitFunction = (
+  roomNumber: number,
+  cost: number,
+  roomId: number
+) => Promise<void>;
+
 interface RoomFormProps {
   onCancel: () => void;
-  onSubmit: (
-    roomNumber: number,
-    cost: number,
-    roomId: number,
-    imageFile?: File | null
-  ) => Promise<void> | undefined;
+  onSubmit: CreateRoomSubmitFunction | UpdateRoomSubmitFunction;
+
   initialValues: {
-    id: number;
+    id?: number;
     roomNumber: number | null;
     cost: number | null;
-    amenities: RoomAmenityForUpdate[];
-    imageFile?: File | null;
+    type: string;
+    capacityOfAdults: number | null;
+    capacityOfChildren: number | null;
+    availability: boolean | undefined;
+    amenities: RoomAmenity[] | [];
+    imageFile?: File[];
   };
   isCreateMode?: boolean;
-  onAmenitiesChange: (
+  onAmenitiesChange?: (
     roomId: number,
-    amenities: RoomAmenityForCreate[] | RoomAmenityForUpdate[]
+    amenities: RoomAmenityForCreate[] | RoomAmenity[]
   ) => Promise<void>;
 }
 
@@ -53,28 +67,33 @@ const RoomForm: React.FC<RoomFormProps> = ({
   onAmenitiesChange,
 }) => {
   const roomId = initialValues.id;
-  const [type, setType] = useState("standard");
-  const [capacityOfAdults, setCapacityOfAdults] = useState(2);
-  const [capacityOfChildren, setCapacityOfChildren] = useState(1);
-  const [availability, setAvailability] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [roomAmenities, setRoomAmenities] = useState<RoomAmenityForCreate[]>(
     initialValues.amenities
   );
   const [newAmenityName, setNewAmenityName] = useState("");
   const [newAmenityDescription, setNewAmenityDescription] = useState("");
-  const [isAddingAmenity, setIsAddingAmenity] = useState(false);
   const [editingAmenityId, setEditingAmenityId] = useState(-1);
 
-  const handleFormSubmit = async (values: any) => {
+  const handleFormSubmit = async (values: any, formikProps: any) => {
     try {
       setIsLoading(true);
       if (roomId !== undefined && roomId !== -1) {
-        await onAmenitiesChange(roomId, roomAmenities);
-        await onSubmit(values.roomNumber, values.cost, roomId);
+        if (onAmenitiesChange) {
+          await onAmenitiesChange(roomId, roomAmenities);
+        }
+        await (onSubmit as UpdateRoomSubmitFunction)(
+          values.roomNumber,
+          values.cost,
+          roomId
+        );
       } else if (isCreateMode) {
-        await onAmenitiesChange(roomId, values.amenities);
-        await onSubmit(values.roomNumber, values.cost, values.imageFile);
+        await (onSubmit as CreateRoomSubmitFunction)(
+          values.roomNumber,
+          values.cost,
+          values.imageFile,
+          roomAmenities
+        );
       }
     } catch (errorType) {
       switch (errorType) {
@@ -100,6 +119,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
           break;
       }
     } finally {
+      formikProps.resetForm({ values: initialValues });
       setIsLoading(false);
     }
   };
@@ -122,7 +142,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
 
     setNewAmenityName("");
     setNewAmenityDescription("");
-    setIsAddingAmenity(false);
   };
 
   const handleEditAmenity = (id: number) => {
@@ -131,7 +150,6 @@ const RoomForm: React.FC<RoomFormProps> = ({
       setNewAmenityName(amenityToEdit.name || "");
       setNewAmenityDescription(amenityToEdit.description || "");
       setEditingAmenityId(id);
-      setIsAddingAmenity(true);
     }
   };
 
@@ -145,14 +163,26 @@ const RoomForm: React.FC<RoomFormProps> = ({
     setRoomAmenities(updatedAmenities);
   };
 
+  const handleCancel = (formikProps: any) => {
+    formikProps.resetForm({ values: initialValues });
+    setRoomAmenities(initialValues.amenities || []);
+    setNewAmenityName("");
+    setNewAmenityDescription("");
+    setEditingAmenityId(-1);
+    onCancel();
+  };
   return (
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      onSubmit={handleFormSubmit}
+      onSubmit={(values, formikProps) => handleFormSubmit(values, formikProps)}
       validationSchema={Yup.object({
         roomNumber: Yup.number().required(localization.required),
         cost: Yup.number().required(localization.required),
+        type: Yup.string().required(localization.required),
+        capacityOfAdults: Yup.number().nullable(),
+        capacityOfChildren: Yup.number().nullable(),
+        availability: Yup.boolean().nullable(),
         imageFile: isCreateMode
           ? Yup.mixed().notRequired().nullable()
           : Yup.mixed(),
@@ -186,8 +216,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               name="type"
               fullWidth
               required
-              value={type}
-              onChange={(e: any) => setType(e.target.value)}
+              value={formikProps.values.type}
               className={style.textField}
             />
             <TextInput
@@ -195,8 +224,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               name="capacityOfAdults"
               fullWidth
               required
-              value={capacityOfAdults}
-              onChange={(e: any) => setCapacityOfAdults(e.target.value)}
+              value={formikProps.values.capacityOfAdults}
               className={style.textField}
             />
             <TextInput
@@ -204,16 +232,14 @@ const RoomForm: React.FC<RoomFormProps> = ({
               name="capacityOfChildren"
               fullWidth
               required
-              value={capacityOfChildren}
-              onChange={(e: any) => setCapacityOfChildren(e.target.value)}
+              value={formikProps.values.capacityOfChildren}
               className={style.textField}
             />
             <div>
               Availability
               <Switch
                 name="availability"
-                checked={availability}
-                onChange={(e: any) => setAvailability(e.target.checked)}
+                checked={formikProps.values.availability}
               />
             </div>
             <AmenitiesForm
@@ -234,7 +260,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
             <Box className={style.buttonContainer}>
               <Button
                 variant="contained"
-                onClick={onCancel}
+                onClick={() => handleCancel(formikProps)}
                 className={style.cancelButton}
               >
                 {localization.cancel}{" "}

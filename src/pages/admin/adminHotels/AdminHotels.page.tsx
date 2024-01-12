@@ -135,7 +135,6 @@ export default function AdminHotels() {
     fetchCities();
   }, []);
 
-  console.log("hotels", hotelsInfo);
   const handleDebouncedSearch = async () => {
     try {
       let filteredCities;
@@ -196,7 +195,6 @@ export default function AdminHotels() {
   const handleEditHotelClick = async (hotelId: number) => {
     try {
       const hotelInfo = await getHotelInfoByItsId(hotelId);
-      console.log("id", hotelId, "hotel info : ", hotelInfo);
       const initialValues = {
         hotelName: hotelInfo.hotelName,
         description: hotelInfo.description,
@@ -207,8 +205,6 @@ export default function AdminHotels() {
         cities: citiesInfo ? citiesInfo : null,
         hotelId: hotelId,
       };
-
-      console.log("initial values:", initialValues);
 
       setHotelData(initialValues);
       setUpdateFormOpen(true);
@@ -324,7 +320,7 @@ export default function AdminHotels() {
       {isLoading && (
         <div className={style.loadingContainer}>
           <CircularProgress color="primary" />
-          <span>Loading...</span>
+          <span>{localization.loading}</span>
         </div>
       )}
       {!isLoading && (

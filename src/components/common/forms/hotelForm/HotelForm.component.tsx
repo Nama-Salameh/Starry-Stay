@@ -57,7 +57,6 @@ const HotelForm: React.FC<HotelFormProps> = ({
   isCreateMode = false,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  console.log("Received Initial Values:", initialValues);
 
   const handleFormSubmit = async (values: any) => {
     try {
