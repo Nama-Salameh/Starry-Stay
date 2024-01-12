@@ -24,7 +24,7 @@ interface Row {
 const TableWithPagination: React.FC<{
   data?: Row[];
   itemsPerPage: number;
-  onDelete: (params: { id: number; relatedId?: number }) => void;
+  onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 }> = ({ data = [], itemsPerPage, onDelete, onEdit }) => {
   const [page, setPage] = useState(0);
@@ -47,6 +47,7 @@ const TableWithPagination: React.FC<{
       .toLowerCase();
   };
 
+  console.log("rooms", data);
   return (
     <div>
       <TableContainer className={style.tableContainer}>
@@ -87,17 +88,15 @@ const TableWithPagination: React.FC<{
                 <TableCell
                   className={`${style.tableBodyCell} ${style.actionsBodyCell}`}
                 >
-                  <IconButton aria-label="edit" onClick={() => onEdit(row.id)}>
+                  <IconButton
+                    aria-label="edit"
+                    onClick={() => onEdit(row.id ? row.id : row.roomId)}
+                  >
                     <FontAwesomeIcon icon={faEdit} className={style.editIcon} />
                   </IconButton>
                   <IconButton
                     aria-label="delete"
-                    onClick={() =>
-                      onDelete({
-                        id: row.roomNumber ? row.roomNumber : row.id,
-                        relatedId: row.hotelId ? row.hotelId : undefined,
-                      })
-                    }
+                    onClick={() => onDelete(row.id ? row.id : row.roomId)}
                   >
                     <DeleteIcon className={style.deleteIcon} />
                   </IconButton>

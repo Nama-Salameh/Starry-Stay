@@ -2,12 +2,8 @@ import React, { startTransition, useEffect, useState } from "react";
 import {
   Button,
   CircularProgress,
-  Select,
-  MenuItem,
   useMediaQuery,
 } from "@mui/material";
-import { Field, Form, Formik, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useNavigate } from "react-router";
 import { createBrowserHistory } from "history";
 import {
@@ -27,9 +23,6 @@ import style from "./Checkout.module.css";
 import IToken from "../../interfaces/IToken.interface";
 import localization from "../../localizationConfig";
 import RoomCard from "../../components/common/roomCard/RoomCard.component";
-import BigSubmitButton from "../../components/common/Buttons/BigSubmitButton.component";
-import TextInput from "../../components/common/textField/TextField.component";
-import BigButtonLoader from "../../components/common/loaders/BigButtonLoader.component";
 import PersonalInfo from "../../components/checkoutComponents/personalInfoContainer/PersonalInfoContainer.component";
 
 type RoomInfo = {

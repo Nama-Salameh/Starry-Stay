@@ -22,6 +22,7 @@
 }
 .bookedRoomsContainer {
   display: flex;
+  flex-direction: column;
 }
 .personalInfoContainer {
   border: 1px solid var(--mui-palette-secondary-dark);
@@ -33,9 +34,4 @@
 }
 .totalCost{
   text-align: end;
-}
-@media (max-width: 800px) {
-  .bookedRoomsContainer {
-    flex-direction: column;
-  }
 }

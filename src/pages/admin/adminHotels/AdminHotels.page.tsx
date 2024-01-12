@@ -348,7 +348,7 @@ export default function AdminHotels() {
           <TableWithPagination
             data={hotelsInfo}
             itemsPerPage={5}
-            onDelete={({ id: hotelId }) => handleDeleteHotelClick(hotelId)}
+            onDelete={handleDeleteHotelClick}
             onEdit={handleEditHotelClick}
           />
           <DeleteConfirmationModal

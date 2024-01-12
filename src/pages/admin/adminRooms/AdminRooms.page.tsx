@@ -13,15 +13,26 @@ import {
 } from "../../../services/hotels/Hotels.service";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import {
+  addAmenityToRoom,
   deleteRoom,
+  getRoomAmenitiesByItsId,
   getRoomInfoByItsId,
+  removeAmenityfromRoom,
   updateRoom,
 } from "../../../services/rooms/Rooms.service";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 import RoomForm from "../../../components/common/forms/roomForm/RoomForm.component";
 import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
-
+type RoomAmenityForCreate = {
+  name: string;
+  description: string;
+};
+type RoomAmenity = {
+  id: number;
+  name: string;
+  description: string;
+};
 type Hotel = {
   id: number;
   name: string;
@@ -48,11 +59,7 @@ type Room = {
   price: number;
   availability: boolean;
 };
-type RoomToEditOrCreate = {
-  roomNumber: number;
-  cost: number;
-  roomId: number;
-};
+
 const errorMessages = {
   network: localization.networkError,
   unknown: localization.serverIssues,
@@ -72,13 +79,15 @@ const successMessages = {
 
 export default function AdminRooms() {
   const [hotelsInfo, setHotelsInfo] = useState<Hotel[]>([]);
-  const [roomData, setRoomData] = useState<RoomToEditOrCreate | null>(null);
+  const [roomData, setRoomData] = useState<Room | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateFormOpen, setUpdateFormOpen] = useState(false);
   const [isCreateFormOpen, setCreateFormOpen] = useState(false);
   const [roomToDelete, setRoomToDelete] = useState<number | null>(null);
   const [selectedHotel, setSelectedHotel] = useState<number | null>(null);
   const [rooms, setRooms] = useState<Room[]>([]);
+  const [roomAmenities, setRoomAmenities] = useState<RoomAmenity[]>([]);
+  const [selectedRoomId, setSelectedRoomId] = useState<number>(-1);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -137,10 +146,10 @@ export default function AdminRooms() {
     };
     fetchRooms();
   }, [selectedHotel]);
-  
-  const handleDeleteRoomClick = async (id: any) => {
+
+  const handleDeleteRoomClick = async (roomId: any) => {
     setIsDeleteModalOpen(true);
-    setRoomToDelete(id);
+    setRoomToDelete(roomId);
   };
   const handleConfirmDelete = async () => {
     if (roomToDelete !== null && typeof selectedHotel === "number") {
@@ -172,10 +181,12 @@ export default function AdminRooms() {
   const handleCreateRoomClick = () => {};
 
   const handleEditRoomClick = async (roomId: number) => {
-    console.log("roomId:", roomId);
+    setSelectedRoomId(roomId);
     try {
       const roomInfo = await getRoomInfoByItsId(roomId);
-      setRoomData({ ...roomInfo, id: roomId });
+      setRoomData(roomInfo);
+      const roomAmenities = await getRoomAmenitiesByItsId(roomId);
+      setRoomAmenities(roomAmenities);
       setUpdateFormOpen(true);
     } catch (errorType) {
       switch (errorType) {
@@ -203,7 +214,10 @@ export default function AdminRooms() {
   ) => {
     try {
       if (typeof roomId === "number") {
+        await handleAmenitiesChange(roomId, roomAmenities);
+
         await updateRoom(roomId, roomNumber, cost);
+
         notifySuccess(successMessages.successUpdate);
       }
     } catch (errorType) {
@@ -223,13 +237,52 @@ export default function AdminRooms() {
     setRoomData(null);
   };
 
-  console.log(rooms);
+  const handleAmenitiesChange = async (
+    roomId: number,
+    amenities: RoomAmenityForCreate[] | RoomAmenity[]
+  ) => {
+    try {
+      const existingAmenities = await getRoomAmenitiesByItsId(roomId);
+      const amenitiesToRemove = existingAmenities.filter(
+        (existingAmenity: RoomAmenity) =>
+          !amenities.some((a) => a.name === existingAmenity.name)
+      );
+
+      const amenitiesToAdd = amenities.filter(
+        (newAmenity) =>
+          !existingAmenities.some(
+            (a: RoomAmenityForCreate) => a.name === newAmenity.name
+          )
+      );
+      for (const amenityToRemove of amenitiesToRemove) {
+        await removeAmenityfromRoom(roomId, amenityToRemove.id);
+      }
+
+      for (const amenityToAdd of amenitiesToAdd) {
+        await addAmenityToRoom(
+          roomId,
+          amenityToAdd.name,
+          amenityToAdd.description
+        );
+      }
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
+    }
+  };
+
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
       {isLoading && (
         <div className={style.loadingContainer}>
           <CircularProgress color="primary" />
-          <span>Loading...</span>
+          <span>{localization.loading}</span>
         </div>
       )}
       {!isLoading && (
@@ -254,7 +307,7 @@ export default function AdminRooms() {
               className={style.selectContainer}
             >
               <MenuItem disabled value="">
-                <em>Hotels</em>
+                <em>{localization.hotels}</em>
               </MenuItem>
               {hotelsInfo.map((hotel) => (
                 <MenuItem key={hotel.id} value={hotel.id}>
@@ -270,29 +323,31 @@ export default function AdminRooms() {
                 onClick={handleCreateRoomClick}
               />
             </div>
-            <TableWithPagination
-              data={rooms}
-              itemsPerPage={5}
-              onDelete={({ id: roomId }) => handleDeleteRoomClick(roomId)}
-              onEdit={handleEditRoomClick}
-            />
-            <DeleteConfirmationModal
-              isOpen={isDeleteModalOpen}
-              onConfirm={handleConfirmDelete}
-              onCancel={handleCancelDelete}
-            />
           </div>
+          <TableWithPagination
+            data={rooms}
+            itemsPerPage={5}
+            onDelete={handleDeleteRoomClick}
+            onEdit={handleEditRoomClick}
+          />
+          <DeleteConfirmationModal
+            isOpen={isDeleteModalOpen}
+            onConfirm={handleConfirmDelete}
+            onCancel={handleCancelDelete}
+          />
 
           <SlidingWindow isOpen={isUpdateFormOpen} onClose={handleCancelEdit}>
             <RoomForm
               onCancel={handleCancelEdit}
               onSubmit={handleConfirmUpdate}
               initialValues={{
+                id: selectedRoomId,
                 roomNumber: roomData ? roomData.roomNumber : null,
-                cost: roomData ? roomData.cost : null,
-                roomId: roomData ? roomData.roomId : null,
+                cost: roomData ? roomData.price : null,
+                amenities: roomAmenities,
               }}
               isCreateMode={false}
+              onAmenitiesChange={handleAmenitiesChange}
             />
           </SlidingWindow>
         </div>
