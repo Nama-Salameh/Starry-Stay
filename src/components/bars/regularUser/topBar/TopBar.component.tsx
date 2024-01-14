@@ -23,8 +23,9 @@ import { useNavigate } from "react-router-dom";
 import SmallButton from "../../../common/Buttons/SmallButton.component";
 import localization from "../../../../localizationConfig";
 import slugify from "slugify";
-import Badge from '@mui/material/Badge';
+import Badge from "@mui/material/Badge";
 import { useCartContext } from "../../../../contexts/cartContext/CartContext.context";
+import { removeToken } from "../../../../utils/storageUtils/tokenStorage/TokenStorage";
 
 const drawerWidth = 200;
 
@@ -32,7 +33,7 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const theme = useTheme();
-  const {cartCount} = useCartContext();
+  const { cartCount } = useCartContext();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -67,6 +68,20 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
               </ListItemButton>
             </ListItem>
           ))}
+        </List>
+      )}
+      {isLoggedIn() && !isSessionExpired() && (
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton
+              onClick={() => {
+                removeToken();
+                startTransition(() => navigate("/login"));
+              }}
+            >
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </ListItem>
         </List>
       )}
     </Box>
@@ -140,12 +155,12 @@ export default function TopBar({ items = [] }: { items?: string[] }) {
               onClick={() => startTransition(() => navigate("/checkout"))}
             >
               <Badge badgeContent={cartCount} color="primary">
-              <FontAwesomeIcon
-                icon={faShoppingCart}
-                style={{
-                  color: theme.palette.secondary.main,
-                }}
-              />
+                <FontAwesomeIcon
+                  icon={faShoppingCart}
+                  style={{
+                    color: theme.palette.secondary.main,
+                  }}
+                />
               </Badge>
             </IconButton>
           ) : (

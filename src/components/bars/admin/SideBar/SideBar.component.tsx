@@ -1,4 +1,4 @@
-import React, { startTransition, ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -18,12 +18,12 @@ import ListItemText from "@mui/material/ListItemText";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BedIcon from "@mui/icons-material/Bed";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import topBarLogo from "../../../../assets/images/topbarLogo.jpeg";
 import style from "./SideBar.module.css";
 import { Link } from "react-router-dom";
+import { removeToken } from "../../../../utils/storageUtils/tokenStorage/TokenStorage";
 const drawerWidth = 240;
-
-
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -104,7 +104,7 @@ export default function SideBar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("cities");
-  
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -116,7 +116,9 @@ export default function SideBar() {
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
   };
-
+  const handleLogout = () => {
+    removeToken();
+  };
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -295,6 +297,55 @@ export default function SideBar() {
                     opacity: open ? 1 : 0,
                     color:
                       selectedOption === "cities"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
+                  }}
+                />
+              </ListItemButton>
+            </Link>
+          </ListItem>
+          <ListItem disablePadding>
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <ListItemButton
+                selected={selectedOption === "logout"}
+                onClick={handleLogout}
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                  backgroundColor:
+                    selectedOption === "logout"
+                      ? `${theme.palette.secondary.main} !important`
+                      : theme.palette.primary.main,
+
+                  color:
+                    selectedOption === "logout"
+                      ? theme.palette.primary.main
+                      : theme.palette.secondary.light,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color:
+                      selectedOption === "logout"
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.light,
+                  }}
+                >
+                  <ExitToAppIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Logout"
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color:
+                      selectedOption === "logout"
                         ? theme.palette.primary.main
                         : theme.palette.secondary.light,
                   }}
