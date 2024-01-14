@@ -3,15 +3,17 @@ import localization from "../../../localizationConfig";
 import { Box, CircularProgress } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
 import {
+  addAmenityToHotel,
   addHotelImage,
   createHotel,
   deleteHotel,
   getFilteredHotels,
+  getHotelAmenitiesByItsId,
   getHotelInfoByItsId,
   getHotels,
+  removeAmenityFromHotel,
   updateHotel,
 } from "../../../services/hotels/Hotels.service";
-import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import {
   notifyError,
   notifySuccess,
@@ -24,7 +26,15 @@ import { getCities } from "../../../services/cities/Cities.service";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
 import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
+import { addAmenityToRoom } from "../../../services/rooms/Rooms.service";
 
+type HotelAmenityForCreate = {
+  name: string;
+  description: string;
+};
+type HotelAmenity = HotelAmenityForCreate & {
+  id: number;
+};
 type Hotel = {
   hotelName: string;
   location: string;
@@ -86,6 +96,7 @@ export default function AdminHotels() {
   } | null>(null);
   const [citiesInfo, setCitiesInfo] = useState<City[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hotelAmenities, setHotelAmenities] = useState<HotelAmenity[]>([]);
 
   useEffect(() => {
     document.title = localization.adminHotelsPageTitle;
@@ -135,7 +146,6 @@ export default function AdminHotels() {
     fetchCities();
   }, []);
 
-  console.log("hotels", hotelsInfo);
   const handleDebouncedSearch = async () => {
     try {
       let filteredCities;
@@ -196,7 +206,6 @@ export default function AdminHotels() {
   const handleEditHotelClick = async (hotelId: number) => {
     try {
       const hotelInfo = await getHotelInfoByItsId(hotelId);
-      console.log("id", hotelId, "hotel info : ", hotelInfo);
       const initialValues = {
         hotelName: hotelInfo.hotelName,
         description: hotelInfo.description,
@@ -208,9 +217,10 @@ export default function AdminHotels() {
         hotelId: hotelId,
       };
 
-      console.log("initial values:", initialValues);
-
       setHotelData(initialValues);
+      const hotelAmenities = await getHotelAmenitiesByItsId(hotelId);
+      setHotelAmenities(hotelAmenities);
+      console.log("amenities : ", hotelAmenities);
       setUpdateFormOpen(true);
     } catch (errorType) {
       switch (errorType) {
@@ -236,10 +246,11 @@ export default function AdminHotels() {
     starRating: number,
     latitude: number,
     longitude: number,
-    hotelId: any
+    hotelId: number
   ) => {
     try {
       if (typeof hotelId === "number") {
+        await handleAmenitiesChange(hotelId, hotelAmenities);
         await updateHotel(
           hotelId,
           name,
@@ -278,9 +289,10 @@ export default function AdminHotels() {
     starRating: number,
     latitude: number,
     longitude: number,
-    hotelType: any,
-    cityId: any,
-    imageFile: any
+    hotelType: number,
+    cityId: number,
+    images: File[] | null,
+    amenities: HotelAmenityForCreate[] | null
   ) => {
     try {
       const newHotel = await createHotel(
@@ -292,16 +304,33 @@ export default function AdminHotels() {
         latitude,
         longitude
       );
-      if (imageFile) {
-        try {
-          await addHotelImage(newHotel.id, imageFile);
-        } catch {
-          notifyError(errorMessages.gettingHotelImageFailed);
+      if (images && images.length > 0) {
+        for (const imageFile of images) {
+          try {
+            await addHotelImage(newHotel.id, imageFile);
+          } catch (errorType) {
+            switch (errorType) {
+              case ErrorTypes.Network:
+                notifyError(errorMessages.network);
+                break;
+              case ErrorTypes.Unknown:
+                notifyError(errorMessages.unknown);
+                break;
+            }
+          }
+        }
+      }
+      if (amenities && newHotel && amenities.length > 0) {
+        const hotelId = newHotel.id;
+        for (const amenity of amenities) {
+          await addAmenityToRoom(hotelId, amenity.name, amenity.description);
         }
       }
       const updatedHotels = await getHotels();
       setHotelsInfo(updatedHotels);
       notifySuccess(successMessages.successCreate);
+      setCreateFormOpen(false);
+      setHotelData(null);
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -312,19 +341,56 @@ export default function AdminHotels() {
           break;
       }
     }
-    setCreateFormOpen(false);
-    setHotelData(null);
   };
   const handleCancelCreate = () => {
     setCreateFormOpen(false);
     setHotelData(null);
+  };
+  const handleAmenitiesChange = async (
+    hotelId: number,
+    amenities: HotelAmenityForCreate[] | HotelAmenity[]
+  ) => {
+    try {
+      const existingAmenities = await getHotelAmenitiesByItsId(hotelId);
+      const amenitiesToRemove = existingAmenities.filter(
+        (existingAmenity: HotelAmenity) =>
+          !amenities.some((a) => a.name === existingAmenity.name)
+      );
+
+      const amenitiesToAdd = amenities.filter(
+        (newAmenity) =>
+          !existingAmenities.some(
+            (a: HotelAmenityForCreate) => a.name === newAmenity.name
+          )
+      );
+      for (const amenityToRemove of amenitiesToRemove) {
+        await removeAmenityFromHotel(hotelId, amenityToRemove.id);
+      }
+
+      for (const amenityToAdd of amenitiesToAdd) {
+        await addAmenityToHotel(
+          hotelId,
+          amenityToAdd.name,
+          amenityToAdd.description
+        );
+      }
+    } catch (errorType) {
+      switch (errorType) {
+        case ErrorTypes.Network:
+          notifyError(errorMessages.network);
+          break;
+        case ErrorTypes.Unknown:
+          notifyError(errorMessages.unknown);
+          break;
+      }
+    }
   };
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
       {isLoading && (
         <div className={style.loadingContainer}>
           <CircularProgress color="primary" />
-          <span>Loading...</span>
+          <span>{localization.loading}</span>
         </div>
       )}
       {!isLoading && (
@@ -369,8 +435,10 @@ export default function AdminHotels() {
                 longitude: hotelData ? hotelData.longitude : 0,
                 cities: citiesInfo ? citiesInfo : null,
                 hotelId: hotelData ? hotelData.hotelId : undefined,
+                amenities: hotelAmenities,
               }}
               isCreateMode={false}
+              onAmenitiesChange={handleAmenitiesChange}
             />
           </SlidingWindow>
           <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelEdit}>
@@ -386,6 +454,7 @@ export default function AdminHotels() {
                 longitude: 0,
                 cities: citiesInfo ? citiesInfo : null,
                 cityId: null,
+                amenities: [],
               }}
               isCreateMode={true}
             />

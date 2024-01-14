@@ -10,26 +10,43 @@ import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
+import AmenitiesForm from "../amenitiesForm/AmenitiesFrom.component";
 
+type HotelAmenityForCreate = {
+  name: string;
+  description: string;
+};
+type HotelAmenity = HotelAmenityForCreate & {
+  id: number;
+};
 type City = {
   id: number;
   name: string;
   description: string;
 };
+type CreateHotelSubmitFunction = (
+  name: string,
+  description: string,
+  starRating: number,
+  latitude: number,
+  longitude: number,
+  hotelType: number,
+  cityId: number,
+  imageFile: File[] | null,
+  hotelAmenities: HotelAmenityForCreate[] | null
+) => Promise<void>;
 
+type UpdateHotelSubmitFunction = (
+  name: string,
+  description: string,
+  starRating: number,
+  latitude: number,
+  longitude: number,
+  hotelId: number
+) => Promise<void>;
 interface HotelFormProps {
   onCancel: () => void;
-  onSubmit: (
-    name: string,
-    description: string,
-    starrating: number,
-    latitude: number,
-    longitude: number,
-    hotelId?: number,
-    hotelType?: number,
-    cityId?: number,
-    imageFile?: File | null
-  ) => Promise<void> | undefined;
+  onSubmit: CreateHotelSubmitFunction | UpdateHotelSubmitFunction;
   initialValues: {
     name: string;
     description: string;
@@ -38,11 +55,16 @@ interface HotelFormProps {
     latitude: number;
     longitude: number;
     cities: City[] | null;
+    amenities: HotelAmenity[] | [];
     hotelId?: number | undefined;
     cityId?: number | null;
-    imageFile?: File | null;
+    imageFile?: File[] | null;
   };
   isCreateMode?: boolean;
+  onAmenitiesChange?: (
+    hotelId: number,
+    amenities: HotelAmenityForCreate[] | HotelAmenity[]
+  ) => Promise<void>;
 }
 
 const errorMessages = {
@@ -55,25 +77,23 @@ const HotelForm: React.FC<HotelFormProps> = ({
   onSubmit,
   initialValues,
   isCreateMode = false,
+  onAmenitiesChange,
 }) => {
+  console.log("the amenities : ", initialValues.amenities);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("Received Initial Values:", initialValues);
+  const [hotelAmenities, setHotelAmenities] = useState<HotelAmenityForCreate[]>(
+    initialValues.amenities || []
+  );
+  const [newAmenityName, setNewAmenityName] = useState("");
+  const [newAmenityDescription, setNewAmenityDescription] = useState("");
+  const [editingAmenityId, setEditingAmenityId] = useState(-1);
 
-  const handleFormSubmit = async (values: any) => {
+  const handleFormSubmit = async (values: any, formikProps: any) => {
     try {
       setIsLoading(true);
 
-      if (values.hotelId !== undefined) {
-        await onSubmit(
-          values.name,
-          values.description,
-          values.starrating,
-          values.latitude,
-          values.longitude,
-          values.hotelId
-        );
-      } else if (isCreateMode) {
-        await onSubmit(
+      if (isCreateMode) {
+        await (onSubmit as CreateHotelSubmitFunction)(
           values.name,
           values.description,
           values.starrating,
@@ -81,9 +101,24 @@ const HotelForm: React.FC<HotelFormProps> = ({
           values.longitude,
           values.hoteltype,
           values.cityId,
-          values.imageFile
+          values.imageFile,
+          hotelAmenities
+        );
+      } else if (values.hotelId !== undefined) {
+        if (onAmenitiesChange) {
+          await onAmenitiesChange(values.hotelId, hotelAmenities);
+        }
+        await (onSubmit as UpdateHotelSubmitFunction)(
+          values.name,
+          values.description,
+          values.starrating,
+          values.latitude,
+          values.longitude,
+          values.hotelId
         );
       }
+      formikProps.resetForm();
+      setHotelAmenities([]);
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -112,11 +147,51 @@ const HotelForm: React.FC<HotelFormProps> = ({
     }
   };
 
+  const handleAddAmenity = () => {
+    const newAmenity: HotelAmenityForCreate = {
+      name: newAmenityName,
+      description: newAmenityDescription,
+    };
+
+    if (editingAmenityId !== -1) {
+      const updatedAmenities = hotelAmenities.map((amenity, index) =>
+        index === editingAmenityId ? newAmenity : amenity
+      );
+      setHotelAmenities(updatedAmenities);
+      setEditingAmenityId(-1);
+    } else {
+      setHotelAmenities([...hotelAmenities, newAmenity]);
+    }
+
+    setNewAmenityName("");
+    setNewAmenityDescription("");
+  };
+
+  const handleEditAmenity = (id: number) => {
+    const amenityToEdit = hotelAmenities[id];
+    if (amenityToEdit) {
+      setNewAmenityName(amenityToEdit.name || "");
+      setNewAmenityDescription(amenityToEdit.description || "");
+      setEditingAmenityId(id);
+    }
+  };
+
+  const handleRemoveAmenity = (id: number) => {
+    const updatedAmenities = [...hotelAmenities];
+    updatedAmenities.splice(id, 1);
+    setHotelAmenities(updatedAmenities);
+  };
+
+  const handleAmenitiesChangeInHotelForm = async (updatedAmenities: any) => {
+    setHotelAmenities(updatedAmenities);
+  };
   return (
     <Formik
       enableReinitialize={true}
       initialValues={initialValues}
-      onSubmit={handleFormSubmit}
+      onSubmit={(values, formikProps) => {
+        handleFormSubmit(values, formikProps);
+      }}
       validationSchema={Yup.object({
         name: Yup.string().required(localization.required),
         description: Yup.string().required(localization.required),
@@ -138,6 +213,7 @@ const HotelForm: React.FC<HotelFormProps> = ({
             name="name"
             fullWidth
             required
+            error={formikProps.touched.name && Boolean(formikProps.errors.name)}
             className={style.textField}
           />
           <TextInput
@@ -147,6 +223,10 @@ const HotelForm: React.FC<HotelFormProps> = ({
             required
             multiline
             rows={4}
+            error={
+              formikProps.touched.description &&
+              Boolean(formikProps.errors.description)
+            }
             className={style.textField}
           />
           <TextInput
@@ -154,6 +234,10 @@ const HotelForm: React.FC<HotelFormProps> = ({
             name="hoteltype"
             fullWidth
             required
+            error={
+              formikProps.touched.hoteltype &&
+              Boolean(formikProps.errors.hoteltype)
+            }
             className={style.textField}
           />
           <TextInput
@@ -161,6 +245,10 @@ const HotelForm: React.FC<HotelFormProps> = ({
             name="starrating"
             fullWidth
             required
+            error={
+              formikProps.touched.starrating &&
+              Boolean(formikProps.errors.starrating)
+            }
             className={style.textField}
           />
           <div className={style.hotelLocationContainer}>
@@ -168,12 +256,20 @@ const HotelForm: React.FC<HotelFormProps> = ({
               label="latitude"
               name="latitude"
               required
+              error={
+                formikProps.touched.latitude &&
+                Boolean(formikProps.errors.latitude)
+              }
               className={`${style.textField} ${style.locationField}`}
             />
             <TextInput
               label="longitude"
               name="longitude"
               required
+              error={
+                formikProps.touched.longitude &&
+                Boolean(formikProps.errors.longitude)
+              }
               className={`${style.textField} ${style.locationField}`}
             />
           </div>
@@ -182,6 +278,9 @@ const HotelForm: React.FC<HotelFormProps> = ({
               name="cityId"
               fullWidth
               required
+              error={
+                formikProps.touched.cityId && Boolean(formikProps.errors.cityId)
+              }
               value={formikProps.values.cityId || localization.hotelCity}
               onChange={(e) =>
                 formikProps.setFieldValue("cityId", e.target.value)
@@ -212,7 +311,7 @@ const HotelForm: React.FC<HotelFormProps> = ({
               className={style.textField}
             >
               <MenuItem disabled value="">
-                Hotel City
+                {localization.hotelCity}
               </MenuItem>
               {initialValues.cities.map((city) => (
                 <MenuItem key={city.id} value={city.id}>
@@ -221,6 +320,13 @@ const HotelForm: React.FC<HotelFormProps> = ({
               ))}
             </Select>
           )}
+          <AmenitiesForm
+            amenities={initialValues.amenities}
+            onAddAmenity={handleAddAmenity}
+            onEditAmenity={handleEditAmenity}
+            onRemoveAmenity={handleRemoveAmenity}
+            onAmenitiesChange={handleAmenitiesChangeInHotelForm}
+          />
           {isCreateMode && (
             <FileUploadInput
               formikProps={formikProps}
@@ -232,7 +338,11 @@ const HotelForm: React.FC<HotelFormProps> = ({
           <Box className={style.buttonContainer}>
             <Button
               variant="contained"
-              onClick={onCancel}
+              onClick={() => {
+                onCancel();
+                formikProps.resetForm();
+                setHotelAmenities([]);
+              }}
               className={style.cancelButton}
             >
               Cancel

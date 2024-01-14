@@ -1,3 +1,4 @@
+import getUrlForFile from "../../utils/fileUrlUtils/FileUrl.utils";
 import { axiosInstance, handleError } from "../ApisConfig";
 
 export const getRoomInfoByItsId = async (roomId: number) => {
@@ -52,7 +53,7 @@ export const updateRoom = async (
     cost: cost,
   };
   try {
-    await axiosInstance.put(`api/rooms/${roomId}`,  params );
+    await axiosInstance.put(`api/rooms/${roomId}`, params);
   } catch (error: any) {
     let type = handleError(error);
     throw type;
@@ -69,7 +70,7 @@ export const addAmenityToRoom = async (
     description: description,
   };
   try {
-    await axiosInstance.post(`api/rooms/${roomId}/amenities`,  params );
+    await axiosInstance.post(`api/rooms/${roomId}/amenities`, params);
   } catch (error: any) {
     let type = handleError(error);
     throw type;
@@ -82,6 +83,36 @@ export const removeAmenityfromRoom = async (
   try {
     await axiosInstance.delete(`api/rooms/${roomId}/amenities/${amenityId}`);
   } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+export const createRoom = async (
+  hotelId: number,
+  roomNumber: number,
+  cost: number
+) => {
+  const params = { roomNumber: roomNumber, cost: cost };
+  try {
+    const response = await axiosInstance.post(
+      `api/hotels/${hotelId}/rooms`,
+      params
+    );
+    return response.data;
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
+
+export const addRoomImage = async (roomId: number, file: File) => {
+  try {
+    const imageUrl = await getUrlForFile(file);
+    const response = await axiosInstance.post(`/api/rooms/${roomId}/photos`, {
+      url: imageUrl,
+    });
+    return response.data;
+  } catch (error) {
     let type = handleError(error);
     throw type;
   }

@@ -4,7 +4,6 @@ import getUrlForFile from "../../utils/fileUrlUtils/FileUrl.utils";
 export const getHotelInfoByItsId = async (hotelId: number) => {
   try {
     const response = await axiosInstance.get(`api/hotels/${hotelId}`);
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);
@@ -15,7 +14,6 @@ export const getHotelInfoByItsId = async (hotelId: number) => {
 export const getHotelGalleryByItsId = async (hotelId: number) => {
   try {
     const response = await axiosInstance.get(`api/hotels/${hotelId}/gallery`);
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);
@@ -26,14 +24,41 @@ export const getHotelGalleryByItsId = async (hotelId: number) => {
 export const getHotelAmenitiesByItsId = async (hotelId: number) => {
   try {
     const response = await axiosInstance.get(`api/hotels/${hotelId}/amenities`);
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);
     throw type;
   }
 };
+export const removeAmenityFromHotel = async (
+  hotelId: number,
+  amenityId: number
+) => {
+  try {
+    await axiosInstance.delete(`api/hotels/${hotelId}/amenities/${amenityId}`);
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
 
+export const addAmenityToHotel = async (
+  hotelId: number,
+  name: string,
+  description: string
+) => {
+  const params = { name: name, description: description };
+  try {
+    const response = await axiosInstance.post(
+      `api/hotels/${hotelId}/amenities`,
+      params
+    );
+    return response.data;
+  } catch (error: any) {
+    let type = handleError(error);
+    throw type;
+  }
+};
 export const getHotelRoomsByItsId = async (
   hotelId: number,
   checkInDate: string,
@@ -48,7 +73,6 @@ export const getHotelRoomsByItsId = async (
     const response = await axiosInstance.get(`api/hotels/${hotelId}/rooms`, {
       params,
     });
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);
@@ -71,7 +95,6 @@ export const getHotelAvailableRoomsByItsId = async (
       `api/hotels/${hotelId}/available-rooms`,
       { params }
     );
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);
@@ -82,7 +105,6 @@ export const getHotelAvailableRoomsByItsId = async (
 export const getHotels = async () => {
   try {
     const response = await axiosInstance.get("/api/hotels");
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);
@@ -186,7 +208,6 @@ export const deleteHotel = async (hotelId: number, cityId: number) => {
 export const getHotelReviewsByItsId = async (hotelId: number) => {
   try {
     const response = await axiosInstance.get(`api/hotels/${hotelId}/reviews`);
-    console.log("response is ", response);
     return response.data;
   } catch (error: any) {
     let type = handleError(error);

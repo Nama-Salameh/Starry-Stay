@@ -199,20 +199,22 @@ export default function AdminCities() {
   const handleConfirmCreate = async (
     name: string,
     description: string,
-    imageFile: any
+    images: File[] | null
   ) => {
     try {
       const newCity = await createCity(name, description);
-      if (imageFile) {
-        try {
-          await addCityImage(newCity.id, imageFile);
-        } catch {
-          notifyError(errorMessages.gettingCityImageFailed);
+      if (images && images.length > 0) {
+        for (const imageFile of images) {
+          try {
+            await addCityImage(newCity.id, imageFile);
+          } catch {
+            notifyError(errorMessages.gettingCityImageFailed);
+          }
         }
+        const updatedCities = await getCities();
+        setCitiesInfo(updatedCities);
+        notifySuccess(successMessages.successCreate);
       }
-      const updatedCities = await getCities();
-      setCitiesInfo(updatedCities);
-      notifySuccess(successMessages.successCreate);
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -259,7 +261,7 @@ export default function AdminCities() {
           <TableWithPagination
             data={citiesInfo}
             itemsPerPage={5}
-            onDelete={ handleDeleteCityClick}
+            onDelete={handleDeleteCityClick}
             onEdit={handleEditCityClick}
           />
           <DeleteConfirmationModal

@@ -14,6 +14,8 @@ import {
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import {
   addAmenityToRoom,
+  addRoomImage,
+  createRoom,
   deleteRoom,
   getRoomAmenitiesByItsId,
   getRoomInfoByItsId,
@@ -66,6 +68,7 @@ const errorMessages = {
   roomToEditNotFound: localization.roomToEditNotFound,
   hotelsNotFound: localization.hotelsNotFound,
   roomsNotFound: localization.roomsNotFound,
+  roomNotFound: localization.roomNotFound,
   searchTimedout: localization.searchTimedout,
   gettingRoomImageFailed: localization.gettingRoomImageFailed,
   roomToDeleteNotFound: localization.roomToDeleteNotFound,
@@ -178,8 +181,6 @@ export default function AdminRooms() {
     setRoomToDelete(null);
   };
 
-  const handleCreateRoomClick = () => {};
-
   const handleEditRoomClick = async (roomId: number) => {
     setSelectedRoomId(roomId);
     try {
@@ -277,6 +278,69 @@ export default function AdminRooms() {
     }
   };
 
+  const handleCreateRoomClick = async () => {
+    setCreateFormOpen(true);
+  };
+  const handleConfirmCreate = async (
+    roomNumber: number,
+    cost: number,
+    images: File[],
+    amenities: RoomAmenityForCreate[] | null
+  ) => {
+    if (selectedHotel) {
+      try {
+        const newRoom = await createRoom(selectedHotel, roomNumber, cost);
+        if (images && images.length > 0) {
+          for (const imageFile of images) {
+            try {
+              await addRoomImage(newRoom.id, imageFile);
+            } catch (errorType) {
+              switch (errorType) {
+                case ErrorTypes.Network:
+                  notifyError(errorMessages.network);
+                  break;
+                case ErrorTypes.Unknown:
+                  notifyError(errorMessages.unknown);
+                  break;
+                case ErrorTypes.NotFound:
+                  notifyError(errorMessages.roomNotFound);
+                  break;
+              }
+            }
+          }
+        }
+        if (amenities && newRoom && amenities.length > 0) {
+          const roomId = newRoom.id;
+          for (const amenity of amenities) {
+            await addAmenityToRoom(roomId, amenity.name, amenity.description);
+          }
+        }
+        const updatedRooms = await getHotelRoomsByItsId(
+          selectedHotel,
+          "2024-1-10",
+          "2024-2-10"
+        );
+        setRooms(updatedRooms);
+        setCreateFormOpen(false);
+        notifySuccess(successMessages.successCreate);
+        setRoomData(null);
+      } catch (errorType) {
+        switch (errorType) {
+          case ErrorTypes.Network:
+            notifyError(errorMessages.network);
+            break;
+          case ErrorTypes.Unknown:
+            notifyError(errorMessages.unknown);
+            break;
+        }
+      }
+    }
+  };
+  const handleCancelCreate = () => {
+    setCreateFormOpen(false);
+    setRoomData(null);
+  };
+
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 10, pt: 7, pr: 3 }}>
       {isLoading && (
@@ -344,10 +408,30 @@ export default function AdminRooms() {
                 id: selectedRoomId,
                 roomNumber: roomData ? roomData.roomNumber : null,
                 cost: roomData ? roomData.price : null,
+                type: "standard",
+                capacityOfAdults: 2,
+                capacityOfChildren: 1,
+                availability: true,
                 amenities: roomAmenities,
               }}
               isCreateMode={false}
               onAmenitiesChange={handleAmenitiesChange}
+            />
+          </SlidingWindow>
+          <SlidingWindow isOpen={isCreateFormOpen} onClose={handleCancelCreate}>
+            <RoomForm
+              onCancel={handleCancelCreate}
+              onSubmit={handleConfirmCreate}
+              initialValues={{
+                roomNumber: null,
+                cost: null,
+                type: "",
+                capacityOfAdults: null,
+                capacityOfChildren: null,
+                availability: undefined,
+                amenities: [],
+              }}
+              isCreateMode={true}
             />
           </SlidingWindow>
         </div>
