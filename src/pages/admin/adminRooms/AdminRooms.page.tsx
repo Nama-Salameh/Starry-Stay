@@ -292,11 +292,8 @@ export default function AdminRooms() {
         const newRoom = await createRoom(selectedHotel, roomNumber, cost);
         if (images && images.length > 0) {
           for (const imageFile of images) {
-            console.log("having images", images);
             try {
-              console.log("image ", images);
               await addRoomImage(newRoom.id, imageFile);
-              console.log("adding image");
             } catch (errorType) {
               switch (errorType) {
                 case ErrorTypes.Network:

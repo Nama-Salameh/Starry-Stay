@@ -11,19 +11,25 @@ import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 
+type CreateCitySubmitFunction = (
+  name: string,
+  description: string,
+  imageFile: File[] | null
+) => Promise<void>;
+
+type UpdateCitySubmitFunction = (
+  name: string,
+  description: string,
+  cityId: number
+) => Promise<void>;
 interface CityFormProps {
   onCancel: () => void;
-  onSubmit: (
-    name: string,
-    description: string,
-    cityId?: number,
-    imageFile?: File | null
-  ) => Promise<void> | undefined;
+  onSubmit: CreateCitySubmitFunction | UpdateCitySubmitFunction;
   initialValues: {
     name: string;
     description: string;
     cityId?: number | undefined;
-    imageFile?: File | null;
+    imageFile?: File[] | null;
   };
   isCreateMode?: boolean;
 }
@@ -41,16 +47,23 @@ const CityForm: React.FC<CityFormProps> = ({
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleFormSubmit = async (values: any) => {
-    console.log("values ", values);
+  const handleFormSubmit = async (values: any, formikProps: any) => {
     try {
       setIsLoading(true);
-      console.log("id", values.cityId);
       if (values.cityId !== undefined) {
-        await onSubmit(values.name, values.description, values.cityId);
+        await (onSubmit as UpdateCitySubmitFunction)(
+          values.name,
+          values.description,
+          values.cityId
+        );
       } else if (isCreateMode) {
-        await onSubmit(values.name, values.description, values.imageFile);
+        await (onSubmit as UpdateCitySubmitFunction)(
+          values.name,
+          values.description,
+          values.imageFile
+        );
       }
+      formikProps.resetForm();
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -83,7 +96,7 @@ const CityForm: React.FC<CityFormProps> = ({
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      onSubmit={handleFormSubmit}
+      onSubmit={(values, formikProps) => handleFormSubmit(values, formikProps)}
       validationSchema={Yup.object({
         name: Yup.string().required(localization.required),
         description: Yup.string().required(localization.required),
@@ -95,7 +108,9 @@ const CityForm: React.FC<CityFormProps> = ({
       {(formikProps) => {
         return (
           <Form>
-            <h3>{isCreateMode ? "Create" : "Update"} City</h3>
+            <h3>
+              {isCreateMode ? "Create" : "Update"} {localization.city}
+            </h3>
             <TextInput
               label="City name"
               name="name"
@@ -123,10 +138,13 @@ const CityForm: React.FC<CityFormProps> = ({
             <Box className={style.buttonContainer}>
               <Button
                 variant="contained"
-                onClick={onCancel}
+                onClick={() => {
+                  onCancel();
+                  formikProps.resetForm();
+                }}
                 className={style.cancelButton}
               >
-                Cancel
+                {localization.cancel}
               </Button>
               {!isLoading ? (
                 <SmallSubmitButton

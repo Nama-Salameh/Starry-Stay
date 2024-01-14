@@ -11,6 +11,7 @@ import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 import AmenitiesForm from "../amenitiesForm/AmenitiesFrom.component";
+
 type RoomAmenityForCreate = {
   name: string;
   description: string;
@@ -95,6 +96,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
           roomAmenities
         );
       }
+      formikProps.resetForm();
     } catch (errorType) {
       switch (errorType) {
         case ErrorTypes.Network:
@@ -260,10 +262,13 @@ const RoomForm: React.FC<RoomFormProps> = ({
             <Box className={style.buttonContainer}>
               <Button
                 variant="contained"
-                onClick={() => handleCancel(formikProps)}
+                onClick={() => {
+                  handleCancel(formikProps);
+                  formikProps.resetForm();
+                }}
                 className={style.cancelButton}
               >
-                {localization.cancel}{" "}
+                {localization.cancel}
               </Button>
               {!isLoading ? (
                 <SmallSubmitButton

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@mui/material";
 import style from "./FileUploadInput.module.css";
+import { Button } from "antd";
 
 interface FileUploadInputProps {
   formikProps: any;
@@ -18,19 +19,26 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files?.length) {
-      const newImages = [...images, ...Array.from(files)];
+      const newImages = Array.from(files).filter((file) => {
+        return !images.some(
+          (existingImage) => existingImage.name === file.name
+        );
+      });
 
-      const newPreviews = Array.from(files).map((file, index) => (
-        <img
-          key={index}
-          src={URL.createObjectURL(file)}
-          alt={`Selected Image ${index + 1}`}
-          style={{
-            maxWidth: "100px",
-            maxHeight: "100px",
-            marginRight: "10px",
-          }}
-        />
+      const newPreviews = newImages.map((file) => (
+        <div key={`${file.name}`}>
+          <img
+            key={`${file.name}`}
+            src={URL.createObjectURL(file)}
+            alt={`Selected Image ${file.name}`}
+            style={{
+              maxWidth: "100px",
+              maxHeight: "100px",
+              marginRight: "10px",
+            }}
+          />
+          <Button onClick={() => handleDelete(file)}>Delete</Button>
+        </div>
       ));
 
       const updatedPreviews = [
@@ -38,17 +46,48 @@ const FileUploadInput: React.FC<FileUploadInputProps> = ({
         ...newPreviews,
       ];
 
-      const updatedImages = [...newImages];
+      const updatedImages = [...images, ...newImages];
 
       formikProps.setFieldValue(`${name}Previews`, updatedPreviews);
       formikProps.setFieldValue(name, updatedImages);
-      setImages((prevImages) => [...prevImages, ...Array.from(files)]);
+      setImages(updatedImages);
     } else {
       formikProps.setFieldValue(`${name}Previews`, null);
       formikProps.setFieldValue(name, null);
       setImages([]);
     }
   };
+
+  const handleDelete = (fileToDelete: File) => {
+    setImages((prevImages) =>
+      prevImages.filter(
+        (existingImage) => existingImage.name !== fileToDelete.name
+      )
+    );
+  };
+
+  useEffect(() => {
+    const updatedPreviews = images.map((file) => (
+      <div key={`${file.name}`}>
+        <img
+          key={`${file.name}`}
+          src={URL.createObjectURL(file)}
+          alt={`Selected Image ${file.name}`}
+          style={{
+            maxWidth: "100px",
+            maxHeight: "100px",
+            marginRight: "10px",
+          }}
+        />
+        <Button onClick={() => handleDelete(file)}>Delete</Button>
+      </div>
+    ));
+    const updatedImages = images;
+    formikProps.setFieldValue(name, updatedImages);
+    formikProps.setFieldValue(`${name}Previews`, updatedPreviews);
+    formikProps.setFieldValue(name, images);
+  }, [images]);
+
   return (
     <div className={style.fileUploadContainer}>
       <label htmlFor={name}>{label}</label>
