@@ -5,7 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 
 export default function HotelHomeCard({
-  info: { id, imageUrl, name, starRating, cityName, visitDate },
+  info: {
+    id,
+    imageUrl,
+    name,
+    starRating,
+    cityName,
+    visitDate,
+    priceLowerBound,
+    priceUpperBound,
+    cost,
+    discountPercent,
+  },
   onClick,
 }: {
   info: {
@@ -14,19 +25,41 @@ export default function HotelHomeCard({
     name: string;
     starRating?: number;
     cityName: string;
-    visitDate?:any;
+    visitDate?: any;
+    priceLowerBound?: number;
+    priceUpperBound?: number;
+    cost?: number;
+    discountPercent?: number;
   };
-  onClick: (id: number) => void;
+  onClick?: (id: number) => void;
 }) {
-  const formattedDate = visitDate ? new Date(visitDate).toLocaleDateString() : null;
+  const formattedDate = visitDate
+    ? new Date(visitDate).toLocaleDateString()
+    : null;
 
   const handleCardClick = () => {
-    onClick(id);
+    {
+      onClick && onClick(id);
+    }
   };
 
   return (
     <Card className={style.itemCard} key={id} onClick={handleCardClick}>
-      <img src={imageUrl} className={style.image} alt={name} />
+      <div className={style.imageContainer}>
+        {discountPercent && discountPercent && (
+          <div className={style.discountPercent}>
+            {Math.round(discountPercent * 100)}% OFF
+          </div>
+        )}
+        <img src={imageUrl} className={style.image} alt={name} />
+        <div className={style.costContainer}>
+          {priceLowerBound && priceUpperBound && (
+            <p className={style.costText}>
+              ${priceLowerBound} - ${priceUpperBound}
+            </p>
+          )}
+        </div>
+      </div>
       <div className={style.cardInfo}>
         <h3>{name}</h3>
         {starRating && <Rating value={starRating} readOnly />}

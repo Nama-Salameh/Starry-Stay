@@ -44,6 +44,8 @@ export default function RecenlyVisitedHotels({
               cityName: hotel.cityName,
               starRating: hotel.starRating,
               visitDate: hotel.visitDate,
+              priceLowerBound: hotel.priceLowerBound,
+              priceUpperBound: hotel.priceUpperBound
             }}
             onClick={handleHotelClick}
           />
