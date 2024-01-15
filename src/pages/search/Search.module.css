@@ -18,7 +18,7 @@
 }
 
 .hotelsContainerWithoutSideBar {
-  margin-top: 60px;
+  margin-top: 30px;
   flex-grow: 1;
   overflow-y: auto;
   grid: 10px;
@@ -36,7 +36,7 @@
   flex-direction: row;
   gap: 10px;
 }
-.backButton{
+.backButton {
   cursor: pointer;
   text-transform: none !important;
   z-index: 3;
@@ -52,7 +52,15 @@
   background-color: var(--mui-palette-secondary-main);
   z-index: 1;
 }
-
+.backButtonContainer {
+  background-color: var(--mui-palette-secondary-main);
+  width: 200px;
+  z-index: 2;
+  position: fixed;
+  top: 140px;
+  left: 5px;
+  padding: 10px 10px 0 10px;
+}
 .mainContainer {
   display: flex;
   flex-direction: column;
@@ -65,5 +73,25 @@
 @media (max-width: 950px) {
   .filterSideBarContainer {
     width: 26%;
+  }
+}
+@media (max-width: 900px) {
+  .filtersContainer {
+    position: fixed;
+    display: flex;
+    justify-content: space-between !important;
+    align-items: center;
+    top: 186.5px;
+    left: 5px;
+    width: 100%;
+    padding: 15px 20px;
+    z-index: 2;
+    background-color: var(--mui-palette-secondary-main);
+  }
+  .hotelsContainerWithoutSideBar {
+    margin-top: 110px !important;
+  }
+  .backButtonContainer {
+    width: 100% !important;
   }
 }

@@ -51,13 +51,13 @@
 .confirmationInfo {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 7px;
 }
 .paymentInfoContainer {
   width: 40%;
 }
-.bookedRoomsContainer {
-  width: 55%;
+.bookedRoomsTableContainer {
+  width: 58% ;
 }
 @media (max-width: 550px) {
   .confirmationInfo {
@@ -67,7 +67,7 @@
   .paymentInfoContainer {
     width: 100%;
   }
-  .bookedRoomsContainer {
+  .bookedRoomsTableContainer {
     width: 100%;
   }
 }

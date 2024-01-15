@@ -150,13 +150,14 @@ export default function Hotel() {
 
         const hotelAmenities = await getHotelAmenitiesByItsId(hotelId);
         setHotelAmenities(hotelAmenities || []);
-
+        console.log("amenities: ", hotelAmenities);
         const hotelRooms = await getHotelRoomsByItsId(
           hotelId,
           "2024-1-1",
           "2024-1-30"
         );
         setHotelRooms(hotelRooms || []);
+        console.log("hotel rooms: ", hotelRooms);
 
         const hotelAvailableRooms = await getHotelAvailableRoomsByItsId(
           hotelId,
@@ -164,8 +165,11 @@ export default function Hotel() {
           "2024-1-30"
         );
         setHotelAvailableRooms(hotelAvailableRooms || []);
+
+        console.log("hotel avai rooms: ", hotelAvailableRooms);
         const hotelReviews = await getHotelReviewsByItsId(hotelId);
         setHotelReviews(hotelReviews || []);
+        console.log("hotel reviews: ", hotelReviews);
       } catch (errorType) {
         switch (errorType) {
           case ErrorTypes.Network:
@@ -271,14 +275,24 @@ export default function Hotel() {
               <p>{hotelInfo?.description}</p>
 
               <AmenitiesContainer amenities={hotelAmenities || []} />
-              <h2>{localization.Rooms}</h2>
-              <RoomContainer hotelRooms={hotelRooms} hotelId={hotelId} />
-              <h2>{localization.availableRooms}</h2>
-              <RoomContainer
-                hotelRooms={hotelAvailableRooms}
-                hotelId={hotelId}
-              />
-              <ReviewsContainer reviews={hotelReviews} />
+              {hotelRooms?.length > 0 && (
+                <div>
+                  <h2>{localization.Rooms}</h2>
+                  <RoomContainer hotelRooms={hotelRooms} hotelId={hotelId} />
+                </div>
+              )}
+              {hotelRooms?.length > 0 && (
+                <div>
+                  <h2>{localization.availableRooms}</h2>
+                  <RoomContainer
+                    hotelRooms={hotelAvailableRooms}
+                    hotelId={hotelId}
+                  />
+                </div>
+              )}
+              {hotelReviews?.length > 0 && (
+                <ReviewsContainer reviews={hotelReviews} />
+              )}
             </div>
           </div>
         )}

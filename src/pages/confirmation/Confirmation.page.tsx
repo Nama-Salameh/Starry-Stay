@@ -27,7 +27,6 @@ import {
   handlePrintPdf,
   handleSavePdf,
 } from "../../utils/pdfGeneratorUtils/PdfGeneratoeUtils";
-import SmallButton from "../../components/common/Buttons/SmallButton.component";
 import { useTheme } from "@mui/system";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { notifyError } from "../../utils/toastUtils/Toast.utils";
