@@ -14,13 +14,11 @@ import { getDecodedToken } from "../../utils/TokenUtils";
 import IToken from "../../interfaces/IToken.interface";
 import { useMediaQuery } from "@mui/material";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
   unauthorized: localization.incorrectUsernameOrPassword,
-  network: localization.networkError,
   notFound: localization.userNotFoundError,
-  unknown: localization.serverIssues,
   timeout: localization.loginTimedout,
 };
 
@@ -33,7 +31,7 @@ export default function Login() {
 
   useEffect(() => {
     document.title = localization.loginPageTitle;
-  })
+  });
   const handleLogin = async (values: {
     username: string;
     password: string;
@@ -44,24 +42,12 @@ export default function Login() {
       if (decodedToken?.userType === "Admin") navigate("/Admin");
       else navigate("/home");
     } catch (errorType) {
-      console.log("error type : ", errorType);
-      switch (errorType) {
-        case ErrorTypes.Unauthorized:
-          setValidationMessage(errorMessages.unauthorized);
-          break;
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.notFound);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.Timeout:
-          notifyError(errorMessages.timeout);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.notFound,
+        timeout: errorMessages.timeout,
+      });
+      if (errorType === ErrorTypes.Unauthorized)
+        setValidationMessage(errorMessages.unauthorized);
     } finally {
       setIsLoginLoading(false);
     }

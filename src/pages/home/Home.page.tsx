@@ -16,16 +16,15 @@ import {
   getRecentlyVisitedHotels,
   getTrendingDestinations,
 } from "../../services/home/home.service";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { CircularProgress } from "@mui/material";
 import TrendingDestinationsContainer from "../../components/homeComponents/trendingDestinationsContainer/TrendingDestinationsContainer.component";
 import IToken from "../../interfaces/IToken.interface";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
   notFound: localization.contentNotFound,
-  unknown: localization.serverIssues,
+  timeout: localization.loadingHomePageContentTimeout,
 };
 
 type City = {
@@ -59,17 +58,10 @@ export default function Home() {
         const featuredDeals = await getFeaturedDeals();
         setFeaturedDeals(featuredDeals);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+          timeout: errorMessages.timeout,
+        });
       } finally {
         setIsLoading(false);
       }

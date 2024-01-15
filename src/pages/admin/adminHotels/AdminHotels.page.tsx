@@ -14,10 +14,7 @@ import {
   removeAmenityFromHotel,
   updateHotel,
 } from "../../../services/hotels/Hotels.service";
-import {
-  notifyError,
-  notifySuccess,
-} from "../../../utils/toastUtils/Toast.utils";
+import { notifySuccess } from "../../../utils/toastUtils/Toast.utils";
 import HotelForm from "../../../components/common/forms/hotelForm/HotelForm.component";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
@@ -27,6 +24,7 @@ import { SlidingWindow } from "../../../components/common/slidingWindow/SildingW
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
 import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
 import { addAmenityToRoom } from "../../../services/rooms/Rooms.service";
+import handleErrorType from "../../../utils/handleErrorUtils/HnadleError.utils";
 
 type HotelAmenityForCreate = {
   name: string;
@@ -60,14 +58,13 @@ type City = {
   description: string;
 };
 const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
   hotelToEditNotFound: localization.hotelToEditNotFound,
   hotelsNotFound: localization.hotelsNotFound,
   searchTimedout: localization.searchTimedout,
   gettingHotelImageFailed: localization.gettingHotelImageFailed,
   citiesNotFound: localization.citiesNotFound,
   hotelToDeleteNotFound: localization.hotelToDeleteNotFound,
+  hotelNotFound: localization.hotelNotFound,
 };
 
 const successMessages = {
@@ -108,17 +105,9 @@ export default function AdminHotels() {
         const results = await getHotels();
         setHotelsInfo(results);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.hotelsNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.hotelsNotFound,
+        });
       }
     };
     const fetchCities = async () => {
@@ -126,17 +115,9 @@ export default function AdminHotels() {
         const citiesInfo = await getCities();
         setCitiesInfo(citiesInfo);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.citiesNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.citiesNotFound,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -158,17 +139,9 @@ export default function AdminHotels() {
       }
       setHotelsInfo(filteredCities);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Timeout:
-          notifyError(errorMessages.searchTimedout);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        timeout: errorMessages.searchTimedout,
+      });
     }
   };
 
@@ -183,17 +156,9 @@ export default function AdminHotels() {
         await deleteHotel(hotelToDelete, hotelInfo.cityId);
         notifySuccess(successMessages.successDelete);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.hotelToDeleteNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.hotelToDeleteNotFound,
+        });
       }
     }
     setIsDeleteModalOpen(false);
@@ -220,20 +185,11 @@ export default function AdminHotels() {
       setHotelData(initialValues);
       const hotelAmenities = await getHotelAmenitiesByItsId(hotelId);
       setHotelAmenities(hotelAmenities);
-      console.log("amenities : ", hotelAmenities);
       setUpdateFormOpen(true);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.hotelToEditNotFound);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.hotelToEditNotFound,
+      });
     }
   };
   const handleCancelEdit = () => {
@@ -264,17 +220,9 @@ export default function AdminHotels() {
         notifySuccess(successMessages.successUpdate);
       }
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.hotelToEditNotFound);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.hotelToEditNotFound,
+      });
     }
     setUpdateFormOpen(false);
     setHotelData(null);
@@ -309,14 +257,9 @@ export default function AdminHotels() {
           try {
             await addHotelImage(newHotel.id, imageFile);
           } catch (errorType) {
-            switch (errorType) {
-              case ErrorTypes.Network:
-                notifyError(errorMessages.network);
-                break;
-              case ErrorTypes.Unknown:
-                notifyError(errorMessages.unknown);
-                break;
-            }
+            handleErrorType(errorType as ErrorTypes, {
+              notFound: errorMessages.hotelNotFound,
+            });
           }
         }
       }
@@ -332,14 +275,7 @@ export default function AdminHotels() {
       setCreateFormOpen(false);
       setHotelData(null);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes);
     }
   };
   const handleCancelCreate = () => {
@@ -375,14 +311,7 @@ export default function AdminHotels() {
         );
       }
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes);
     }
   };
   return (

@@ -1,6 +1,7 @@
 import React from "react";
-import { Modal, Typography, Button, Box, Divider } from "@mui/material";
+import { Modal, Typography, Button, Box } from "@mui/material";
 import style from "./DeleteConfirmation.module.css";
+import localization from "../../../localizationConfig";
 const DeleteConfirmationModal: React.FC<{
   isOpen: boolean;
   onConfirm: () => void;
@@ -10,10 +11,10 @@ const DeleteConfirmationModal: React.FC<{
     <Modal open={isOpen} onClose={onCancel}>
       <Box className={style.modalContainer}>
         <Typography variant="h5" className={style.title}>
-          Delete Confirmation
+          {localization.deleteConfirmation}
         </Typography>
         <Typography className={style.confirmationText}>
-          Are you sure you want to delete this city?
+          {localization.deleteConfirmationQuestion}
         </Typography>
 
         <Box className={style.buttonContainer}>
@@ -22,7 +23,7 @@ const DeleteConfirmationModal: React.FC<{
             variant="contained"
             className={style.cancelButton}
           >
-            Cancel
+            {localization.cancel}
           </Button>
           <Button
             onClick={onConfirm}
@@ -30,7 +31,7 @@ const DeleteConfirmationModal: React.FC<{
             color="error"
             className={style.deleteButton}
           >
-            Delete
+            {localization.delete}
           </Button>
         </Box>
       </Box>

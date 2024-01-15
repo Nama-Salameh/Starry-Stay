@@ -5,7 +5,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Experimental_CssVarsProvider as CssVarsProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-
+import { StyledEngineProvider } from "@mui/material/styles";
 import { theme } from "./theme/Theme";
 
 const root = ReactDOM.createRoot(
@@ -16,7 +16,9 @@ root.render(
     <BrowserRouter>
       <CssVarsProvider theme={theme}>
         <CssBaseline>
-          <App />
+          <StyledEngineProvider injectFirst>
+            <App />
+          </StyledEngineProvider>
         </CssBaseline>
       </CssVarsProvider>
     </BrowserRouter>

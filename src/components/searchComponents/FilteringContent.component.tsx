@@ -4,14 +4,12 @@ import CheckboxFiltering from "./checkbox/CheckboxFiltering.component";
 import { CircularProgress, Divider } from "@mui/material";
 import { getAmenitiesNames } from "../../services/aminities/Aminities.service";
 import localization from "../../localizationConfig";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import style from "./FilteringContent.module.css";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
   notFound: localization.amenitiesNotFound,
-  unknown: localization.serverIssues,
 };
 
 export default function FilteringContent() {
@@ -24,17 +22,9 @@ export default function FilteringContent() {
         const names = await getAmenitiesNames();
         setAmenitiesNames(names || []);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -48,7 +38,7 @@ export default function FilteringContent() {
       {isLoading && (
         <div className={style.loadingContainer}>
           <CircularProgress color="primary" />
-          <span>Loading...</span>
+          <span>{localization.loading}</span>
         </div>
       )}
       {!isLoading && (
