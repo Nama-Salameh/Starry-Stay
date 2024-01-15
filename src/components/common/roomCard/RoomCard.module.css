@@ -53,21 +53,14 @@
   display: flex;
   align-items: center;
   color: grey;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   height: 40px;
 }
 .capacityIcon {
   margin-right: 4px;
 }
-
-.roomCapacity p {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.capacityContainer p {
+  overflow: hidden !important;
+  white-space: nowrap !important;
 }
 .roomPrice {
   position: absolute;
@@ -106,11 +99,18 @@
   }
 }
 
-@media (max-width: 420px) {
-  .imageContainer {
-    height: 200px;
+@media (max-width: 470px) {
+  .roomContainer {
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    margin-top: 4%;
+  }
+  .roomInfoContainer {
+    margin-top: 0px;
+    width: 100%;
   }
   .roomImage {
-    height: 200px;
+    height: 100%;
   }
 }

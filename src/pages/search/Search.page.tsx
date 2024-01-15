@@ -89,6 +89,15 @@ export default function Search() {
         )}
         {!isLoading && (
           <div>
+            <div className={style.backButtonContainer}>
+            <Button
+              variant="outlined"
+              className={style.backButton}
+              onClick={handleGoBack}
+            >
+              &lt; {localization.back}
+            </Button>
+            </div>
             {isSmallScreen ? (
               <div className={style.smallPageContainer}>
                 <div className={style.filtersContainer}>
@@ -112,13 +121,6 @@ export default function Search() {
               </div>
             ) : (
               <div className={style.searchContainerWithSideBar}>
-                <Button
-                  variant="outlined"
-                  className={style.backButton}
-                  onClick={handleGoBack}
-                >
-                  &lt; {localization.back}
-                </Button>
                 <div className={style.filterSideBarContainer}>
                   <FilteringContent />
                 </div>

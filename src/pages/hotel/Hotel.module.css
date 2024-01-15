@@ -8,6 +8,7 @@
 .pageContainer {
   width: 100%;
   padding: 110px 20px;
+  margin: 0;
 }
 .hotelPageContainer {
   width: 60%;
@@ -88,4 +89,12 @@ h4 {
 h2 {
   margin-top: 70px;
   margin-bottom: 20px;
+}
+@media (max-width: 600px) {
+  .hotelPageContainer.mapHidden {
+    width: 90%;
+  }
+  .hotelDetails {
+    width: 100%;
+  }
 }
