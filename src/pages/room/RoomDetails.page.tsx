@@ -4,7 +4,6 @@ import {
   getRoomPhotosByItsId,
   getRoomInfoByItsId,
 } from "../../services/rooms/Rooms.service";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import style from "./RoomDetails.module.css";
 import { Button, CircularProgress } from "@mui/material";
@@ -17,11 +16,10 @@ import { isLoggedIn, isSessionExpired } from "../../utils/TokenUtils";
 import { useCartContext } from "../../contexts/cartContext/CartContext.context";
 import LoginModal from "../../components/modals/loginModal/LoginModal.component";
 import { createBrowserHistory } from "history";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
   notFound: localization.roomNotFound,
-  unknown: localization.serverIssues,
   timeout: localization.roomDetailsTimedout,
 };
 
@@ -71,7 +69,7 @@ export default function RoomDetails() {
 
   useEffect(() => {
     document.title = localization.roomPageTitle;
-  })
+  });
   useEffect(() => {
     const fetchRoomData = async () => {
       try {
@@ -81,20 +79,10 @@ export default function RoomDetails() {
         const roomPhotos = await getRoomPhotosByItsId(roomId);
         setRoomPhotos(roomPhotos || []);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.Timeout:
-            notifyError(errorMessages.timeout);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+          timeout: errorMessages.timeout,
+        });
       } finally {
         setIsLoading(false);
       }

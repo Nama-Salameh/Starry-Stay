@@ -1,18 +1,15 @@
 import React, { startTransition, useEffect, useState } from "react";
-import IHotel from "../../../interfaces/IHotel.interface";
 import { getHotelInfoByItsId } from "../../../services/hotels/Hotels.service";
 import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
-import { notifyError } from "../../../utils/toastUtils/Toast.utils";
 import localization from "../../../localizationConfig";
 import style from "./HotelCard.module.css";
 import { useNavigate } from "react-router-dom";
-import { Rating } from "@mui/material";
+import { CircularProgress, Rating } from "@mui/material";
 import AmenitiesContainer from "../amenitiesContainer/AmenitiesContainer.component";
+import handleErrorType from "../../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
   notFound: localization.hotelNotFound,
-  unknown: localization.serverIssues,
 };
 type Hotel = {
   hotelName: string;
@@ -40,17 +37,9 @@ export default function HotelCard({ hotelId }: { hotelId: number }) {
         const hotelInfo = await getHotelInfoByItsId(hotelId);
         setHotelInfo(hotelInfo);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -70,29 +59,40 @@ export default function HotelCard({ hotelId }: { hotelId: number }) {
       key={hotelId}
       onClick={() => handleHotelClick(hotelId)}
     >
-      <img
-        src={hotelInfo?.imageUrl}
-        alt={`Hotel ${hotelInfo?.hotelName}`}
-        className={style.hotelImage}
-      />
-      <div className={style.hotelInfoContainer}>
-        <h2>{hotelInfo?.hotelName}</h2>
-        <h4 className={style.hotelLocation}>{hotelInfo?.location}</h4>
-        <Rating
-          value={hotelInfo?.starRating}
-          readOnly
-          className={style.hotelRating}
-        />
-
-        <div className={style.amenitiesContainer}>
-          {hotelInfo?.amenities && (
-            <AmenitiesContainer
-              amenities={hotelInfo?.amenities}
-              isHotelCard={true}
-            />
-          )}
+      {isLoading && (
+        <div className={style.loadingContainer}>
+          <CircularProgress color="primary" />
+          <span>{localization.loading}</span>
         </div>
-      </div>
+      )}
+      {!isLoading && (
+        <div>
+          {" "}
+          <img
+            src={hotelInfo?.imageUrl}
+            alt={`Hotel ${hotelInfo?.hotelName}`}
+            className={style.hotelImage}
+          />
+          <div className={style.hotelInfoContainer}>
+            <h2>{hotelInfo?.hotelName}</h2>
+            <h4 className={style.hotelLocation}>{hotelInfo?.location}</h4>
+            <Rating
+              value={hotelInfo?.starRating}
+              readOnly
+              className={style.hotelRating}
+            />
+
+            <div className={style.amenitiesContainer}>
+              {hotelInfo?.amenities && (
+                <AmenitiesContainer
+                  amenities={hotelInfo?.amenities}
+                  isHotelCard={true}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

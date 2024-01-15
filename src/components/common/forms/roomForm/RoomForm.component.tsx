@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Box, Button, Input, Switch } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Switch } from "@mui/material";
 import { Formik, Form } from "formik";
 import TextInput from "../../textField/TextField.component";
 import style from "../Form.module.css";
 import SmallSubmitButton from "../../Buttons/SmallSubmitButton.component";
 import SmallButtonLoader from "../../loaders/SmallButtonLoaders.component";
-import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
 import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 import AmenitiesForm from "../amenitiesForm/AmenitiesFrom.component";
+import handleErrorType from "../../../../utils/handleErrorUtils/HnadleError.utils";
 
 type RoomAmenityForCreate = {
   name: string;
@@ -55,11 +55,6 @@ interface RoomFormProps {
   ) => Promise<void>;
 }
 
-const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
-};
-
 const RoomForm: React.FC<RoomFormProps> = ({
   onCancel,
   onSubmit,
@@ -98,28 +93,11 @@ const RoomForm: React.FC<RoomFormProps> = ({
       }
       formikProps.resetForm();
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Timeout:
-          notifyError(
-            `${
-              isCreateMode ? "creating" : "updating"
-            } timed out. Please try again.`
-          );
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        default:
-          notifyError(
-            `Failed ${
-              isCreateMode ? "creating" : "updating"
-            } room. please Try again`
-          );
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        timeout: `${
+          isCreateMode ? "creating" : "updating"
+        } timed out. Please try again.`,
+      });
     } finally {
       formikProps.resetForm({ values: initialValues });
       setIsLoading(false);
@@ -238,7 +216,7 @@ const RoomForm: React.FC<RoomFormProps> = ({
               className={style.textField}
             />
             <div>
-              Availability
+              {localization.availability}
               <Switch
                 name="availability"
                 checked={formikProps.values.availability}

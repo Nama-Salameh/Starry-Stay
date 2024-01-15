@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Box, Button, Select, MenuItem } from "@mui/material";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import React, { useState } from "react";
+import { Box, Button, Select, MenuItem } from "@mui/material";
+import { Formik, Form } from "formik";
 import TextInput from "../../textField/TextField.component";
 import style from "../Form.module.css";
 import SmallSubmitButton from "../../Buttons/SmallSubmitButton.component";
 import SmallButtonLoader from "../../loaders/SmallButtonLoaders.component";
-import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
 import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
 import AmenitiesForm from "../amenitiesForm/AmenitiesFrom.component";
+import handleErrorType from "../../../../utils/handleErrorUtils/HnadleError.utils";
 
 type HotelAmenityForCreate = {
   name: string;
@@ -67,11 +67,6 @@ interface HotelFormProps {
   ) => Promise<void>;
 }
 
-const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
-};
-
 const HotelForm: React.FC<HotelFormProps> = ({
   onCancel,
   onSubmit,
@@ -120,28 +115,11 @@ const HotelForm: React.FC<HotelFormProps> = ({
       formikProps.resetForm();
       setHotelAmenities([]);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Timeout:
-          notifyError(
-            `${
-              isCreateMode ? "creating" : "updating"
-            } timed out. Please try again.`
-          );
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        default:
-          notifyError(
-            `Failed ${
-              isCreateMode ? "creating" : "updating"
-            } hotel. please Try again`
-          );
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        timeout: `${
+          isCreateMode ? "creating" : "updating"
+        } timed out. Please try again.`,
+      });
     } finally {
       setIsLoading(false);
     }

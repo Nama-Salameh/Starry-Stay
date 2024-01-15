@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Box, Button, Input } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button } from "@mui/material";
 import { Formik, Form } from "formik";
 import TextInput from "../../textField/TextField.component";
 import style from "../Form.module.css";
 import SmallSubmitButton from "../../Buttons/SmallSubmitButton.component";
 import SmallButtonLoader from "../../loaders/SmallButtonLoaders.component";
-import { notifyError } from "../../../../utils/toastUtils/Toast.utils";
 import * as Yup from "yup";
 import localization from "../../../../localizationConfig";
 import FileUploadInput from "../../FileUploadInput/FileUploadInput.component";
 import { ErrorTypes } from "../../../../enums/ErrorTypes.enum";
+import handleErrorType from "../../../../utils/handleErrorUtils/HnadleError.utils";
 
 type CreateCitySubmitFunction = (
   name: string,
@@ -33,11 +33,6 @@ interface CityFormProps {
   };
   isCreateMode?: boolean;
 }
-
-const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
-};
 
 const CityForm: React.FC<CityFormProps> = ({
   onCancel,
@@ -65,28 +60,11 @@ const CityForm: React.FC<CityFormProps> = ({
       }
       formikProps.resetForm();
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Timeout:
-          notifyError(
-            `${
-              isCreateMode ? "creating" : "updating"
-            } timed out. Please try again.`
-          );
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        default:
-          notifyError(
-            `Failed ${
-              isCreateMode ? "creating" : "updating"
-            } city. please Try again`
-          );
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        timeout: `${
+          isCreateMode ? "creating" : "updating"
+        } timed out. Please try again.`,
+      });
     } finally {
       setIsLoading(false);
     }

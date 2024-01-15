@@ -2,42 +2,23 @@ import React, { useEffect, useState } from "react";
 import localization from "../../localizationConfig";
 import { getBooking } from "../../services/booking/Booking.service";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCreditCard,
-  faCalendarDays,
-  faDollarSign,
-  faClock,
-  faFilePdf,
-  faFileDownload,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf, faFileDownload } from "@fortawesome/free-solid-svg-icons";
 import style from "./Confirmation.module.css";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
+import { Button, IconButton, CircularProgress } from "@mui/material";
 import {
   handlePrintPdf,
   handleSavePdf,
 } from "../../utils/pdfGeneratorUtils/PdfGeneratoeUtils";
 import { useTheme } from "@mui/system";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { createBrowserHistory } from "history";
 import { useParams } from "react-router-dom";
 import BookedRoomsTable from "../../components/confirmationComponents/bookedRoomsTable/BookedRoomsTable.component";
 import PaymentInfoContainer from "../../components/confirmationComponents/paymentInfoContainer/PaymentInfoContainer.component";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
+  timeout: localization.loadingConfiramtionTimeout,
 };
 
 export default function Confirmation() {
@@ -69,14 +50,9 @@ export default function Confirmation() {
         const bookingData = await getBooking(confirmationNumber);
         setBookingInfo(bookingData);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          timeout: errorMessages.timeout,
+        });
       } finally {
         setIsLoading(false);
       }

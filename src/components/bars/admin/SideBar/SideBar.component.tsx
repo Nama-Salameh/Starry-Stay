@@ -103,8 +103,10 @@ const Drawer = styled(MuiDrawer, {
 export default function SideBar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("cities");
-
+  const [selectedOption, setSelectedOption] = useState(() => {
+    return localStorage.getItem("selectedOption") || "cities";
+  });
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -115,9 +117,11 @@ export default function SideBar() {
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option);
+    localStorage.setItem("selectedOption", option);
   };
   const handleLogout = () => {
     removeToken();
+    localStorage.removeItem("selectedOption");
   };
   return (
     <Box sx={{ display: "flex" }}>

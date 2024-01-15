@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import {
   getCityByItsId,
   getCityHotels,
@@ -13,11 +12,10 @@ import style from "./CityDetails.module.css";
 import Carousel from "../../components/common/carousel/Carousel.component";
 import HotelCard from "../../components/common/hotelCard/HotelCard.component";
 import { createBrowserHistory } from "history";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
   notFound: localization.hotelNotFound,
-  unknown: localization.serverIssues,
   timeout: localization.cityDetailsTimedout,
 };
 
@@ -73,20 +71,10 @@ export default function CityDetails() {
         const cityPhotos = await getCityPhotos(cityId);
         setCityPhotos(cityPhotos);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.Timeout:
-            notifyError(errorMessages.timeout);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+          timeout: errorMessages.timeout,
+        });
       } finally {
         setIsLoading(false);
       }

@@ -1,11 +1,10 @@
-import React  from "react";
-import { Outlet} from "react-router-dom";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 
- const Admin = () => {
+const Admin = () => {
   return (
-    <Box component="main" sx={{ flexGrow: 1, pt:4 }}>
-      
+    <Box component="main" sx={{ flexGrow: 1, pt: 4 }}>
       <div className="content">
         <Outlet />
       </div>

@@ -13,12 +13,12 @@ import { Button, CircularProgress, Rating } from "@mui/material";
 import style from "./Hotel.module.css";
 import Map from "../../components/hotelComponents/mapContainer/MapContainer.component";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import ReviewsContainer from "../../components/hotelComponents/reviewsContainer/ReviewsContainer.component";
 import Carousel from "../../components/common/carousel/Carousel.component";
 import RoomContainer from "../../components/hotelComponents/roomsContainer/RoomsContainer.component";
 import AmenitiesContainer from "../../components/common/amenitiesContainer/AmenitiesContainer.component";
 import { createBrowserHistory } from "history";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 type HotelInfo = {
   hotelName: string;
@@ -50,9 +50,8 @@ type Room = {
 };
 
 const errorMessages = {
-  network: localization.networkError,
   notFound: localization.hotelNotFound,
-  unknown: localization.serverIssues,
+  timeout: localization.loadingHotelInfoTimeout,
 };
 const responsiveHotelImage = {
   superLargeDesktop: {
@@ -150,14 +149,13 @@ export default function Hotel() {
 
         const hotelAmenities = await getHotelAmenitiesByItsId(hotelId);
         setHotelAmenities(hotelAmenities || []);
-        console.log("amenities: ", hotelAmenities);
+
         const hotelRooms = await getHotelRoomsByItsId(
           hotelId,
           "2024-1-1",
           "2024-1-30"
         );
         setHotelRooms(hotelRooms || []);
-        console.log("hotel rooms: ", hotelRooms);
 
         const hotelAvailableRooms = await getHotelAvailableRoomsByItsId(
           hotelId,
@@ -166,22 +164,13 @@ export default function Hotel() {
         );
         setHotelAvailableRooms(hotelAvailableRooms || []);
 
-        console.log("hotel avai rooms: ", hotelAvailableRooms);
         const hotelReviews = await getHotelReviewsByItsId(hotelId);
         setHotelReviews(hotelReviews || []);
-        console.log("hotel reviews: ", hotelReviews);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+          timeout: errorMessages.timeout,
+        });
       } finally {
         setIsLoading(false);
       }

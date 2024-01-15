@@ -24,6 +24,7 @@ import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 import CircularProgress from "@mui/material/CircularProgress";
 import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
+import handleErrorType from "../../../utils/handleErrorUtils/HnadleError.utils";
 
 interface CityData {
   id?: number;
@@ -32,13 +33,12 @@ interface CityData {
 }
 
 const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
   cityToEditNotFound: localization.cityToEditNotFound,
   citiesNotFound: localization.citiesNotFound,
   searchTimedout: localization.searchTimedout,
   cityToDeleteNotFound: localization.cityToDeleteNotFound,
   gettingCityImageFailed: localization.gettingCityImageFailed,
+  cityNotFound: localization.cityNotFound,
 };
 const successMessages = {
   successUpdate: localization.cityUpdatedSuccessfully,
@@ -65,17 +65,9 @@ export default function AdminCities() {
         const citiesInfo = await getCities();
         setCitiesInfo(citiesInfo);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.citiesNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.citiesNotFound,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -95,17 +87,9 @@ export default function AdminCities() {
       }
       setCitiesInfo(filteredCities);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Timeout:
-          notifyError(errorMessages.searchTimedout);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        timeout: errorMessages.searchTimedout,
+      });
     }
   };
 
@@ -119,17 +103,9 @@ export default function AdminCities() {
         await deleteCityByItsId(cityToDelete);
         notifySuccess(successMessages.successDelete);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.cityToDeleteNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.cityToDeleteNotFound,
+        });
       }
     }
     setIsDeleteModalOpen(false);
@@ -146,17 +122,9 @@ export default function AdminCities() {
       setCityData(cityInfo);
       setUpdateFormOpen(true);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.cityToEditNotFound);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.cityToEditNotFound,
+      });
     }
   };
 
@@ -177,17 +145,9 @@ export default function AdminCities() {
         notifySuccess(successMessages.successUpdate);
       }
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.cityToEditNotFound);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.cityToEditNotFound,
+      });
     }
     setUpdateFormOpen(false);
     setCityData(null);
@@ -207,8 +167,10 @@ export default function AdminCities() {
         for (const imageFile of images) {
           try {
             await addCityImage(newCity.id, imageFile);
-          } catch {
-            notifyError(errorMessages.gettingCityImageFailed);
+          } catch (errorType) {
+            handleErrorType(errorType as ErrorTypes, {
+              notFound: errorMessages.cityNotFound,
+            });
           }
         }
         const updatedCities = await getCities();
@@ -216,14 +178,7 @@ export default function AdminCities() {
         notifySuccess(successMessages.successCreate);
       }
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes);
     }
     setCreateFormOpen(false);
     setCityData(null);

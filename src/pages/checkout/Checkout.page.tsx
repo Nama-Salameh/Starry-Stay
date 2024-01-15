@@ -1,9 +1,5 @@
 import React, { startTransition, useEffect, useState } from "react";
-import {
-  Button,
-  CircularProgress,
-  useMediaQuery,
-} from "@mui/material";
+import { Button, CircularProgress, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router";
 import { createBrowserHistory } from "history";
 import {
@@ -18,12 +14,12 @@ import {
   getHotelRoomsByItsId,
 } from "../../services/hotels/Hotels.service";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import style from "./Checkout.module.css";
 import IToken from "../../interfaces/IToken.interface";
 import localization from "../../localizationConfig";
 import RoomCard from "../../components/common/roomCard/RoomCard.component";
 import PersonalInfo from "../../components/checkoutComponents/personalInfoContainer/PersonalInfoContainer.component";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 type RoomInfo = {
   hotelId: number;
@@ -80,8 +76,6 @@ type Room = {
 };
 
 const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
   conflict: localization.conflictBookingError,
   notFound: localization.bookingRoomsNotFound,
 };
@@ -108,9 +102,6 @@ export default function Checkout() {
       try {
         let totalCost = 0;
         const roomDetails: RoomInfo[] = [];
-        const getBook = await getBooking(+userInfo.user_id);
-        console.log("getBook ", getBook);
-
         for (const room of allRoomsFromCart) {
           const hotelRooms = await getHotelRoomsByItsId(
             room.hotelId,
@@ -154,17 +145,9 @@ export default function Checkout() {
           }))
         );
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.notFound);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.notFound,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -198,17 +181,9 @@ export default function Checkout() {
       }
       startTransition(() => navigate(`/confirmation/${confirmationNumber}`));
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Conflict:
-          notifyError(errorMessages.conflict);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        conflict: errorMessages.conflict,
+      });
     } finally {
       setIsConfirmLoading(false);
       resetForm();

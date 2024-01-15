@@ -17,13 +17,12 @@ import { useSearchContext } from "../../contexts/searchContext/SearchContext.con
 import { getSearchResultRegularUser } from "../../services/search/Search.service";
 import HotelsContainer from "../../components/searchComponents/hotel/HotelsConatainer.component";
 import Sort from "../../components/searchComponents/sort/Sort.component";
-import { notifyError } from "../../utils/toastUtils/Toast.utils";
 import { ErrorTypes } from "../../enums/ErrorTypes.enum";
 import { createBrowserHistory } from "history";
+import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
 
 const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.searchUnknownError,
+  timedOut: localization.searchTimedout,
 };
 
 export default function Search() {
@@ -52,15 +51,10 @@ export default function Search() {
           searchParams.sort
         );
         setHotelsSearchResults(results);
-      } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+      } catch (errorType: any) {
+        handleErrorType(errorType as ErrorTypes, {
+          timeout: errorMessages.timedOut,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -90,13 +84,13 @@ export default function Search() {
         {!isLoading && (
           <div>
             <div className={style.backButtonContainer}>
-            <Button
-              variant="outlined"
-              className={style.backButton}
-              onClick={handleGoBack}
-            >
-              &lt; {localization.back}
-            </Button>
+              <Button
+                variant="outlined"
+                className={style.backButton}
+                onClick={handleGoBack}
+              >
+                &lt; {localization.back}
+              </Button>
             </div>
             {isSmallScreen ? (
               <div className={style.smallPageContainer}>

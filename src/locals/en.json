@@ -94,7 +94,11 @@
   "searchUnknownError": "Failed to get search result, please try again",
   "roomNotFound": "The requested room was not found.",
   "hotelNotFound": "The requested hotel was not found.",
+  "cityNotFound": "The requested city was not found.",
   "conflictBookingError": "We are soory, but please try to booking again after few minutes",
+  "loadingHotelInfoTimeout": "Loading hotel info operation timed out. Please refresh the page",
+  "loadingHomePageContentTimeout": "Loading home page content operation timed out. Please refresh the page",
+  "loadingConfiramtionTimeout": "Loading your confirmation info timed out. Please refresh the page",
   "amenitiesNotFound": "The amenities not found",
   "hotelGalleryNotFound": "No Photo for this hotel found",
   "hotelAvailableRoomsNotFound": "No Available rooms for this hotel",
@@ -162,5 +166,8 @@
   "remove": "Remove",
   "noAmenitiesAdded": "No Amenities added",
   "amenities": "Amenities ",
-  "hotels" : "Hotels"
+  "hotels": "Hotels",
+  "deleteConfirmation": "Delete Confirmation",
+  "deleteConfirmationQuestion":"Are you sure you want for this deletion ?",
+  "delete" : "Delete"
 }

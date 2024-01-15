@@ -3,10 +3,7 @@ import localization from "../../../localizationConfig";
 import { Box, CircularProgress, MenuItem, Select } from "@mui/material";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";
-import {
-  notifyError,
-  notifySuccess,
-} from "../../../utils/toastUtils/Toast.utils";
+import { notifySuccess } from "../../../utils/toastUtils/Toast.utils";
 import {
   getHotelRoomsByItsId,
   getHotels,
@@ -26,6 +23,7 @@ import DeleteConfirmationModal from "../../../components/modals/deleteConfirmati
 import { SlidingWindow } from "../../../components/common/slidingWindow/SildingWindow.component";
 import RoomForm from "../../../components/common/forms/roomForm/RoomForm.component";
 import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
+import handleErrorType from "../../../utils/handleErrorUtils/HnadleError.utils";
 type RoomAmenityForCreate = {
   name: string;
   description: string;
@@ -63,8 +61,6 @@ type Room = {
 };
 
 const errorMessages = {
-  network: localization.networkError,
-  unknown: localization.serverIssues,
   roomToEditNotFound: localization.roomToEditNotFound,
   hotelsNotFound: localization.hotelsNotFound,
   roomsNotFound: localization.roomsNotFound,
@@ -104,17 +100,9 @@ export default function AdminRooms() {
         setHotelsInfo(hotels);
         setSelectedHotel(hotels.length > 0 ? hotels[0].id : null);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.hotelsNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.hotelsNotFound,
+        });
       } finally {
         setIsLoading(false);
       }
@@ -134,17 +122,9 @@ export default function AdminRooms() {
           setRooms(hotelRooms);
         }
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.roomToDeleteNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.roomToDeleteNotFound,
+        });
       }
     };
     fetchRooms();
@@ -160,17 +140,9 @@ export default function AdminRooms() {
         await deleteRoom(selectedHotel, roomToDelete);
         notifySuccess(successMessages.successDelete);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-          case ErrorTypes.NotFound:
-            notifyError(errorMessages.roomToDeleteNotFound);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes, {
+          notFound: errorMessages.roomToDeleteNotFound,
+        });
       }
     }
     setIsDeleteModalOpen(false);
@@ -190,17 +162,9 @@ export default function AdminRooms() {
       setRoomAmenities(roomAmenities);
       setUpdateFormOpen(true);
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.roomToEditNotFound);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.roomToEditNotFound,
+      });
     }
   };
 
@@ -216,23 +180,13 @@ export default function AdminRooms() {
     try {
       if (typeof roomId === "number") {
         await handleAmenitiesChange(roomId, roomAmenities);
-
         await updateRoom(roomId, roomNumber, cost);
-
         notifySuccess(successMessages.successUpdate);
       }
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-        case ErrorTypes.NotFound:
-          notifyError(errorMessages.roomsNotFound);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes, {
+        notFound: errorMessages.roomsNotFound,
+      });
     }
     setUpdateFormOpen(false);
     setRoomData(null);
@@ -267,14 +221,7 @@ export default function AdminRooms() {
         );
       }
     } catch (errorType) {
-      switch (errorType) {
-        case ErrorTypes.Network:
-          notifyError(errorMessages.network);
-          break;
-        case ErrorTypes.Unknown:
-          notifyError(errorMessages.unknown);
-          break;
-      }
+      handleErrorType(errorType as ErrorTypes);
     }
   };
 
@@ -295,17 +242,9 @@ export default function AdminRooms() {
             try {
               await addRoomImage(newRoom.id, imageFile);
             } catch (errorType) {
-              switch (errorType) {
-                case ErrorTypes.Network:
-                  notifyError(errorMessages.network);
-                  break;
-                case ErrorTypes.Unknown:
-                  notifyError(errorMessages.unknown);
-                  break;
-                case ErrorTypes.NotFound:
-                  notifyError(errorMessages.roomNotFound);
-                  break;
-              }
+              handleErrorType(errorType as ErrorTypes, {
+                notFound: errorMessages.roomNotFound,
+              });
             }
           }
         }
@@ -325,14 +264,7 @@ export default function AdminRooms() {
         notifySuccess(successMessages.successCreate);
         setRoomData(null);
       } catch (errorType) {
-        switch (errorType) {
-          case ErrorTypes.Network:
-            notifyError(errorMessages.network);
-            break;
-          case ErrorTypes.Unknown:
-            notifyError(errorMessages.unknown);
-            break;
-        }
+        handleErrorType(errorType as ErrorTypes);
       }
     }
   };
