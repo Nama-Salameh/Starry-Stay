@@ -40,10 +40,9 @@ They can do things that the unauthenticated users do, in addition to booking roo
 - MUI (Material-UI)
 - Formik
 
-
 ## Prerequisites
 
-Make sure you have Node.js and npm installed before proceeding.
+Make sure you have npm installed before proceeding.
 
 ## Installation
 
@@ -67,7 +66,77 @@ You can install the project and run it on your device by these steps :
    npm start
    ```
 
+
 ## Usage
+
+Welcome to Starry Stay! Below, you'll find a guide on how to navigate and use the platform. Please note that certain features are exclusive to authenticated users. If you don't have an account yet, you can sign up to unlock additional capabilities.
+
+### 1. Home Page
+
+- The home page welcomes users to Starry Stay.
+- Featured deals, recently visited hotel, and trending destinations are showcased.
+- Users can browse Featured deals, recently visited hotel, and trending destinations cities.
+- Users can search for available rooms by filling the destination, check-in and check-out dates, number of rooms, adults, and children.
+- Users can click to any of the hotels and cities to view it's details.
+
+### 2. Search Page
+
+- The search page showing the result of search for user.
+- Users can filter the search result by ratings.
+- Users can sort the search result ascending or descending.
+- Authenticated users can adding a rooms to the cart.
+
+### 3. Hotel Page
+
+- The hotel page showing the hotel details (Hotel gallery, hotel description, hotel amenities, whole hotel rooms, the available rooms, customer reviews, and the hotel location on map).
+- Authenticated users can adding a rooms to the cart
+- Users can open the room details, by click to the room.
+- Users can open the specific room details by click to it.
+
+### 4. Room Page
+
+- The room page showing the room details (Room number, room type, room gallery, room amenities, and the capacity of the room).
+- Authenticated users can adding a rooms to the cart
+
+### 5. City Page
+
+- The city page showing the city details (City name, city description, city gallery, and the city hotels).
+- Users can open the specific hotel details by click to it.
+
+### 6. Checkout page
+
+- This page available only for authenticated users.
+- The checkout page opend by click to the cart icon in the top bar.
+- The checkout page showing the booked rooms, the personal and payment information.
+- Users can confirm their bookings.
+
+### 7. Confirmation page
+
+- This page available only for authenticated users.
+- The confirmation page opend by confirm the booking from checkout page.
+- The confirmation page showing the booking status, booked rooms and booking information.
+
+### 8. Mange hotels page
+
+- This page available only for admins.
+- The Mange hotels page showing all added hotel, and its information.
+- The Mange hotels page enabling admin to create a new hotel (Must add the hotel basic information, and can add images and amenities).
+- The Mange hotels page enabling admin to search for hotel by it's name or description.
+
+### 8. Mange rooms page
+
+- This page available only for admins.
+- The Mange rooms page showing all added rooms for specific hotel, and its information.
+- The Mange rooms page enabling admin to create a new room (Must add the room basic information, and can add images and amenities).
+- The Mange rooms page enabling admin to search for hotel by it's name or description.
+
+### 8. Mange cities page
+
+- This page available only for admins.
+- The Mange cities page showing all added cities, and its information.
+- The Mange cities page enabling admin to create a new city (Must add the city basic information, and can add images).
+- The Mange cities page enabling admin to search for hotel by it's name or description.
+
 
 ## Contributing
 
