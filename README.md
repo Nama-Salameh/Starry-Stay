@@ -1,46 +1,96 @@
-# Getting Started with Create React App
+# Starry Stay
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+It is a platform for booking travel and accommodation, enabling users to book the accommodation that suits them and their desires.
 
-## Available Scripts
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#built-with">Built With</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+  </ol>
+</details>
 
-In the project directory, you can run:
+## About the project
 
-### `npm start`
+Starry Stay platform for booking travel and accommodation. provides three flows for different types of users, each of them having his/her permissions:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### 1. Administrators:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+They can manage cities, hotels, and rooms (Can do CRUD operations for each type as a whole and for related info for them as photos, ratings, and amenities). Also, they can search for each type and filter them.
 
-### `npm test`
+#### 2. Unauthenticated users:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Can browse the cities, hotels, and rooms (featured deals, trending destinations), Can see the details (Photos gallery for all of them, amenities for hotels and rooms, reviews for hotels, the whole rooms, and the available rooms for a specific hotel.) The most important feature that they can do: is search for accommodations based on the destination, the check-in and check-out dates, the number of rooms, and how many the number of adults and children.
 
-### `npm run build`
+#### 3. Authenticated users:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+They can do things that the unauthenticated users do, in addition to booking rooms in their hotel and seeing the recently visited hotel.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Build with
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- React
+- React router
+- React hooks
+- React-toastify
+- TypeScript
+- MUI (Material-UI)
+- Formik
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Prerequisites
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Make sure you have Node.js and npm installed before proceeding.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Installation
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can install the project and run it on your device by these steps :
 
-## Learn More
+1. **Clone the repo:**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```sh
+   git clone https://github.com/Nama-Salameh/Starry-Stay.git
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Install npm packages:**
+
+   ```sh
+   npm install
+   ```
+
+3. **Run the project:**
+
+   ```sh
+   npm start
+   ```
+
+## Usage
+
+## Contributing
+
+If you have suggestions or improvements, feel free to open an issue with the tag "enhancement".  
+Don't forget to give the project a star! Thanks again!
+
+1. **Fork the Project**
+2. **Create your Feature Branch:**
+
+   ```sh
+   git checkout -b feature/SuggestedFeature
+   ```
+
+3. **Commit your Changes:**
+
+   ```sh
+   git commit -m 'Add some SuggestedFeature'
+   ```
+
+4. **Push to the Branch:**
+
+   ```sh
+   git push origin feature/SuggestedFeature
+   ```
+
+5. **Open a Pull Request**
