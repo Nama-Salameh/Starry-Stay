@@ -3,7 +3,6 @@
 Explore the world with Starry Stay! A platform for booking travel and accommodation.
 
 **Design:** [Figma Design](https://www.figma.com/proto/L7CXtGogw7r7TSYQa1wjCf/Starry-Stay--Travel-and-accomodation-booking?type=design&node-id=50-1561&t=a9EV51jtzCO6IUBw-1&scaling=scale-down&page-id=0%3A1&starting-point-node-id=50%3A1561&show-proto-sidebar=1)  
-**Live Demo:** [Starry Stay - Live Deployment]( )
 
 <details>
   <summary>Table of Contents</summary>
@@ -140,7 +139,8 @@ Welcome to Starry Stay! Below, you'll find a guide on how to navigate and use th
 
 - This page is available only for authenticated users.
 - The confirmation page opened by confirming the booking from the checkout page.
-- The confirmation page shows the booking status, booked rooms, and booking information.  
+- The confirmation page shows the booking status, booked rooms, and booking information.
+- Users can save and print the information as a pdf file. 
 
 ![Confirmation page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/0a486fdb-37a9-4ba6-9447-6fbe449719da)
 
