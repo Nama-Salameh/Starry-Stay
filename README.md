@@ -1,46 +1,200 @@
-# Getting Started with Create React App
+# Starry Stay
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Explore the world with Starry Stay! A platform for booking travel and accommodation.
 
-## Available Scripts
+**Design:** [Figma Design](https://www.figma.com/proto/L7CXtGogw7r7TSYQa1wjCf/Starry-Stay--Travel-and-accomodation-booking?type=design&node-id=50-1561&t=a9EV51jtzCO6IUBw-1&scaling=scale-down&page-id=0%3A1&starting-point-node-id=50%3A1561&show-proto-sidebar=1)  
+**Live Demo:** [Starry Stay - Live Deployment]( )
 
-In the project directory, you can run:
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a></li>
+    <li><a href="#built-with">Built With</a></li>
+    <li><a href="#prerequisites">Prerequisites</a></li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+  </ol>
+</details>
 
-### `npm start`
+## About the project
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Starry Stay platform for booking travel and accommodation. provides three flows for different types of users, each of them having his/her permissions:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### 1. Administrators:
 
-### `npm test`
+They can manage cities, hotels, and rooms (Can do CRUD operations for each type as a whole and for related info for them as photos, ratings, and amenities). Also, they can search for each type and filter them.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### 2. Unauthenticated users:
 
-### `npm run build`
+Can browse the cities, hotels, and rooms (featured deals, trending destinations), Can see the details (Photos gallery for all of them, amenities for hotels and rooms, reviews for hotels, the whole rooms, and the available rooms for a specific hotel.) The most important feature that they can do: is search for accommodations based on the destination, the check-in and check-out dates, the number of rooms, and how many the number of adults and children.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### 3. Authenticated users:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+They can do things that the unauthenticated users do, in addition to booking rooms in their hotel and seeing the recently visited hotel.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Build with
 
-### `npm run eject`
+- React
+- React router
+- React hooks
+- React-toastify
+- TypeScript
+- MUI (Material-UI)
+- Formik
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Prerequisites
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Make sure you have npm installed before proceeding.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Installation
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+You can install the project and run it on your device by these steps :
 
-## Learn More
+1. **Clone the repo:**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```sh
+   git clone https://github.com/Nama-Salameh/Starry-Stay.git
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. **Install npm packages:**
+
+   ```sh
+   npm install
+   ```
+
+3. **Run the project:**
+
+   ```sh
+   npm start
+   ```
+
+
+## Usage
+
+Welcome to Starry Stay! Below, you'll find a guide on how to navigate and use the platform. Please note that certain features are exclusive to authenticated users. If you don't have an account yet, you can sign up to unlock additional capabilities.
+
+### 1. Home Page
+
+- The home page welcomes users to Starry Stay.
+- Featured deals, recently visited hotels, and trending destinations are showcased.
+- Users can browse Featured deals, recently visited hotels, and trending destinations cities.
+- Users can search for available rooms by filling in the destination, check-in and check-out dates, number of rooms, adults, and children.
+- Users can click on any of the hotels and cities to view their details.  
+
+![Home page 1](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/59e4626d-8d24-46d6-934e-c463594702be)  
+
+![Home page 2](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/6e9a8c7e-5181-4da3-8ff8-1bfc6bb483c2)  
+
+![Home page 3](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/56cbdb29-ad90-4c8b-b0d7-228999eb906b)  
+
+
+### 2. Search Page
+
+- The search page shows the result of the user search.
+- Users can filter the search results by ratings.
+- Users can sort the search results ascending or descending.
+- Authenticated users can add a room to the cart.  
+    
+![Search page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/db9356c1-ad87-4c9d-aefc-5786d337e2e1)
+
+
+### 3. Hotel Page
+
+- The hotel page showing the hotel details (Hotel gallery, hotel description, hotel amenities, whole hotel rooms, the available rooms, customer reviews, and the hotel location on the map).
+- Authenticated users can add a room to the cart
+- Users can open the room details, by clicking to the room.
+- Users can open the specific room details by clicking on it.  
+
+![Hotel page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/99c1cfd5-e98c-492d-be6f-e0024b9d5f84)
+
+
+### 4. Room Page
+
+- The room page showing the room details (Room number, room type, room gallery, room amenities, and the capacity of the room).
+- Authenticated users can add a room to the cart.  
+
+![Room page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/deb240ba-5c6b-4329-9f29-b2329827a324)
+
+
+### 5. City Page
+
+- The city page shows the city details (City name, city description, city gallery, and the city hotels).
+- Users can open the specific hotel details by clicking on them.  
+
+![City page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/26e42841-3c33-491a-8a6c-a443d7fa5e89)
+
+
+### 6. Checkout page
+
+- This page is available only for authenticated users.
+- The checkout page opened by clicking on the cart icon in the top bar.
+- The checkout page shows the booked rooms and the personal and payment information.
+- Users can confirm their bookings.  
+
+![Checkout page 1](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/50387bcb-31f3-498c-9efc-927da032344a)  
+![Checkout page 2](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/5ff240c5-0c15-41ea-9402-41e5d854145d)
+
+
+### 7. Confirmation page
+
+- This page is available only for authenticated users.
+- The confirmation page opened by confirming the booking from the checkout page.
+- The confirmation page shows the booking status, booked rooms, and booking information.  
+
+![Confirmation page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/0a486fdb-37a9-4ba6-9447-6fbe449719da)
+
+
+### 8. Mange hotels page
+
+- This page is available only for admins.
+- The Mange hotels page shows all added hotels and their information.
+- The Mange hotels page enables the admin to create a new hotel (Must add the hotel basic information and can add images and amenities).
+- The Mange hotels page enables the admin to search for the hotels by their name or description.
+  
+![Manage hotels](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/02f0709a-7512-4ed9-b510-df87f3eb3c38)  
+
+### 8. Mange rooms page
+
+- This page is available only for admins.
+- The Mange rooms page shows all added rooms for a specific hotel and their information.
+- The Mange rooms page enables the admin to create a new room (Must add the room basic information and can add images and amenities).  
+
+![Manage rooms](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/26f57413-6c3b-4ff7-8fea-ca3abf316a37)  
+
+
+### 8. Manage cities page
+
+- This page is available only for admins.
+- The Mange cities page shows all added cities and their information.
+- The Mange cities page enables the admin to create a new city (Must add the city basic information and can add images).
+- The Mange cities page enables the admin to search for the cities by their name or description.  
+
+![Manage cities](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/0a764bd0-4d5b-460c-9187-60ca15b535c9)  
+
+
+## Contributing
+
+If you have suggestions or improvements, feel free to open an issue with the tag "enhancement".  
+Don't forget to give the project a star! Thanks again!
+
+1. **Fork the Project**
+2. **Create your Feature Branch:**
+
+   ```sh
+   git checkout -b feature/SuggestedFeature
+   ```
+
+3. **Commit your Changes:**
+
+   ```sh
+   git commit -m 'Add some SuggestedFeature'
+   ```
+
+4. **Push to the Branch:**
+
+   ```sh
+   git push origin feature/SuggestedFeature
+   ```
+
+5. **Open a Pull Request**
