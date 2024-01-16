@@ -1,6 +1,9 @@
 # Starry Stay
 
-It is a platform for booking travel and accommodation, enabling users to book the accommodation that suits them and their desires.
+Explore the world with Starry Stay! A platform for booking travel and accommodation.
+
+**Design:** [Figma Design](https://www.figma.com/proto/L7CXtGogw7r7TSYQa1wjCf/Starry-Stay--Travel-and-accomodation-booking?type=design&node-id=50-1561&t=a9EV51jtzCO6IUBw-1&scaling=scale-down&page-id=0%3A1&starting-point-node-id=50%3A1561&show-proto-sidebar=1)  
+**Live Demo:** [Starry Stay - Live Deployment]( )
 
 <details>
   <summary>Table of Contents</summary>
@@ -74,68 +77,100 @@ Welcome to Starry Stay! Below, you'll find a guide on how to navigate and use th
 ### 1. Home Page
 
 - The home page welcomes users to Starry Stay.
-- Featured deals, recently visited hotel, and trending destinations are showcased.
-- Users can browse Featured deals, recently visited hotel, and trending destinations cities.
-- Users can search for available rooms by filling the destination, check-in and check-out dates, number of rooms, adults, and children.
-- Users can click to any of the hotels and cities to view it's details.
+- Featured deals, recently visited hotels, and trending destinations are showcased.
+- Users can browse Featured deals, recently visited hotels, and trending destinations cities.
+- Users can search for available rooms by filling in the destination, check-in and check-out dates, number of rooms, adults, and children.
+- Users can click on any of the hotels and cities to view their details.  
+
+![Home page 1](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/59e4626d-8d24-46d6-934e-c463594702be)  
+
+![Home page 2](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/6e9a8c7e-5181-4da3-8ff8-1bfc6bb483c2)  
+
+![Home page 3](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/56cbdb29-ad90-4c8b-b0d7-228999eb906b)  
+
 
 ### 2. Search Page
 
-- The search page showing the result of search for user.
-- Users can filter the search result by ratings.
-- Users can sort the search result ascending or descending.
-- Authenticated users can adding a rooms to the cart.
+- The search page shows the result of the user search.
+- Users can filter the search results by ratings.
+- Users can sort the search results ascending or descending.
+- Authenticated users can add a room to the cart.  
+    
+![Search page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/db9356c1-ad87-4c9d-aefc-5786d337e2e1)
+
 
 ### 3. Hotel Page
 
-- The hotel page showing the hotel details (Hotel gallery, hotel description, hotel amenities, whole hotel rooms, the available rooms, customer reviews, and the hotel location on map).
-- Authenticated users can adding a rooms to the cart
-- Users can open the room details, by click to the room.
-- Users can open the specific room details by click to it.
+- The hotel page showing the hotel details (Hotel gallery, hotel description, hotel amenities, whole hotel rooms, the available rooms, customer reviews, and the hotel location on the map).
+- Authenticated users can add a room to the cart
+- Users can open the room details, by clicking to the room.
+- Users can open the specific room details by clicking on it.  
+
+![Hotel page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/99c1cfd5-e98c-492d-be6f-e0024b9d5f84)
+
 
 ### 4. Room Page
 
 - The room page showing the room details (Room number, room type, room gallery, room amenities, and the capacity of the room).
-- Authenticated users can adding a rooms to the cart
+- Authenticated users can add a room to the cart.  
+
+![Room page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/deb240ba-5c6b-4329-9f29-b2329827a324)
+
 
 ### 5. City Page
 
-- The city page showing the city details (City name, city description, city gallery, and the city hotels).
-- Users can open the specific hotel details by click to it.
+- The city page shows the city details (City name, city description, city gallery, and the city hotels).
+- Users can open the specific hotel details by clicking on them.  
+
+![City page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/26e42841-3c33-491a-8a6c-a443d7fa5e89)
+
 
 ### 6. Checkout page
 
-- This page available only for authenticated users.
-- The checkout page opend by click to the cart icon in the top bar.
-- The checkout page showing the booked rooms, the personal and payment information.
-- Users can confirm their bookings.
+- This page is available only for authenticated users.
+- The checkout page opened by clicking on the cart icon in the top bar.
+- The checkout page shows the booked rooms and the personal and payment information.
+- Users can confirm their bookings.  
+
+![Checkout page 1](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/50387bcb-31f3-498c-9efc-927da032344a)  
+![Checkout page 2](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/5ff240c5-0c15-41ea-9402-41e5d854145d)
+
 
 ### 7. Confirmation page
 
-- This page available only for authenticated users.
-- The confirmation page opend by confirm the booking from checkout page.
-- The confirmation page showing the booking status, booked rooms and booking information.
+- This page is available only for authenticated users.
+- The confirmation page opened by confirming the booking from the checkout page.
+- The confirmation page shows the booking status, booked rooms, and booking information.  
+
+![Confirmation page](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/0a486fdb-37a9-4ba6-9447-6fbe449719da)
+
 
 ### 8. Mange hotels page
 
-- This page available only for admins.
-- The Mange hotels page showing all added hotel, and its information.
-- The Mange hotels page enabling admin to create a new hotel (Must add the hotel basic information, and can add images and amenities).
-- The Mange hotels page enabling admin to search for hotel by it's name or description.
+- This page is available only for admins.
+- The Mange hotels page shows all added hotels and their information.
+- The Mange hotels page enables the admin to create a new hotel (Must add the hotel basic information and can add images and amenities).
+- The Mange hotels page enables the admin to search for the hotels by their name or description.
+  
+![Manage hotels](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/02f0709a-7512-4ed9-b510-df87f3eb3c38)  
 
 ### 8. Mange rooms page
 
-- This page available only for admins.
-- The Mange rooms page showing all added rooms for specific hotel, and its information.
-- The Mange rooms page enabling admin to create a new room (Must add the room basic information, and can add images and amenities).
-- The Mange rooms page enabling admin to search for hotel by it's name or description.
+- This page is available only for admins.
+- The Mange rooms page shows all added rooms for a specific hotel and their information.
+- The Mange rooms page enables the admin to create a new room (Must add the room basic information and can add images and amenities).  
 
-### 8. Mange cities page
+![Manage rooms](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/26f57413-6c3b-4ff7-8fea-ca3abf316a37)  
 
-- This page available only for admins.
-- The Mange cities page showing all added cities, and its information.
-- The Mange cities page enabling admin to create a new city (Must add the city basic information, and can add images).
-- The Mange cities page enabling admin to search for hotel by it's name or description.
+
+### 8. Manage cities page
+
+- This page is available only for admins.
+- The Mange cities page shows all added cities and their information.
+- The Mange cities page enables the admin to create a new city (Must add the city basic information and can add images).
+- The Mange cities page enables the admin to search for the cities by their name or description.  
+
+![Manage cities](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/0a764bd0-4d5b-460c-9187-60ca15b535c9)  
 
 
 ## Contributing
