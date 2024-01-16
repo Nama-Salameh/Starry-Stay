@@ -61,8 +61,13 @@ You can install the project and run it on your device by these steps :
    ```sh
    npm install
    ```
+   if it's not run, can use
+   
+   ```sh
+   npm install --force
+   ```
 
-3. **Run the project:**
+4. **Run the project:**
 
    ```sh
    npm start
