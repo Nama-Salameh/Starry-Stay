@@ -32,7 +32,7 @@ const PersonalInfo = ({
         })}
       >
         {({ handleChange, values }) => (
-          <Form >
+          <Form>
             <div className={style.paymentSelectContainer}>
               <Field
                 as={Select}

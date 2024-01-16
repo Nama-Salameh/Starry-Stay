@@ -17,26 +17,13 @@ import { useCartContext } from "../../contexts/cartContext/CartContext.context";
 import LoginModal from "../../components/modals/loginModal/LoginModal.component";
 import { createBrowserHistory } from "history";
 import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
+import IRoom from "../../interfaces/IRoom.interface";
 
 const errorMessages = {
   notFound: localization.roomNotFound,
   timeout: localization.roomDetailsTimedout,
 };
 
-type Room = {
-  roomId: number;
-  roomNumber: number;
-  roomPhotoUrl: string;
-  roomType: string;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
-  price: number;
-  availability: boolean;
-};
 type RoomGallery = {
   id: number;
   url: string;
@@ -60,7 +47,7 @@ export default function RoomDetails() {
   const hotelIdString = params.hotelId;
   const roomId: number = roomIdString ? parseInt(roomIdString, 10) : 0;
   const hotelId: number = hotelIdString ? parseInt(hotelIdString, 10) : 0;
-  const [roomInfo, setRoomInfo] = useState<Room>();
+  const [roomInfo, setRoomInfo] = useState<IRoom>();
   const [roomPhotos, setRoomPhotos] = useState<RoomGallery[]>();
   const [isLoading, setIsLoading] = useState(true);
   const { handleAddToCart } = useCartContext();

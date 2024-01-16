@@ -1,14 +1,8 @@
-import React, { useState, useEffect, startTransition } from "react";
-import { getTrendingDestinations } from "../../../services/home/home.service";
+import React, { startTransition } from "react";
 import Carousel from "../../common/carousel/Carousel.component";
-import { Card } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import style from "../HomeComponents.module.css";
 import localization from "../../../localizationConfig";
 import slugify from "slugify";
-import { ErrorTypes } from "../../../enums/ErrorTypes.enum";
-import { notifyError } from "../../../utils/toastUtils/Toast.utils";
 import HotelHomeCard from "../../common/homePageCard/HomePageCard.component";
 import { useNavigate } from "react-router-dom";
 

@@ -1,6 +1,5 @@
 .dialogItem {
   margin: 3px auto;
-  width: 60vw;
   max-height: 70vh;
   overflow-y: auto;
 }

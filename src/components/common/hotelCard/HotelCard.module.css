@@ -1,6 +1,5 @@
 .hotelContainer {
   display: flex;
-  flex-direction: row;
   position: relative;
   margin-bottom: 3%;
   border: 1px solid var(--mui-palette-secondary-dark);

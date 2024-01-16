@@ -3,27 +3,14 @@ import RoomCard from "../../common/roomCard/RoomCard.component";
 import style from "./RoomsContainer.module.css";
 import { Button } from "@mui/material";
 import localization from "../../../localizationConfig";
+import IRoom from "../../../interfaces/IRoom.interface";
 
-type Room = {
-  roomId: number;
-  roomNumber: number;
-  roomPhotoUrl: string;
-  roomType: string;
-  price: number;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  availability: boolean;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
-};
 
 export default function RoomContainer({
   hotelRooms,
   hotelId,
 }: {
-  hotelRooms: Room[];
+  hotelRooms: IRoom[];
   hotelId: number;
 }) {
   const [showAllRooms, setShowAllRooms] = useState(false);

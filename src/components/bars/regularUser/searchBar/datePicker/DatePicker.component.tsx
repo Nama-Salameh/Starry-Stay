@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import style from "./DatePicker.module.css";
 import { useSearchContext } from "../../../../../contexts/searchContext/SearchContext.context";
-import { handleError } from "../../../../../services/ApisConfig";
 import { notifyError } from "../../../../../utils/toastUtils/Toast.utils";
 import localization from "../../../../../localizationConfig";
 

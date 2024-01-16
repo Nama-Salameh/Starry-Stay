@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Typography, Button, Box } from "@mui/material";
 import style from "./DeleteConfirmation.module.css";
 import localization from "../../../localizationConfig";
+
 const DeleteConfirmationModal: React.FC<{
   isOpen: boolean;
   onConfirm: () => void;

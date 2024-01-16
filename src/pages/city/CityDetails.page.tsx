@@ -13,13 +13,13 @@ import Carousel from "../../components/common/carousel/Carousel.component";
 import HotelCard from "../../components/common/hotelCard/HotelCard.component";
 import { createBrowserHistory } from "history";
 import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
+import ICity from "../../interfaces/ICity.interface";
 
 const errorMessages = {
   notFound: localization.hotelNotFound,
   timeout: localization.cityDetailsTimedout,
 };
 
-type City = { id: number; name: string; description: string };
 type CityHotel = {
   id: number;
   name: string;
@@ -50,7 +50,7 @@ export default function CityDetails() {
   const params = useParams();
   const cityIdString = params.cityId;
   const cityId: number = cityIdString ? parseInt(cityIdString, 10) : 0;
-  const [cityInfo, setCityInfo] = useState<City>();
+  const [cityInfo, setCityInfo] = useState<ICity>();
   const [cityHotels, setCityHotels] = useState<CityHotel[]>();
   const [cityPhotos, setCityPhotos] = useState<CityPhoto[]>();
   const [isLoading, setIsLoading] = useState(true);

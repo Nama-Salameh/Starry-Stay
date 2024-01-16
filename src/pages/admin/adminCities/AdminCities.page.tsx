@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import localization from "../../../localizationConfig";
 import { Box } from "@mui/material";
 import SearchBar from "../../../components/bars/admin/serachBar/SearchBar.component";
-import TableWithNavigation from "../../../components/common/table/TableWithPagination.component";
 import {
   addCityImage,
   createCity,
@@ -13,10 +12,7 @@ import {
   updateCity,
 } from "../../../services/cities/Cities.service";
 import DeleteConfirmationModal from "../../../components/modals/deleteConfirmationModal/DeleteConfirmationModal.component";
-import {
-  notifyError,
-  notifySuccess,
-} from "../../../utils/toastUtils/Toast.utils";
+import { notifySuccess } from "../../../utils/toastUtils/Toast.utils";
 import CityForm from "../../../components/common/forms/cityForm/CityFrom.component";
 import SmallButton from "../../../components/common/Buttons/SmallButton.component";
 import style from "../Admin.module.css";

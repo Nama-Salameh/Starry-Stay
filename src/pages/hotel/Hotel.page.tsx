@@ -19,35 +19,8 @@ import RoomContainer from "../../components/hotelComponents/roomsContainer/Rooms
 import AmenitiesContainer from "../../components/common/amenitiesContainer/AmenitiesContainer.component";
 import { createBrowserHistory } from "history";
 import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
-
-type HotelInfo = {
-  hotelName: string;
-  location: string;
-  availableRooms: number;
-  imageUrl: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  starRating: number;
-  amenities: {
-    name: string;
-    description: string;
-  };
-};
-type Room = {
-  roomId: number;
-  roomNumber: number;
-  roomPhotoUrl: string;
-  roomType: string;
-  price: number;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  availability: boolean;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
-};
+import IRoom from "../../interfaces/IRoom.interface";
+import IHotelInfo from "../../interfaces/IHotelInfo.interface";
 
 const errorMessages = {
   notFound: localization.hotelNotFound,
@@ -114,11 +87,11 @@ export default function Hotel() {
   const [hotelGallery, setHotelGallery] = useState<
     { id: number; url: string }[]
   >([]);
-  const [hotelInfo, setHotelInfo] = useState<HotelInfo>();
+  const [hotelInfo, setHotelInfo] = useState<IHotelInfo>();
   const [hotelAmenities, setHotelAmenities] =
     useState<{ id: number; name: string; description: string }[]>();
-  const [hotelRooms, setHotelRooms] = useState<Room[]>([]);
-  const [hotelAvailableRooms, setHotelAvailableRooms] = useState<Room[]>([]);
+  const [hotelRooms, setHotelRooms] = useState<IRoom[]>([]);
+  const [hotelAvailableRooms, setHotelAvailableRooms] = useState<IRoom[]>([]);
   const [hotelReviews, setHotelReviews] = useState<
     {
       reviewId: number;

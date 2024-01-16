@@ -25,6 +25,8 @@ import DeleteConfirmationModal from "../../../components/modals/deleteConfirmati
 import TableWithPagination from "../../../components/common/table/TableWithPagination.component";
 import { addAmenityToRoom } from "../../../services/rooms/Rooms.service";
 import handleErrorType from "../../../utils/handleErrorUtils/HnadleError.utils";
+import ICity from "../../../interfaces/ICity.interface";
+import IHotelInfo from "../../../interfaces/IHotelInfo.interface";
 
 type HotelAmenityForCreate = {
   name: string;
@@ -33,30 +35,7 @@ type HotelAmenityForCreate = {
 type HotelAmenity = HotelAmenityForCreate & {
   id: number;
 };
-type Hotel = {
-  hotelName: string;
-  location: string;
-  description: string;
-  latitude: number;
-  longitude: number;
-  amenities: [
-    {
-      id: number;
-      name: string;
-      description: string;
-    }
-  ];
-  starRating: number;
-  avaiableRooms: number;
-  imageUrl: string;
-  cityId: number;
-};
 
-type City = {
-  id: number;
-  name: string;
-  description: string;
-};
 const errorMessages = {
   hotelToEditNotFound: localization.hotelToEditNotFound,
   hotelsNotFound: localization.hotelsNotFound,
@@ -88,10 +67,10 @@ export default function AdminHotels() {
     starRating: number;
     latitude: number;
     longitude: number;
-    cities: City[] | null;
+    cities: ICity[] | null;
     hotelId?: number;
   } | null>(null);
-  const [citiesInfo, setCitiesInfo] = useState<City[] | null>(null);
+  const [citiesInfo, setCitiesInfo] = useState<ICity[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hotelAmenities, setHotelAmenities] = useState<HotelAmenity[]>([]);
 
@@ -152,7 +131,9 @@ export default function AdminHotels() {
   const handleConfirmDelete = async () => {
     if (hotelToDelete !== null) {
       try {
-        const hotelInfo = (await getHotelInfoByItsId(hotelToDelete)) as Hotel;
+        const hotelInfo = (await getHotelInfoByItsId(
+          hotelToDelete
+        )) as IHotelInfo;
         await deleteHotel(hotelToDelete, hotelInfo.cityId);
         notifySuccess(successMessages.successDelete);
       } catch (errorType) {

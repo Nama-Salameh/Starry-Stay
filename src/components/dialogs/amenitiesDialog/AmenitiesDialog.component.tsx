@@ -30,9 +30,9 @@ const amenityIcons: Record<string, JSX.Element | undefined> = {
   "Mini Bar": <LocalBarIcon className={style.icon} />,
   "Swimming Pool": <PoolIcon className={style.icon} />,
   "Fitness Center": <FitnessCenterIcon className={style.icon} />,
-  "Jacuzzi": <HotTubIcon className={style.icon} />,
+  Jacuzzi: <HotTubIcon className={style.icon} />,
   "Ocean View": <WaterIcon className={style.icon} />,
-  "TV": <TvIcon className={style.icon} />,
+  TV: <TvIcon className={style.icon} />,
   "King Size Bed": <BedIcon className={style.icon} />,
   "Room Service": <RoomServiceIcon className={style.icon} />,
 };

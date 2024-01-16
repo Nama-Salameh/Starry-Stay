@@ -2,10 +2,7 @@ import React, { startTransition, useEffect, useState } from "react";
 import { Button, CircularProgress, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router";
 import { createBrowserHistory } from "history";
-import {
-  getBooking,
-  postBooking,
-} from "../../services/booking/Booking.service";
+import { postBooking } from "../../services/booking/Booking.service";
 import { getDecodedToken } from "../../utils/TokenUtils";
 import { getAllRoomsFromCart } from "../../utils/storageUtils/cartStorage/CartStorage";
 import { useCartContext } from "../../contexts/cartContext/CartContext.context";
@@ -20,59 +17,15 @@ import localization from "../../localizationConfig";
 import RoomCard from "../../components/common/roomCard/RoomCard.component";
 import PersonalInfo from "../../components/checkoutComponents/personalInfoContainer/PersonalInfoContainer.component";
 import handleErrorType from "../../utils/handleErrorUtils/HnadleError.utils";
-
-type RoomInfo = {
-  hotelId: number;
-  hotelName: string;
-  roomId: number;
-  roomNumber: number;
-  roomType: string;
-  roomPhotoUrl: string;
-  price: number;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  availability: boolean;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
-};
+import IRoom from "../../interfaces/IRoom.interface";
+import IHotelInfo from "../../interfaces/IHotelInfo.interface";
+import IRoomInfo from "../../interfaces/IRoomInfo.interface";
 
 type RoomDetails = {
   roomNumber: number;
   roomType: string;
   price: number;
   hotelName: string;
-};
-
-type HotelInfo = {
-  hotelName: string;
-  location: string;
-  availableRooms: number;
-  imageUrl: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  starRating: number;
-  amenities: {
-    name: string;
-    description: string;
-  }[];
-};
-
-type Room = {
-  roomId: number;
-  roomNumber: number;
-  roomType: string;
-  roomPhotoUrl: string;
-  price: number;
-  capacityOfAdults: number;
-  capacityOfChildren: number;
-  availability: boolean;
-  roomAmenities: {
-    name: string;
-    description: string;
-  }[];
 };
 
 const errorMessages = {
@@ -86,7 +39,7 @@ export default function Checkout() {
   const userInfo: IToken = getDecodedToken() as IToken;
   const allRoomsFromCart = getAllRoomsFromCart();
   const { cartCount } = useCartContext();
-  const [roomsInfo, setRoomsInfo] = useState<RoomInfo[]>([]);
+  const [roomsInfo, setRoomsInfo] = useState<IRoomInfo[]>([]);
   const [totalCost, setTotalCost] = useState(0);
   const [selectedRooms, setSelectedRooms] = useState<RoomDetails[]>([]);
   const [isConfirmLoading, setIsConfirmLoading] = useState(false);
@@ -101,7 +54,7 @@ export default function Checkout() {
     const fetchRoomsInfo = async () => {
       try {
         let totalCost = 0;
-        const roomDetails: RoomInfo[] = [];
+        const roomDetails: IRoomInfo[] = [];
         for (const room of allRoomsFromCart) {
           const hotelRooms = await getHotelRoomsByItsId(
             room.hotelId,
@@ -110,10 +63,10 @@ export default function Checkout() {
           );
 
           const matchingRoom = hotelRooms.find(
-            (roomDetails: Room) => roomDetails.roomNumber === room.roomNumber
+            (roomDetails: IRoom) => roomDetails.roomNumber === room.roomNumber
           );
           if (matchingRoom) {
-            const hotelInfo: HotelInfo = await getHotelInfoByItsId(
+            const hotelInfo: IHotelInfo = await getHotelInfoByItsId(
               room.hotelId
             );
 
@@ -216,14 +169,16 @@ export default function Checkout() {
           <div>
             <div className={style.bookedRoomsContainer}>
               <h2>{localization.bookedRooms}</h2>
-              {roomsInfo.map((room) => (
-                <RoomCard
-                  key={room.roomId}
-                  room={room}
-                  hotelId={room.hotelId}
-                  isBooked={true}
-                />
-              ))}
+              <div className={style.bookedRooms}>
+                {roomsInfo.map((room) => (
+                  <RoomCard
+                    key={room.roomId}
+                    room={room}
+                    hotelId={room.hotelId}
+                    isBooked={true}
+                  />
+                ))}
+              </div>
               <h4 className={style.totalCost}>
                 {localization.totalCost}: {totalCost}$
               </h4>
