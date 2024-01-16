@@ -1,0 +1,97 @@
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.pageContainer {
+  position: relative;
+}
+.filterSideBarContainer {
+  position: fixed;
+  margin-top: 50px;
+  width: 20%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  padding: 4px 8px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+}
+
+.hotelsContainerWithoutSideBar {
+  margin-top: 30px;
+  flex-grow: 1;
+  overflow-y: auto;
+  grid: 10px;
+}
+.hotelsContainer {
+  margin-top: 50px;
+  overflow-y: auto;
+  width: 75%;
+  left: 350px;
+  position: absolute;
+}
+.mainContainer {
+  top: 180px !important;
+  display: flex !important;
+  flex-direction: row;
+  gap: 10px;
+}
+.backButton {
+  cursor: pointer;
+  text-transform: none !important;
+  z-index: 3;
+  margin-left: 10px !important;
+}
+.sortContainer {
+  padding-top: 5px;
+  text-align: right;
+  width: 100%;
+  position: fixed;
+  top: 140px;
+  right: 10px;
+  background-color: var(--mui-palette-secondary-main);
+  z-index: 1;
+}
+.backButtonContainer {
+  background-color: var(--mui-palette-secondary-main);
+  width: 200px;
+  z-index: 2;
+  position: fixed;
+  top: 140px;
+  left: 5px;
+  padding: 10px 10px 0 10px;
+}
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 1100px) {
+  .filterSideBarContainer {
+    width: 23%;
+  }
+}
+@media (max-width: 950px) {
+  .filterSideBarContainer {
+    width: 26%;
+  }
+}
+@media (max-width: 900px) {
+  .filtersContainer {
+    position: fixed;
+    display: flex;
+    justify-content: space-between !important;
+    align-items: center;
+    top: 186.5px;
+    left: 5px;
+    width: 100%;
+    padding: 15px 20px;
+    z-index: 2;
+    background-color: var(--mui-palette-secondary-main);
+  }
+  .hotelsContainerWithoutSideBar {
+    margin-top: 110px !important;
+  }
+  .backButtonContainer {
+    width: 100% !important;
+  }
+}

@@ -1,0 +1,16 @@
+.searchBarContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 1px solid var(--mui-palette-primary-main);
+  padding: 6px;
+  width: 100%;
+  position: fixed;
+  top: 71px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--mui-palette-secondary-main);
+}

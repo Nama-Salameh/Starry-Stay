@@ -1,0 +1,51 @@
+.amenitiesContainer {
+  margin-top: 10px;
+}
+
+.amenityItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #f8f8f8;
+}
+
+.amenityDetails {
+  flex-grow: 1;
+}
+
+.amenityButtons {
+  display: flex;
+  gap: 5px;
+  margin-left: auto;
+}
+
+.addAmenityContainer {
+  margin-top: 15px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.addAmenityButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.toggleAmenityButtonContainer {
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+.toggleAmenityButtonContainer > Button,
+.addAmenityButtons > Button,
+.amenityButtons > Button {
+  text-transform: none !important;
+}
+.textField {
+  width: 100%;
+  margin-bottom: 0px !important;
+}

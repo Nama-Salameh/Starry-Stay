@@ -1,0 +1,31 @@
+.dialogItem {
+  margin: 3px auto;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.amenityHeader {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 20px;
+  font-weight: 100 !important;
+}
+.closeButtonContainer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 999;
+}
+.dialogTitle {
+  margin-top: 30px !important;
+}
+h6 {
+  margin: 0;
+  padding: 0;
+}
+.icon {
+  font-size: 18px !important;
+}
+.amenityDescription {
+  font-size: 13px;
+}

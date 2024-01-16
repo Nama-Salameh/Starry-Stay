@@ -1,0 +1,74 @@
+.container {
+  width: 100%;
+  margin-top: 6% !important;
+}
+.amenitiesContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+h2 {
+  margin-left: 10px;
+}
+
+.item {
+  width: calc(
+    (100% - 10px * (var(--items-per-line, 1) - 1)) / var(--items-per-line, 1)
+  );
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 20px;
+  font-weight: 100 !important;
+}
+.icon {
+  font-size: 18px !important;
+}
+
+.amenitiesButton {
+  text-transform: none !important;
+  margin: 3% 0 0 0 !important;
+}
+h6 {
+  margin: 0;
+  padding: 0;
+}
+.amenityHeader {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 20px;
+  font-weight: 100 !important;
+}
+
+.amenityDescription {
+  font-size: 13px;
+}
+.HotelAmenitiesIcon {
+  margin-right: 25px;
+  flex-wrap: wrap;
+  color:grey;
+}
+@media (min-width: 600px) {
+  .amenitiesContainer {
+    --items-per-line: 2;
+  }
+}
+
+@media (min-width: 900px) {
+  .amenitiesContainer {
+    --items-per-line: 3;
+  }
+}
+@media (min-width: 1400px) {
+  .amenitiesContainer {
+    --items-per-line: 4;
+  }
+}
+@media (max-width:700px){
+  .HotelAmenitiesIcon {
+  display: none;
+  }
+}

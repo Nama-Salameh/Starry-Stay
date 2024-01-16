@@ -1,0 +1,57 @@
+.tableContainer {
+  margin-top: 2%;
+}
+
+.table {
+  background-color: var(--mui-palette-secondary-main);
+  border: 1px solid var(--mui-palette-secondary-dark);
+}
+
+.tableHead {
+  background-color: var(--mui-palette-secondary-dark) !important;
+}
+
+.tableHeadCell {
+  font-weight: bold !important;
+  text-transform: capitalize;
+  font-size: 16px !important;
+  color: var(--mui-palette-primary-dark);
+}
+.actionsCell {
+  text-align: center !important;
+}
+.tableBodyRow {
+  border-bottom: 1px solid var(--mui-palette-secondary-dark);
+}
+
+.tableBodyCell {
+  color: var(--mui-palette-primary-dark);
+  font-size: 16px !important;
+}
+.actionsBodyCell {
+  display: flex !important;
+  justify-content: space-between;
+  border: none !important;
+}
+.deleteIcon {
+  font-size: 22px;
+  color: red !important;
+}
+.editIcon {
+  font-size: 18px;
+}
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--mui-palette-secondary-main);
+  border-top: 1px solid var(--mui-palette-secondary-dark);
+}
+
+.pagination {
+  color: var(--mui-palette-primary-dark);
+}

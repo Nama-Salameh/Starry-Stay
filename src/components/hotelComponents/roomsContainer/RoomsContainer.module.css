@@ -1,0 +1,12 @@
+.roomContainerWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  margin-top: 5px;
+}
+.seeAllButton,
+.hideRoomsButton {
+  text-transform: none !important;
+  margin: 1% 0 0 0 !important;
+}

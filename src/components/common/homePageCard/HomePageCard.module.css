@@ -1,0 +1,65 @@
+.itemCard {
+  width: 90%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  box-shadow: 0 0 15px 0px var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  position: relative;
+  margin: 5px auto;
+  padding-bottom: 2px;
+  cursor: pointer;
+}
+
+.itemCard:hover {
+  box-shadow: 0 3px 15px -5px var(--mui-palette-primary-light) !important;
+}
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+}
+.image {
+  width: 100%;
+  aspect-ratio: 16 / 15;
+  border-radius: 5px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+  height: 100%; 
+
+}
+.costContainer {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  color: var(--mui-palette-secondary-light);
+  background: #001f3ff6;
+  padding: 5px;
+  border-radius: 0 0 0 5px;
+  overflow: hidden;
+  margin: 0;
+}
+.costText {
+  margin: 0;
+}
+.discountPercent{
+  position: absolute;
+  top:0;
+  right: 0;
+  color: var(--mui-palette-secondary-light);
+  background: #001f3ff6;
+  padding: 5px;
+  border-radius: 0 5px 0 0;
+  overflow: hidden;
+  margin: 0;
+  width:80px;
+}
+.cardInfo {
+  padding: 0 8px 4px 8px;
+  margin: 0;
+}
+.cardInfo > * {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.locationIcon {
+  margin-right: 5px;
+}

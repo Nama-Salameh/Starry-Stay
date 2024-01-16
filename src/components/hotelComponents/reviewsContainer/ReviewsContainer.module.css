@@ -1,0 +1,37 @@
+.reviewsContainer {
+  margin-top: 45px;
+  width: 100%;
+}
+.reviewsHeader {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.review {
+  height: 130px;
+  overflow: hidden;
+  margin: 0 0 3% 0%;
+  padding: 2% 2% !important;
+  border: 1px solid var(--mui-palette-secondary-dark) !important;
+}
+.reviewerInfo {
+  color: var(--mui-palette-primary-main) !important;
+  display: flex;
+  flex-direction: column;
+}
+.reviewerInfo > * {
+  margin: 0;
+  padding: 0;
+}
+.reviewDescription {
+  margin-left: 45px;
+  color: var(--mui-palette-primary-light) !important;
+}
+.seeAllReviewsButton,
+.hideAllReviewsButton {
+  text-transform: none !important;
+  margin: 3% 0 0 0 !important;
+}
+.customerName {
+  color: var(--mui-palette-primary-main) !important;
+}

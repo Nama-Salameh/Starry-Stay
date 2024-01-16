@@ -1,0 +1,38 @@
+.formContainer {
+  padding-top: 3%;
+}
+.formContainer > * {
+  margin-bottom: 10px;
+}
+.textField {
+  width: 100%;
+  margin-bottom: 0px !important;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-right: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.cancelButton {
+  background-color: var(--mui-palette-secondary-main) !important;
+  color: var(--mui-palette-primary-main) !important;
+  text-transform: none !important;
+  margin-right: 10px !important;
+  width: 110px !important;
+  font-weight: bold;
+  height: 38px !important;
+}
+
+.hotelLocationContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.locationField {
+  width: 90% !important;
+}

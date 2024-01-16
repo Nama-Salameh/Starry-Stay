@@ -1,0 +1,116 @@
+.roomContainer {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  margin-bottom: 3%;
+  border: 1px solid var(--mui-palette-secondary-dark);
+  border-radius: 5px;
+  box-shadow: 0 0 5px 1px var(--mui-palette-secondary-dark);
+  cursor: pointer;
+  width: 48%;
+  margin: 2% 1%;
+  box-sizing: border-box;
+  position: relative;
+  padding: 0;
+}
+.imageContainer {
+  position: relative;
+  width: 90%;
+  aspect-ratio: 16 / 16;
+  margin: 0;
+  padding: 0;
+}
+
+.roomImage {
+  width: 100%;
+  aspect-ratio: 16 / 16;
+  margin: 0;
+  padding: 0;
+  margin-right: 4%;
+  border-radius: 5px;
+  object-fit: cover;
+  height: 100%;
+}
+
+.roomInfoContainer {
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  flex-grow: 1;
+  width: 100%;
+}
+.roomNumber {
+  margin: 4px 0;
+}
+.roomType {
+  color: grey;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.capacityContainer {
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex;
+  align-items: center;
+  color: grey;
+  height: 40px;
+}
+.capacityIcon {
+  margin-right: 4px;
+}
+.capacityContainer p {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+.roomPrice {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  margin: 0;
+  padding: 2px 4px;
+  color: var(--mui-palette-secondary-main);
+  background-color: rgba(0, 0, 17, 0.721);
+}
+.smallButtonContainer {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+}
+
+.addToCartButton,
+.deleteFromCartButton {
+  border-radius: 1px;
+  background-color: var(--mui-palette-primary-main);
+}
+.addToCartIcon,
+.deleteFromCartButton {
+  color: var(--mui-palette-secondary-main);
+}
+@media (max-width: 1350px) {
+  .roomContainer {
+    width: 100%;
+    height: 200px;
+  }
+  .imageContainer {
+    width: 100%;
+  }
+  .roomImage {
+    height: 200px;
+  }
+}
+
+@media (max-width: 470px) {
+  .roomContainer {
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    margin-top: 4%;
+  }
+  .roomInfoContainer {
+    margin-top: 0px;
+    width: 100%;
+  }
+  .roomImage {
+    height: 100%;
+  }
+}
