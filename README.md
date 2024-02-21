@@ -1,5 +1,7 @@
-![foothill](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/ca46ad7e-9d34-4ccd-9511-df389846fe94)
-
+<p align="center">
+  ![foothill](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/ca46ad7e-9d34-4ccd-9511-df389846fe94)
+</p>
+<hr>
 # Starry Stay
 
 Explore the world with Starry Stay! A platform for booking travel and accommodation.
