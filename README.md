@@ -1,3 +1,5 @@
+![foothill](https://github.com/Nama-Salameh/Starry-Stay/assets/92352860/ca46ad7e-9d34-4ccd-9511-df389846fe94)
+
 # Starry Stay
 
 Explore the world with Starry Stay! A platform for booking travel and accommodation.
@@ -203,3 +205,8 @@ Don't forget to give the project a star! Thanks again!
    ```
 
 5. **Open a Pull Request**
+
+## Acknowledgment
+I extend my sincere gratitude to **Foothill Technology Solutions** for granting me the opportunity to participate in this internship cycle. Their unwavering support has been instrumental throughout the development of this project.
+
+
